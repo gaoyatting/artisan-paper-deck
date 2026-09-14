@@ -144,6 +144,47 @@
 
 ---
 
+## 🎨 9 大工坊大师纸色与智能反色系统 (Master Paper Palettes)
+
+系统内置 9 种源自欧洲独立手工工坊与典藏档案的经典纸品母色。针对不同明度的纸板底色，系统搭载了**智能高对比反色引擎（Intelligent Contrast Inversion）**：深色纸板（陶土红棕、橄榄麻布、古典棉纸）自动反转为米白墨色；浅色票据纸板自动咬合为深炭矿物油墨，确保在任何投影与屏幕上均具备绝对权威的可读性。
+
+![9 大工坊大师纸色与智能反色矩阵](assets/previews/palette_system_showcase.png)
+
+### 🔄 同一版式多母色自适应对比 (Adaptive Palette Switching)
+
+通过调用配置抽屉或按键，同一套幻灯片可零损耗瞬时换肤，所有卡片背景、墨水对比度与印章色阶自动重算：
+
+<table width="100%">
+  <tr>
+    <td width="25%" align="center">
+      <img src="assets/previews/palette_variant_terracotta.png" alt="01 陶土红棕" />
+      <br>
+      <b>01 · 陶土红棕 (Terracotta)</b><br>
+      <sub>深色底板 · 象牙墨自动反白</sub>
+    </td>
+    <td width="25%" align="center">
+      <img src="assets/previews/palette_variant_butter.png" alt="05 黄油票据" />
+      <br>
+      <b>05 · 黄油票据 (Butter Invoice)</b><br>
+      <sub>经典票根 · 暖黄深炭矿物墨</sub>
+    </td>
+    <td width="25%" align="center">
+      <img src="assets/previews/palette_variant_olive.png" alt="02 橄榄麻布" />
+      <br>
+      <b>02 · 橄榄麻布 (Olive Linen)</b><br>
+      <sub>原麻深底 · 自然雅致古朴墨</sub>
+    </td>
+    <td width="25%" align="center">
+      <img src="assets/previews/palette_variant_celadon.png" alt="04 冷杉青绿" />
+      <br>
+      <b>04 · 冷杉青绿 (Celadon)</b><br>
+      <sub>清润青灰 · 深黛绿植物咬合</sub>
+    </td>
+  </tr>
+</table>
+
+---
+
 ## ⌨️ 快捷键指南 (Keyboard Shortcuts)
 
 | 按键 | 功能 | 说明 |
@@ -204,7 +245,7 @@ artisan-paper-deck/
 │   ├── 07_side_rule_columns.html     # 侧线三列编号支柱范例
 │   ├── 08_number_statement.html      # 极简巨型数字陈述范例
 │   └── 09_crop_mark_frame.html       # 工业裁切标定画框范例
-├── assets/previews/                  # 范例高清缩略图与画廊图片
+├── assets/previews/                  # 范例高清缩略图、色卡矩阵与画廊图片
 └── scripts/
     └── export_pdf.js                 # 基于 Puppeteer 的无损 16:9 矢量批量导出脚本
 ```
