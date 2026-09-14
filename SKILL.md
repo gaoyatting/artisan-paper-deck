@@ -13,15 +13,15 @@ description: >-
   with localStorage persistence (E & Cmd+S), and seamless 16:9 PDF export (P).
 ---
 
-# 双风格专业演示文稿系统规范：权威排版、图示语汇与物料典藏 (Artisan Paper & Minimal Editorial Deck Doctrine)
+# 双风格演示文稿规范：Artisan Paper & Minimal Editorial
 
-本技能用于规范**高品质 16:9 网页级 PPT 演示文稿、演讲胶片、战略汇报与 Pitch Deck**。  
-彻底剔除传统低质商业 PPT 充斥的“大段文字堆砌、塑料数码渐变、高光光晕与无意义彩色色块”，深度融合**世界级权威演示文稿设计理论**，原生支持**两大经典美学体系**，并构建在工业级的 16:9 动态缩放引擎、图形化视觉思考（Visual Thinking）与极简全屏交互闭环之上：
+本技能用于规范 **16:9 网页级演示文稿、演讲胶片与 Pitch Deck** 的生成与设计。  
+避免传统 PPT 中大段文字堆砌、高光渐变与无序色彩，支持两种视觉风格，并内置清晰的图示化思维与 16:9 交互支持：
 
-1. **风格 A：Artisan Paper（手工物料与纸质典藏风）**：将真实纸品物料、400GSM 棉浆纤维、活页打孔透光、印刷锯齿撕边票券与欧洲排印标本格式深度融入演示叙事；
-2. **风格 B：Minimal Editorial（留白辑要 · 静奢极简编辑风）**：源自高端品牌画册与独立杂志版面，单一暖中性底色、0.5–1px 发丝细线几何、三色上限、四声部排印、大面积空气感与不对称留白。
+1. **风格 A：Artisan Paper（手工纸质风）**：融入纸张质感、活页打孔、票券撕边等实体物料细节，支持自适应墨色对比；
+2. **风格 B：Minimal Editorial（极简编辑风）**：类似杂志与画册排版，暖中性底色、细线几何、克制的三支配色与大面积留白。
 
-无论采用哪种风格，文稿均严格遵循**“观点先行、图形主导、信噪极高、克制排版”**的权威标准，并共享完全一致的高稳定性底层交互引擎。
+文稿均遵循“观点先行、图示主导、信息精简、克制排版”的原则，并共享统一的底层交互逻辑。
 
 > [!IMPORTANT]
 > **零摩擦单风格直出守恒律 (Zero-Friction Single-Style Direct Delivery)**：
@@ -87,7 +87,7 @@ description: >-
 >    - 失去焦点或按 `Cmd+S` 时，全量提取所有修改至 `localStorage`，刷新后永久保留；抽屉内支持一键重置恢复出厂。
 
 ### 0.6 印刷级 16:9 无损 PDF 导出（按 `P` 键 / `Cmd+P`）
-- 内置高精度 `@media print` 样式（`@page { size: 16in 9in; margin: 0; }`），按 `P` 或 `Cmd+P` 即可调起浏览器无损导出 16:9 工业级矢量画册 PDF；
+- 内置高精度 `@media print` 样式（`@page { size: 16in 9in; margin: 0; }`），按 `P` 或 `Cmd+P` 即可调起浏览器无损导出 16:9 矢量画册 PDF；
 - 打印触发时，系统自动跳过 GSAP 进行中的补间，将所有元素直接置为完成态（`opacity: 1`），避免截出半透明或空白；
 - 配套提供 Puppeteer 批量自动化导出脚本：`node scripts/export_pdf.js input.html output.pdf`。
 
