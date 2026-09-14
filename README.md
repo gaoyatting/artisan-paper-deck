@@ -38,73 +38,106 @@
 
 ---
 
-## 🖼 版式范例画廊 (Gallery)
+## 🖼 双风格版式缩略图画廊 (Design Gallery)
 
-内置 9 套高质量 16:9 经典版式源码，均位于 [examples/](examples/) 目录，双击任意 HTML 文件即可在浏览器全屏交互体验：
+本系统原生支持两大独立美学体系，以下分别展示两种风格在**封面立论、活页与大纲结构、观点与票券论断、图表与矩阵对比、巨型数字表达、行动结语**等多元排版下的真实 16:9 渲染效果（点击缩略图即可直接在新标签页全屏交互体验）：
+
+### 📜 风格 A · Artisan Paper (手工物料与纸质典藏风)
+
+> **场景定位**：融资路演 Pitch Deck、品牌发布会、年度汇报、工艺/手作/文化宣讲、实体行业汇报。  
+> **视觉语汇**：400GSM 棉浆纸张微距纹理、活页双联打孔透光、印刷锯齿撕边票券、多色母版智能反色。  
+> 🔗 完整交互范例：[`examples/demo_artisan_paper.html`](examples/demo_artisan_paper.html)
 
 <table width="100%">
   <tr>
-    <td width="50%" align="center">
-      <a href="examples/01_intro_deck.html"><img src="assets/previews/01_intro_deck.png" alt="01 五页介绍 Deck" /></a>
+    <td width="33.3%" align="center">
+      <a href="examples/demo_artisan_paper.html#1"><img src="assets/previews/artisan_01.png" alt="01 封面大版" /></a>
       <br>
-      <b><a href="examples/01_intro_deck.html">01 · 五页完整介绍 Deck</a></b><br>
-      <sub>目录 / 架构 / 特色 / 理论 / 结语五联完整演示</sub>
+      <b>01 · 封面大版 (Poster Cover)</b><br>
+      <sub>档案物料立论封面 · 火漆印章</sub>
     </td>
-    <td width="50%" align="center">
-      <a href="examples/02_loop_cycle.html"><img src="assets/previews/02_loop_cycle.png" alt="02 闭环循环" /></a>
+    <td width="33.3%" align="center">
+      <a href="examples/demo_artisan_paper.html#2"><img src="assets/previews/artisan_02.png" alt="02 双联活页议程" /></a>
       <br>
-      <b><a href="examples/02_loop_cycle.html">02 · 闭环循环飞轮</a></b><br>
-      <sub>四阶段因果闭环增强回路与自驱动飞轮</sub>
+      <b>02 · 双联活页议程 (Rowland Split)</b><br>
+      <sub>打孔透光装订 · 章节结构导轨</sub>
     </td>
-  </tr>
-  <tr>
-    <td width="50%" align="center">
-      <a href="examples/03_nested_circles.html"><img src="assets/previews/03_nested_circles.png" alt="03 同心嵌套圆" /></a>
+    <td width="33.3%" align="center">
+      <a href="examples/demo_artisan_paper.html#3"><img src="assets/previews/artisan_03.png" alt="03 锯齿票券论断" /></a>
       <br>
-      <b><a href="examples/03_nested_circles.html">03 · 同心嵌套圆</a></b><br>
-      <sub>三层核心驱动、赋能与外围生态层级</sub>
-    </td>
-    <td width="50%" align="center">
-      <a href="examples/04_banded_list.html"><img src="assets/previews/04_banded_list.png" alt="04 拱顶题名色带列表" /></a>
-      <br>
-      <b><a href="examples/04_banded_list.html">04 · 拱顶题名色带列表</a></b><br>
-      <sub>高对比度三色带对比与横向属性矩阵</sub>
+      <b>03 · 锯齿票券论断 (Sawtooth Ticket)</b><br>
+      <sub>撕边物料票券 · 核心金句断言</sub>
     </td>
   </tr>
   <tr>
-    <td width="50%" align="center">
-      <a href="examples/05_quadrant_chart.html"><img src="assets/previews/05_quadrant_chart.png" alt="05 十字象限散点" /></a>
+    <td width="33.3%" align="center">
+      <a href="examples/demo_artisan_paper.html#4"><img src="assets/previews/artisan_04.png" alt="04 特性支柱矩阵" /></a>
       <br>
-      <b><a href="examples/05_quadrant_chart.html">05 · 十字象限散点矩阵</a></b><br>
-      <sub>双轴四象限战略定位与散点标定</sub>
+      <b>04 · 特性支柱矩阵 (Pillars Grid)</b><br>
+      <sub>四列竖向导轨 · 图表特性对比</sub>
     </td>
-    <td width="50%" align="center">
-      <a href="examples/06_tick_timeline.html"><img src="assets/previews/06_tick_timeline.png" alt="06 刻度尺时间线" /></a>
+    <td width="33.3%" align="center">
+      <a href="examples/demo_artisan_paper.html#5"><img src="assets/previews/artisan_05.png" alt="05 标本数字度量" /></a>
       <br>
-      <b><a href="examples/06_tick_timeline.html">06 · 细密刻度时间线</a></b><br>
-      <sub>工业刻度尺微步进时间轴与里程碑节点</sub>
+      <b>05 · 标本数字度量 (Specimen Metrics)</b><br>
+      <sub>巨型数字指标 · 标本清单印证</sub>
+    </td>
+    <td width="33.3%" align="center">
+      <a href="examples/demo_artisan_paper.html#6"><img src="assets/previews/artisan_06.png" alt="06 典藏印章结语" /></a>
+      <br>
+      <b>06 · 典藏印章结语 (Archival Outro)</b><br>
+      <sub>工坊油墨咬合 · 行动结语落款</sub>
+    </td>
+  </tr>
+</table>
+
+---
+
+### 🏛️ 风格 B · Minimal Editorial (留白辑要 · 静奢极简编辑风)
+
+> **场景定位**：商业策略咨询、极简思考笔记、设计/摄影作品集、前沿科技洞察、文学哲学思考、个人分享。  
+> **视觉语汇**：单一暖中性底色（象牙白）、0.5–1px 发丝细线几何、三色上限、四声部排印、大面积呼吸空气感。  
+> 🔗 完整交互范例：[`examples/demo_minimal_editorial.html`](examples/demo_minimal_editorial.html)
+
+<table width="100%">
+  <tr>
+    <td width="33.3%" align="center">
+      <a href="examples/demo_minimal_editorial.html#1"><img src="assets/previews/editorial_01.png" alt="01 空镜巨字目录" /></a>
+      <br>
+      <b>01 · 空镜巨字目录 (Hero-Word & TOC)</b><br>
+      <sub>不对称留白 · 衬线编号目录</sub>
+    </td>
+    <td width="33.3%" align="center">
+      <a href="examples/demo_minimal_editorial.html#2"><img src="assets/previews/editorial_02.png" alt="02 闭环循环飞轮" /></a>
+      <br>
+      <b>02 · 闭环循环飞轮 (Loop Flow Cycle)</b><br>
+      <sub>因果回路 · 发丝线几何图表</sub>
+    </td>
+    <td width="33.3%" align="center">
+      <a href="examples/demo_minimal_editorial.html#3"><img src="assets/previews/editorial_03.png" alt="03 拱顶色带对比" /></a>
+      <br>
+      <b>03 · 拱顶色带对比 (Banded Attribute)</b><br>
+      <sub>横向色带矩阵 · 高对比度分析</sub>
     </td>
   </tr>
   <tr>
-    <td width="50%" align="center">
-      <a href="examples/07_side_rule_columns.html"><img src="assets/previews/07_side_rule_columns.png" alt="07 侧线三列编号" /></a>
+    <td width="33.3%" align="center">
+      <a href="examples/demo_minimal_editorial.html#4"><img src="assets/previews/editorial_04.png" alt="04 十字象限散点" /></a>
       <br>
-      <b><a href="examples/07_side_rule_columns.html">07 · 侧线三列编号支柱</a></b><br>
-      <sub>竖向导轨三列排印与参数标本列阵</sub>
+      <b>04 · 十字象限散点 (Quadrant Matrix)</b><br>
+      <sub>双轴四象限 · 战略坐标定位</sub>
     </td>
-    <td width="50%" align="center">
-      <a href="examples/08_number_statement.html"><img src="assets/previews/08_number_statement.png" alt="08 巨型数字陈述" /></a>
+    <td width="33.3%" align="center">
+      <a href="examples/demo_minimal_editorial.html#5"><img src="assets/previews/editorial_05.png" alt="05 极简数字陈述" /></a>
       <br>
-      <b><a href="examples/08_number_statement.html">08 · 极简巨型数字陈述</a></b><br>
-      <sub>高墨水比纯粹断言与大字号数据印证</sub>
+      <b>05 · 极简数字陈述 (Number Statement)</b><br>
+      <sub>大字号纯粹断言 · 最大数据墨水比</sub>
     </td>
-  </tr>
-  <tr>
-    <td colspan="2" align="center">
-      <a href="examples/09_crop_mark_frame.html"><img src="assets/previews/09_crop_mark_frame.png" alt="09 裁切标定画框" style="max-width: 60%;" /></a>
+    <td width="33.3%" align="center">
+      <a href="examples/demo_minimal_editorial.html#6"><img src="assets/previews/editorial_06.png" alt="06 极简行动尾页" /></a>
       <br>
-      <b><a href="examples/09_crop_mark_frame.html">09 · 工业裁切标定画框</a></b><br>
-      <sub>四个角标裁切规线与中央画框物料展陈</sub>
+      <b>06 · 极简行动尾页 (Action Outro)</b><br>
+      <sub>克制留白 · 行动呼吁与落款</sub>
     </td>
   </tr>
 </table>
@@ -159,17 +192,19 @@ artisan-paper-deck/
 ├── templates/                        # 开箱即用模板脚手架
 │   ├── deck_template.html            # 标准 16:9 多页完整 Deck 脚手架
 │   └── editorial_card_scaffold.html  # 静奢单页/卡片快速脚手架
-├── examples/                         # 9 大经典版式范例（可直接双击运行）
-│   ├── 01_intro_deck.html
-│   ├── 02_loop_cycle.html
-│   ├── 03_nested_circles.html
-│   ├── 04_banded_list.html
-│   ├── 05_quadrant_chart.html
-│   ├── 06_tick_timeline.html
-│   ├── 07_side_rule_columns.html
-│   ├── 08_number_statement.html
-│   └── 09_crop_mark_frame.html
-├── assets/previews/                  # 范例高清预览截图
+├── examples/                         # 经典版式与完整多页双风格范例
+│   ├── demo_artisan_paper.html       # 风格 A：手工纸质物料 6 页完整演示文稿
+│   ├── demo_minimal_editorial.html   # 风格 B：留白辑要极简 6 页完整演示文稿
+│   ├── 01_intro_deck.html            # 经典 5 页介绍 Deck
+│   ├── 02_loop_cycle.html            # 闭环循环飞轮范例
+│   ├── 03_nested_circles.html        # 同心嵌套圆范例
+│   ├── 04_banded_list.html           # 拱顶题名色带列表范例
+│   ├── 05_quadrant_chart.html        # 十字象限散点矩阵范例
+│   ├── 06_tick_timeline.html         # 细密刻度时间线范例
+│   ├── 07_side_rule_columns.html     # 侧线三列编号支柱范例
+│   ├── 08_number_statement.html      # 极简巨型数字陈述范例
+│   └── 09_crop_mark_frame.html       # 工业裁切标定画框范例
+├── assets/previews/                  # 范例高清缩略图与画廊图片
 └── scripts/
     └── export_pdf.js                 # 基于 Puppeteer 的无损 16:9 矢量批量导出脚本
 ```
