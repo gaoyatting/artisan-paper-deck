@@ -1,4 +1,4 @@
-# 双风格专业演示文稿系统规范：权威排版、图示语汇与物料典藏 (Artisan Paper & Minimal Editorial Deck Doctrine)
+# Artisan Paper & Minimal Editorial Deck
 
 [![Claude Skill](https://img.shields.io/badge/Claude-Skill-purple)](https://docs.anthropic.com/en/docs/agents-and-tools/agent-skills/overview)
 [![Cursor Compatible](https://img.shields.io/badge/Cursor-Compatible-blue)](https://cursor.com)
@@ -6,35 +6,33 @@
 [![GSAP](https://img.shields.io/badge/GSAP-Animation%20Engine-black)](https://gsap.com)
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-orange.svg)](LICENSE)
 
-面向 AI 编程助手（Claude Code、Cursor、Antigravity、Copilot、Windsurf 等）的**高品质 16:9 网页级演示文稿、演讲胶片与 Pitch Deck 规范体系**。
+面向 AI 编程助手（Claude Code、Cursor、Antigravity、Copilot 等）的 16:9 网页演示文稿设计与生成规范。
 
-彻底剔除传统商业幻灯片中充斥的“大段文字堆砌、塑料数码渐变、高光光晕与无意义彩色色块”，深度融合**世界级权威演示文稿设计理论**，原生支持**两大经典美学体系**，并构建在工业级的 16:9 动态缩放引擎、图形化视觉思考（Visual Thinking）与极简全屏交互闭环之上。
+聚焦于高信息密度与克制美学，支持**手工纸质（Artisan Paper）**与**极简编辑（Minimal Editorial）**两种视觉风格，内置图示化表达原则与标准的 16:9 网页交互能力。
 
 ---
 
-## ✨ 核心特色 (Core Highlights)
+## ✨ 核心特性
 
-- 📜 **两大殿堂级美学体系**：
-  - **风格 A · Artisan Paper（手工物料与纸质典藏风）**：将真实纸品物料、400GSM 棉浆纤维、活页打孔透光、印刷锯齿撕边票券与欧洲排印标本格式深度融入演示叙事；支持 9 套大师工匠纸色智能高对比反色引擎（深色底自动转为米白墨色）；
-  - **风格 B · Minimal Editorial（留白辑要 · 静奢极简编辑风）**：源自高端品牌画册与独立杂志版面，单一暖中性底色、0.5–1px 发丝细线几何、三色上限、四声部排印、大面积呼吸空气感与不对称留白。
-- 🎯 **杜绝模版套用 · 形式追随内容 (Form Follows Content)**：
-  - **绝不让用户在几套死板模版中做单选题！** 智能体根据用户输入的文案属性、受众与数据关系，**现场自由推导构图与图示组合**。文案变则排版变，图表、纯数字、票据、支柱自如衍生。
-- 🏛️ **权威演示理论的工程化落地**：
-  - **芭芭拉·明托《金字塔原理》**：结论先行（BLUF）与行动导向标题（Action Titles），杜绝名词短语式主标；
-  - **南希·杜阿尔特《Slide:ology》**：3 秒看懂法则（The 3-Second Glance Test），主标断言与视觉焦点一览无余；
-  - **加尔·雷诺兹《演说之禅》**：大道至简与留白（間），文字越少力量越强，彻底消灭提词板长篇累牍；
-  - **塞斯·高汀极简律**：单页字数硬预算（汉字严格控制在 25–45 字以内，上限 ≤ 60 字）；
-  - **罗宾·威廉姆斯 CRAP 基石**：对比（悬殊级差）、重复（发丝线与两角制统一）、对齐（基线对齐）、亲密性（间距即逻辑）；
-  - **爱德华·塔夫特**：最大化数据墨水比（Data-Ink Ratio）。
-- 📊 **系统化图示设计族谱 (Visual Thinking)**：
-  - “文不如表，表不如图”，严禁直排纯文本清单；
-  - 支持柱形对比图、结构比例圆环图、因果增强飞轮、刻度时间线、十字象限、纯数字看板、拱顶色带、标本画框等多维图形语汇。
-- 🕹️ **工业级统一 16:9 Deck 交互引擎**：
-  - **16:9 固定舞台动态等比缩放**：JS 监听视口并自动以 `Math.min(vw/1280, vh/720)` 变换，无论窗口如何拉伸均永无滚动条、永不撑破；
-  - **沉浸全屏模式（按 `F`）**：自动隐退所有边缘 UI，视口背景平滑延展幻灯片底色；
-  - **逐层动效与即时重播（按 `R`）**：GSAP 微错落逐层级联入场动效；
-  - **全量自动化行内即时编辑（按 `E` & `Cmd+S`）**：底层脚本自动扫描叶子节点，一键进入所见即所得修改模式，修改内容自动持久化至 `localStorage`；
-  - **印刷级 16:9 PDF 导出（按 `P` / `Cmd+P`）**：内置矢量打印样式与配套 Puppeteer 无损批量导出脚本。
+- 📜 **两种视觉风格**：
+  - **Artisan Paper（手工纸质风）**：融入纸张质感、活页打孔、锯齿票根等物料细节，支持 9 种纸色与文字对比度自适应；
+  - **Minimal Editorial（极简编辑风）**：参考杂志画册排版，暖中性底色、发丝细线、三色上限与大面积留白。
+- 🎯 **形式追随内容 (Form Follows Content)**：
+  - 不预设死板模板，由 AI 根据文案逻辑、受众与数据关系推导构图与图示，做到一页一构思。
+- 🏛️ **结构与排版原则**：
+  - **金字塔原理**：结论先行，使用观点明确的行动导向标题；
+  - **3 秒法则**：主标断言与视觉焦点清晰，重点一目了然；
+  - **克制与留白**：文案精炼，严格控制单页字数与认知负荷；
+  - **CRAP 原则**：明确对比、对齐基线、统一间距与视觉连贯；
+  - **高数据墨水比**：去除无意义装饰，突出核心数据与结论。
+- 📊 **图示化表达 (Visual Thinking)**：
+  - 减少纯文本列表，支持柱状对比、环形比例、增强飞轮、刻度时间线、十字象限与纯数字看板等图形语汇。
+- 🕹️ **统一 16:9 交互支持**：
+  - **自适应缩放**：固定 16:9 舞台随视口等比缩放，无滚动条、不破坏版式；
+  - **全屏放映（按 `F`）**：纯净演示模式，背景平滑延展；
+  - **入场动效（按 `R`）**：轻量微动效，支持按键重播；
+  - **行内文本编辑（按 `E` / `Cmd+S`）**：支持直接点击修改文案并保存至本地存储；
+  - **PDF 导出（按 `P`）**：内置 16:9 矢量打印样式，支持一键调起打印或脚本导出。
 
 ---
 
@@ -163,15 +161,15 @@
 
 ---
 
-## 🎨 9 大工坊大师纸色与智能反色系统 (Master Paper Palettes)
+## 🎨 双风格大师级色彩体系与智能反色 (Chromatic Systems & Color Engines)
 
-系统内置 9 种源自欧洲独立手工工坊与典藏档案的经典纸品母色。针对不同明度的纸板底色，系统搭载了**智能高对比反色引擎（Intelligent Contrast Inversion）**：深色纸板（陶土红棕、橄榄麻布、古典棉纸）自动反转为米白墨色；浅色票据纸板自动咬合为深炭矿物油墨，确保在任何投影与屏幕上均具备绝对权威的可读性。
+演示系统为两大独立美学风格分别构建了严格的色彩纪律与自适应矩阵。无论是在物料纸板上，还是在静奢极简版面中，均支持底色与墨水的高对比智能反色，并在放映过程中支持一键实时调配换肤：
+
+### 📜 体系一 · Artisan Paper 9 大工坊大师纸色 (9 Master Paper Palettes)
+
+源自欧洲独立手工工坊与典藏档案的 9 种经典纸品母色。针对不同明度的纸板底色，搭载**智能高对比反色引擎**：深色纸板（陶土红棕、橄榄麻布、古典棉纸）自动反转为米白墨色；浅色票据纸板自动咬合为深炭矿物油墨：
 
 ![9 大工坊大师纸色与智能反色矩阵](assets/previews/palette_system_showcase.png)
-
-### 🔄 同一版式多母色自适应对比 (Adaptive Palette Switching)
-
-通过调用配置抽屉或按键，同一套幻灯片可零损耗瞬时换肤，所有卡片背景、墨水对比度与印章色阶自动重算：
 
 <table width="100%">
   <tr>
@@ -198,6 +196,43 @@
       <br>
       <b>04 · 冷杉青绿 (Celadon)</b><br>
       <sub>清润青灰 · 深黛绿植物咬合</sub>
+    </td>
+  </tr>
+</table>
+
+---
+
+### 🏛️ 体系二 · Minimal Editorial 6 大静奢暖中性色盘 (6 Quiet Luxury Neutral Palettes)
+
+源自高端独立艺术杂志与品牌画册的单色纪律：**单一暖中性底色 + 炭墨文字 + 至多 1 个低饱和强调色（<8%）**。全图杜绝彩虹糖堆砌，深陶土褐底板自动触发暗色高对比度反转：
+
+![6 大静奢暖中性色盘与排印色相](assets/previews/editorial_palette_showcase.png)
+
+<table width="100%">
+  <tr>
+    <td width="25%" align="center">
+      <img src="assets/previews/editorial_variant_ivory.png" alt="01 象牙灰" />
+      <br>
+      <b>01 · 象牙灰 (Ivory · 默认)</b><br>
+      <sub>经典中性 · 陶土红微强调色</sub>
+    </td>
+    <td width="25%" align="center">
+      <img src="assets/previews/editorial_variant_greige.png" alt="02 暖米灰" />
+      <br>
+      <b>02 · 暖米灰 (Warm Greige)</b><br>
+      <sub>低饱和米灰 · 暖褐沉稳强调色</sub>
+    </td>
+    <td width="25%" align="center">
+      <img src="assets/previews/editorial_variant_taupe.png" alt="06 深陶土褐" />
+      <br>
+      <b>06 · 深陶土褐 (Deep Taupe)</b><br>
+      <sub>暗色反转 · 米白发丝线与香槟金</sub>
+    </td>
+    <td width="25%" align="center">
+      <img src="assets/previews/editorial_variant_olive_beige.png" alt="05 橄榄米色" />
+      <br>
+      <b>05 · 橄榄米色 (Olive Beige)</b><br>
+      <sub>自然大地 · 草木深绿哲学感</sub>
     </td>
   </tr>
 </table>
