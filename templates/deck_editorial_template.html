@@ -250,8 +250,11 @@
 
     <!-- 快捷键与配置 -->
     <div class="flex items-center space-x-2">
-      <span class="text-[11px] text-neutral-500 hidden xl:inline tracking-tight">
-        [←/→] 翻页 &middot; [F] 全屏放映 &middot; [E] 编辑文案 &middot; [Cmd+S] 保存 &middot; [R] 重感动效 &middot; [P] 导出PDF
+      <!-- 快捷键提示 (响应式自适应，任何屏幕尺寸均可见) -->
+      <span class="text-[11px] text-neutral-500 tracking-tight whitespace-nowrap cursor-default" title="快捷键: [←/→] 翻页 · [F] 全屏 · [E] 编辑 · [Cmd+S] 保存 · [R] 重播 · [P] 打印">
+        <span class="hidden lg:inline">[←/→] 翻页 &middot; [F] 全屏 &middot; [E] 编辑文案 &middot; [R] 重感动效 &middot; [P] 打印</span>
+        <span class="hidden sm:inline lg:hidden">[←/→] 翻页 &middot; [F] 全屏 &middot; [E] 编辑 &middot; [P] 打印</span>
+        <span class="inline sm:hidden">[←/→] [F] [E]</span>
       </span>
 
       <button id="btn-toggle-edit" title="开启/关闭网页内即时文字编辑 (快捷键: E)" class="px-3.5 py-1.5 rounded text-xs active:scale-95 flex items-center justify-center font-medium cursor-pointer">
@@ -726,6 +729,19 @@
           <button id="btn-font-sans" class="px-3 py-1.5 rounded border border-neutral-300 bg-white hover:bg-neutral-50 text-neutral-700 font-sans text-xs transition cursor-pointer">
             Jost 无衬线
           </button>
+        </div>
+      </div>
+
+      <!-- 快捷键备忘 (全端随时可查) -->
+      <div class="space-y-2 pt-2 border-t border-[#E5DFD3]">
+        <div class="font-typewriter text-[11px] font-bold text-neutral-700">演示与编辑快捷键</div>
+        <div class="grid grid-cols-2 gap-x-2 gap-y-1.5 text-[11px] text-neutral-600 font-mono">
+          <div><kbd class="px-1.5 py-0.5 bg-neutral-200/70 rounded text-[10px]">← / →</kbd> 上下翻页</div>
+          <div><kbd class="px-1.5 py-0.5 bg-neutral-200/70 rounded text-[10px]">F</kbd> 全屏放映</div>
+          <div><kbd class="px-1.5 py-0.5 bg-neutral-200/70 rounded text-[10px]">E</kbd> 即时编辑</div>
+          <div><kbd class="px-1.5 py-0.5 bg-neutral-200/70 rounded text-[10px]">Cmd+S</kbd> 保存修改</div>
+          <div><kbd class="px-1.5 py-0.5 bg-neutral-200/70 rounded text-[10px]">R</kbd> 重感动效</div>
+          <div><kbd class="px-1.5 py-0.5 bg-neutral-200/70 rounded text-[10px]">P</kbd> 导出 PDF</div>
         </div>
       </div>
 

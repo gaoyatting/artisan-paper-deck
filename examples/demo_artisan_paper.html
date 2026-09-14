@@ -289,8 +289,11 @@
     </div>
 
     <div class="flex items-center space-x-2">
-      <span class="text-[11px] text-neutral-500 hidden xl:inline tracking-tight">
-        [←/→] 翻页 &middot; [F] 全屏演讲 &middot; [E] 编辑文案 &middot; [Cmd+S] 保存 &middot; [R] 重感动效 &middot; [P] 打印
+      <!-- 快捷键提示 (响应式自适应，任何屏幕尺寸均可见) -->
+      <span class="text-[11px] text-neutral-500 tracking-tight whitespace-nowrap cursor-default" title="快捷键: [←/→] 翻页 · [F] 全屏 · [E] 编辑 · [Cmd+S] 保存 · [R] 重播 · [P] 打印">
+        <span class="hidden lg:inline">[←/→] 翻页 &middot; [F] 全屏演讲 &middot; [E] 编辑文案 &middot; [R] 重感动效 &middot; [P] 打印</span>
+        <span class="hidden sm:inline lg:hidden">[←/→] 翻页 &middot; [F] 全屏 &middot; [E] 编辑 &middot; [P] 打印</span>
+        <span class="inline sm:hidden">[←/→] [F] [E]</span>
       </span>
 
       <button id="btn-toggle-edit" title="开启网页直编 (E)" class="px-3.5 py-1.5 rounded text-xs active:scale-95 flex items-center justify-center font-medium cursor-pointer">
