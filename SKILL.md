@@ -126,12 +126,23 @@ description: >-
 
 ---
 
-## 2. 系统化图示设计体系与图形视觉语汇 (Diagrammatic Design System & Visual Graphics)
+## 2. 系统化图示设计体系与有机排版思维 (Visual Thinking & Organic Composition)
 
-**PPT 的灵魂是图示化（Visual Thinking）。“文不如表，表不如图”。**  
-严禁将多项观点直接排成枯燥的纯文字清单，必须将逻辑抽象为几何图形。
+> [!IMPORTANT]
+> **杜绝模板固化与形式追随内容法则 (Anti-Template & Form Follows Content)**：
+> **严禁机械套用任何固定模版！** 演示文稿绝不是让用户在几套死板模版中做单选题。
+> 本规范中的所有图示、组件与版式，**全部仅为底层思维原型与启发思路（Design Inspiration & Thought Seeds）**。
+> 智能体必须根据用户提供的具体文案、逻辑层级与数据诉求，**现场自由发散、有机推导最合适的排版形态**：
+> - 涉及时间与流程？推导细密时间线、里程碑票券、工序阶梯；
+> - 涉及因果增强？推导循环飞轮、闭环回路；
+> - 涉及定量对比与趋势？自主构建**柱形对比图 (Column Bar Chart)**、数据走势刻度线；
+> - 涉及权重与结构比例？自主构建**结构比例圆环图 (Donut Ring Chart)**、同心嵌套圆；
+> - 涉及关键定量突破？自主构建**大字号纯数字看板 (Pure Numbers)**、高数据墨水比度量衡；
+> - 涉及多维战略权衡？自主构建**十字象限散点、拱顶题名色带、双栏对比**；
+> - 涉及实体物料叙事？融入**双联活页装订、锯齿撕边票根、档案火漆印章**。
+> **排版永无定式，唯内容与逻辑是瞻！**
 
-### 2.1 四大图示族谱与语义匹配矩阵
+### 2.1 核心图示族谱与语义匹配矩阵
 
 ```
                        ┌── 线性流程链 (Linear Pipeline)
@@ -142,15 +153,17 @@ description: >-
                        ┌── 同心嵌套圆 (Nested Circles / Inclusion)
     2. 结构与层级 ─────┼── 侧线支柱导轨 (Side-Rule Pillars / Foundations)
     (Hierarchy/System) ├── 金字塔分层梯形 (Pyramid / Tiered Layers)
-                       └── 中枢辐射网络 (Hub & Spoke / Radial)
+                       └── 结构比例圆环图 (Donut Ring Chart / Segmentation)
                        
                        ┌── 十字象限散点 (2×2 Quadrant Matrix)
     3. 对比与决策 ─────┼── 双栏对照对决 (Before vs After / Dual Column)
-    (Comparison/Choice)└── 规整色带条列 (Banded Principles List)
+    (Comparison/Choice)├── 规整色带条列 (Banded Principles List)
+                       └── 柱形对比图表 (Column Bar Chart / Benchmark)
                        
-                       ┌── 巨号陈述看板 (Hero Number Statement)
-    4. 数据与焦点 ─────┼── 工业裁切框景 (Crop Mark Frame / Thesis)
-    (Data & Metrics)   └── 标本技术矩阵 (Specimen Metric Grid)
+                       ┌── 极简纯数字看板 (Pure Numbers & Quantitative Assertion)
+    4. 数据与焦点 ─────┼── 巨号陈述看板 (Hero Number Statement)
+    (Data & Metrics)   ├── 工业裁切框景 (Crop Mark Frame / Thesis)
+                       └── 标本技术矩阵 (Specimen Metric Grid)
 ```
 
 ### 2.2 纯粹矢量发丝几何语言 (Hairline Vector Geometry)

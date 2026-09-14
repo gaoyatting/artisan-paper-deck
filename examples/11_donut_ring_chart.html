@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>范例 11 · 圆环图 — 结构比例与分布图表</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Noto+Serif+SC:wght@400;600&family=Jost:wght@300;400;500;600&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F2F0EB;
+    --ink:#1E1C1A;
+    --accent:#A65235;
+    --muted:rgba(30,28,26,.62);
+    --hairline:rgba(30,28,26,.22);
+    --ring-1:#9B4F3B; /* 68% 主导项 */
+    --ring-2:#4A4139; /* 20% 次主项 */
+    --ring-3:#D4CDC3; /* 12% 基础项 */
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{height:100%;background:var(--bg);overflow:hidden;display:flex;align-items:center;justify-content:center;}
+  .stage{width:1280px;height:720px;background:var(--bg);position:relative;flex:none;transform-origin:center;
+         font-family:'Jost',-apple-system,'PingFang SC',sans-serif;color:var(--ink);padding:48px 100px;
+         display:flex;flex-direction:column;justify-content:between;}
+
+  .meta-top{display:flex;justify-content:space-between;font-family:'Courier Prime',monospace;
+            font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--hairline);padding-bottom:12px;}
+
+  /* 标题立论区 */
+  .header{margin-top:24px;}
+  .kicker{font-family:'Courier Prime',monospace;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);}
+  h1{font-family:'Noto Serif SC',serif;font-size:36px;font-weight:600;letter-spacing:.04em;margin-top:6px;line-height:1.2;}
+  h1 .anno{font-family:'Playfair Display',serif;font-style:italic;font-weight:400;color:var(--accent);margin-left:8px;}
+  .desc{margin-top:6px;font-weight:300;font-size:13.5px;color:var(--muted);letter-spacing:.02em;}
+
+  /* 主体图表双栏 */
+  .content-body{display:flex;flex:1;align-items:center;justify-content:space-between;margin:28px 0 20px;}
+
+  /* 左侧：精密 SVG 圆环 */
+  .donut-wrap{width:360px;height:360px;position:relative;display:flex;align-items:center;justify-content:center;}
+  svg.donut-svg{width:100%;height:100%;transform:rotate(-90deg);overflow:visible;}
+  
+  /* 圆心数字陈述 */
+  .donut-center{position:absolute;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;}
+  .center-val{font-family:'Playfair Display',serif;font-size:56px;font-weight:600;color:var(--accent);line-height:1;}
+  .center-label{font-family:'Courier Prime',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-top:4px;}
+  .center-tag{font-size:11px;font-family:'Noto Serif SC',serif;color:var(--ink);margin-top:2px;font-weight:500;}
+
+  /* 右侧：结构分解条目 */
+  .breakdown-list{flex:1;max-width:540px;margin-left:64px;display:flex;flex-direction:column;gap:18px;}
+  .item-card{display:flex;align-items:flex-start;justify-content:space-between;padding:14px 20px;
+             border:1px solid var(--hairline);border-radius:2px;background:rgba(255,255,255,0.45);}
+  .item-left{display:flex;align-items:baseline;gap:14px;}
+  .item-dot{width:10px;height:10px;border-radius:1px;margin-top:4px;}
+  .item-name{font-family:'Noto Serif SC',serif;font-size:16px;font-weight:600;letter-spacing:.02em;}
+  .item-sub{font-size:12px;color:var(--muted);margin-top:3px;font-weight:300;}
+  .item-right{text-align:right;}
+  .item-pct{font-family:'Playfair Display',serif;font-size:26px;font-weight:600;line-height:1;}
+  .item-amt{font-family:'Courier Prime',monospace;font-size:11px;color:var(--muted);margin-top:2px;}
+
+  /* 底部元信息 */
+  .footer-meta{display:flex;justify-content:space-between;font-family:'Courier Prime',monospace;font-size:10px;color:var(--muted);letter-spacing:.15em;border-top:1px solid var(--hairline);padding-top:10px;}
+</style>
+</head>
+<body>
+
+<div class="stage" id="deck-stage">
+  <!-- 顶栏元信息 -->
+  <div class="meta-top">
+    <span>EXHIBIT 11 &middot; DONUT RING CHART</span>
+    <span>REVENUE COMPOSITION RATIO</span>
+    <span>FIG. 05 / ARCHIVE</span>
+  </div>
+
+  <!-- 标题论断区 (Action Title) -->
+  <div class="header">
+    <div class="kicker">&bull; SEGMENTATION ANALYSIS &middot; 结构分析</div>
+    <h1>特种冷压纸品贡献 68% 营收权重，构筑高附加值利润护城河<span class="anno">/ Core Pillar</span></h1>
+    <div class="desc">摒弃繁杂扇区堆叠，精选三元结构切片，中心数字聚焦关键业务断言。</div>
+  </div>
+
+  <!-- 主体区域 -->
+  <div class="content-body">
+    <!-- 圆环图表 -->
+    <div class="donut-wrap">
+      <svg class="donut-svg" viewBox="0 0 200 200">
+        <!-- 背景轨道 -->
+        <circle cx="100" cy="100" r="76" fill="none" stroke="rgba(30,28,26,0.08)" stroke-width="18" />
+        <!-- 基础项 12% (周长 2 * PI * 76 = 477.5) -->
+        <circle cx="100" cy="100" r="76" fill="none" stroke="var(--ring-3)" stroke-width="18"
+                stroke-dasharray="57.3 420.2" stroke-dashoffset="-420.2" />
+        <!-- 次主项 20% -->
+        <circle cx="100" cy="100" r="76" fill="none" stroke="var(--ring-2)" stroke-width="18"
+                stroke-dasharray="95.5 382" stroke-dashoffset="-324.7" />
+        <!-- 主导项 68% -->
+        <circle cx="100" cy="100" r="76" fill="none" stroke="var(--ring-1)" stroke-width="18"
+                stroke-dasharray="324.7 152.8" stroke-dashoffset="0" />
+      </svg>
+
+      <!-- 中心指标 -->
+      <div class="donut-center">
+        <div class="center-val">68<small style="font-size:24px;font-family:'Courier Prime',monospace;">%</small></div>
+        <div class="center-label">ATELIER RATIO</div>
+        <div class="center-tag">特种纸品主导权</div>
+      </div>
+    </div>
+
+    <!-- 右侧条目分解 -->
+    <div class="breakdown-list">
+      <!-- 条目 1: 68% -->
+      <div class="item-card" style="border-left: 4px solid var(--ring-1);">
+        <div class="item-left">
+          <div class="item-dot" style="background:var(--ring-1);"></div>
+          <div>
+            <div class="item-name">450GSM 特种冷压纯棉浆纸品</div>
+            <div class="item-sub">高净值客户定制装订与典藏级出版物</div>
+          </div>
+        </div>
+        <div class="item-right">
+          <div class="item-pct" style="color:var(--ring-1);">68%</div>
+          <div class="item-amt">¥96.5M</div>
+        </div>
+      </div>
+
+      <!-- 条目 2: 20% -->
+      <div class="item-card" style="border-left: 4px solid var(--ring-2);">
+        <div class="item-left">
+          <div class="item-dot" style="background:var(--ring-2);"></div>
+          <div>
+            <div class="item-name">原麻麻布与植物染物料</div>
+            <div class="item-sub">独立工坊文创周边与限量包装</div>
+          </div>
+        </div>
+        <div class="item-right">
+          <div class="item-pct">20%</div>
+          <div class="item-amt">¥28.4M</div>
+        </div>
+      </div>
+
+      <!-- 条目 3: 12% -->
+      <div class="item-card" style="border-left: 4px solid var(--ring-3);">
+        <div class="item-left">
+          <div class="item-dot" style="background:var(--ring-3);border:1px solid #999;"></div>
+          <div>
+            <div class="item-name">标准化印艺票据存根</div>
+            <div class="item-sub">通用工业装订配件与耗材</div>
+          </div>
+        </div>
+        <div class="item-right">
+          <div class="item-pct" style="color:var(--muted);">12%</div>
+          <div class="item-amt">¥17.1M</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 底栏元信息 -->
+  <div class="footer-meta">
+    <span>STRUCTURAL ANALYSIS &middot; TACTILE DECK SYSTEM</span>
+    <span>TOTAL VOLUME: ¥142.0M &middot; VERIFIED PIGMENT &amp; FIBER</span>
+  </div>
+</div>
+
+<script>
+  function scaleDeck(){
+    const s=Math.min(window.innerWidth/1280,window.innerHeight/720);
+    document.getElementById('deck-stage').style.transform=`scale(${s})`;
+  }
+  window.addEventListener('resize',scaleDeck);
+  scaleDeck();
+</script>
+</body>
+</html>

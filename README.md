@@ -17,8 +17,8 @@
 - 📜 **两大殿堂级美学体系**：
   - **风格 A · Artisan Paper（手工物料与纸质典藏风）**：将真实纸品物料、400GSM 棉浆纤维、活页打孔透光、印刷锯齿撕边票券与欧洲排印标本格式深度融入演示叙事；支持 9 套大师工匠纸色智能高对比反色引擎（深色底自动转为米白墨色）；
   - **风格 B · Minimal Editorial（留白辑要 · 静奢极简编辑风）**：源自高端品牌画册与独立杂志版面，单一暖中性底色、0.5–1px 发丝细线几何、三色上限、四声部排印、大面积呼吸空气感与不对称留白。
-- 🎯 **零摩擦单风格自主决断 (Autonomous Selection)**：
-  - 单次任务智能体自动研判文案场景并自主决断最契合的一套美学风格直接成卷（杜绝向用户反复确认打扰），成品交付后亦支持随时一键无损重构为另一风格。
+- 🎯 **杜绝模版套用 · 形式追随内容 (Form Follows Content)**：
+  - **绝不让用户在几套死板模版中做单选题！** 智能体根据用户输入的文案属性、受众与数据关系，**现场自由推导构图与图示组合**。文案变则排版变，图表、纯数字、票据、支柱自如衍生。
 - 🏛️ **权威演示理论的工程化落地**：
   - **芭芭拉·明托《金字塔原理》**：结论先行（BLUF）与行动导向标题（Action Titles），杜绝名词短语式主标；
   - **南希·杜阿尔特《Slide:ology》**：3 秒看懂法则（The 3-Second Glance Test），主标断言与视觉焦点一览无余；
@@ -28,7 +28,7 @@
   - **爱德华·塔夫特**：最大化数据墨水比（Data-Ink Ratio）。
 - 📊 **系统化图示设计族谱 (Visual Thinking)**：
   - “文不如表，表不如图”，严禁直排纯文本清单；
-  - 内置四大图示族谱：演进与序列（闭环循环飞轮、细密刻度时间线）、结构与层级（同心嵌套圆、侧线支柱导轨）、对比与分布（十字象限散点、拱顶题名色带列表）、证据与断言（大数字陈述、裁切标定画框）。
+  - 支持柱形对比图、结构比例圆环图、因果增强飞轮、刻度时间线、十字象限、纯数字看板、拱顶色带、标本画框等多维图形语汇。
 - 🕹️ **工业级统一 16:9 Deck 交互引擎**：
   - **16:9 固定舞台动态等比缩放**：JS 监听视口并自动以 `Math.min(vw/1280, vh/720)` 变换，无论窗口如何拉伸均永无滚动条、永不撑破；
   - **沉浸全屏模式（按 `F`）**：自动隐退所有边缘 UI，视口背景平滑延展幻灯片底色；
@@ -38,106 +38,125 @@
 
 ---
 
-## 🖼 双风格版式缩略图画廊 (Design Gallery)
+## 🌟 视觉可能与版式表现力集锦 (Endless Layout Possibilities)
 
-本系统原生支持两大独立美学体系，以下分别展示两种风格在**封面立论、活页与大纲结构、观点与票券论断、图表与矩阵对比、巨型数字表达、行动结语**等多元排版下的真实 16:9 渲染效果（点击缩略图即可直接在新标签页全屏交互体验）：
+> [!TIP]
+> **形式严格追随内容 · 拒绝公式化固定套路**  
+> 本系统**不设任何死板的固化模板**。每一页幻灯片皆由 AI 智能体根据您的具体文案语义、逻辑脉络与数据关系**现场推导、有机设计**。  
+> 以下集中展示本系统在**数据图表、纯数字度量、物料排版与极简编辑**等不同场景下的代表性视觉表现力与灵感思路（点击任意预览即可在新标签页体验交互原型源码）：
 
-### 📜 风格 A · Artisan Paper (手工物料与纸质典藏风)
+### 1. 📊 权威数据图表与图形思考 (Data Charts & Visual Thinking)
 
-> **场景定位**：融资路演 Pitch Deck、品牌发布会、年度汇报、工艺/手作/文化宣讲、实体行业汇报。  
-> **视觉语汇**：400GSM 棉浆纸张微距纹理、活页双联打孔透光、印刷锯齿撕边票券、多色母版智能反色。  
-> 🔗 完整交互范例：[`examples/demo_artisan_paper.html`](examples/demo_artisan_paper.html)
+杜绝三维立体与廉价数码渐变，遵循塔夫特数据墨水比，以纯粹矢量发丝几何构建高信噪比图表：
 
 <table width="100%">
   <tr>
-    <td width="33.3%" align="center">
-      <a href="examples/demo_artisan_paper.html#1"><img src="assets/previews/artisan_01.png" alt="01 封面大版" /></a>
+    <td width="50%" align="center">
+      <a href="examples/10_column_bar_chart.html"><img src="assets/previews/10_column_bar_chart.png" alt="柱形对比图" /></a>
       <br>
-      <b>01 · 封面大版 (Poster Cover)</b><br>
-      <sub>档案物料立论封面 · 火漆印章</sub>
+      <b><a href="examples/10_column_bar_chart.html">柱形对比图 (Column Bar Chart)</a></b><br>
+      <sub>发丝刻度基线 · 季度增量高亮 · 侧栏关键结论卡片</sub>
     </td>
-    <td width="33.3%" align="center">
-      <a href="examples/demo_artisan_paper.html#2"><img src="assets/previews/artisan_02.png" alt="02 双联活页议程" /></a>
+    <td width="50%" align="center">
+      <a href="examples/11_donut_ring_chart.html"><img src="assets/previews/11_donut_ring_chart.png" alt="结构圆环图" /></a>
       <br>
-      <b>02 · 双联活页议程 (Rowland Split)</b><br>
-      <sub>打孔透光装订 · 章节结构导轨</sub>
-    </td>
-    <td width="33.3%" align="center">
-      <a href="examples/demo_artisan_paper.html#3"><img src="assets/previews/artisan_03.png" alt="03 锯齿票券论断" /></a>
-      <br>
-      <b>03 · 锯齿票券论断 (Sawtooth Ticket)</b><br>
-      <sub>撕边物料票券 · 核心金句断言</sub>
+      <b><a href="examples/11_donut_ring_chart.html">结构圆环图 (Donut Ring Chart)</a></b><br>
+      <sub>精密 SVG 环状切片 · 中心大字号核心指标 · 结构明细条目卡</sub>
     </td>
   </tr>
   <tr>
-    <td width="33.3%" align="center">
-      <a href="examples/demo_artisan_paper.html#4"><img src="assets/previews/artisan_04.png" alt="04 特性支柱矩阵" /></a>
+    <td width="50%" align="center">
+      <a href="examples/02_loop_cycle.html"><img src="assets/previews/editorial_02.png" alt="闭环飞轮" /></a>
       <br>
-      <b>04 · 特性支柱矩阵 (Pillars Grid)</b><br>
-      <sub>四列竖向导轨 · 图表特性对比</sub>
+      <b><a href="examples/02_loop_cycle.html">闭环增强回路飞轮 (Loop Cycle Flywheel)</a></b><br>
+      <sub>四阶段因果自驱动回路 · 细线导轨弧线 · 中心徽标锚点</sub>
     </td>
-    <td width="33.3%" align="center">
-      <a href="examples/demo_artisan_paper.html#5"><img src="assets/previews/artisan_05.png" alt="05 标本数字度量" /></a>
+    <td width="50%" align="center">
+      <a href="examples/05_quadrant_chart.html"><img src="assets/previews/editorial_04.png" alt="十字象限" /></a>
       <br>
-      <b>05 · 标本数字度量 (Specimen Metrics)</b><br>
-      <sub>巨型数字指标 · 标本清单印证</sub>
-    </td>
-    <td width="33.3%" align="center">
-      <a href="examples/demo_artisan_paper.html#6"><img src="assets/previews/artisan_06.png" alt="06 典藏印章结语" /></a>
-      <br>
-      <b>06 · 典藏印章结语 (Archival Outro)</b><br>
-      <sub>工坊油墨咬合 · 行动结语落款</sub>
+      <b><a href="examples/05_quadrant_chart.html">战略十字象限矩阵 (2×2 Quadrant Axis)</a></b><br>
+      <sub>双轴四象限战略坐标 · 散点分布标定 · 差异化价值区位</sub>
     </td>
   </tr>
 </table>
 
 ---
 
-### 🏛️ 风格 B · Minimal Editorial (留白辑要 · 静奢极简编辑风)
+### 2. 🔢 纯数字度量衡与高墨水比断言 (Pure Numbers & Quantitative Impact)
 
-> **场景定位**：商业策略咨询、极简思考笔记、设计/摄影作品集、前沿科技洞察、文学哲学思考、个人分享。  
-> **视觉语汇**：单一暖中性底色（象牙白）、0.5–1px 发丝细线几何、三色上限、四声部排印、大面积呼吸空气感。  
-> 🔗 完整交互范例：[`examples/demo_minimal_editorial.html`](examples/demo_minimal_editorial.html)
+当文稿的核心在于关键数据突破时，以超大字号数字压阵，赋予画面极具力量感的留白与冲击力：
+
+<table width="100%">
+  <tr>
+    <td width="50%" align="center">
+      <a href="examples/12_pure_number_stats.html"><img src="assets/previews/12_pure_number_stats.png" alt="纯数字陈述大版" /></a>
+      <br>
+      <b><a href="examples/12_pure_number_stats.html">纯数字陈述大版 (Pure Numbers Showcase)</a></b><br>
+      <sub>84px 衬线巨字 · 核心度量衡三列阵列 · 极致信噪比释放</sub>
+    </td>
+    <td width="50%" align="center">
+      <a href="examples/demo_artisan_paper.html#5"><img src="assets/previews/artisan_05.png" alt="标本技术矩阵" /></a>
+      <br>
+      <b><a href="examples/demo_artisan_paper.html#5">标本技术矩阵 (Specimen Data Sheet)</a></b><br>
+      <sub>欧洲排印标本格式 · 4 栏度量指标 · 等宽技术参数校验表</sub>
+    </td>
+  </tr>
+</table>
+
+---
+
+### 3. 📜 纸质物料典藏与触觉排版 (Artisan Paper Material Layouts)
+
+将 400GSM 棉浆纤维微距底纹、物理打孔透光、锯齿撕边票券与火漆印章融入实体商业与路演叙事：
 
 <table width="100%">
   <tr>
     <td width="33.3%" align="center">
-      <a href="examples/demo_minimal_editorial.html#1"><img src="assets/previews/editorial_01.png" alt="01 空镜巨字目录" /></a>
+      <a href="examples/demo_artisan_paper.html#1"><img src="assets/previews/artisan_01.png" alt="立论大字封面" /></a>
       <br>
-      <b>01 · 空镜巨字目录 (Hero-Word & TOC)</b><br>
-      <sub>不对称留白 · 衬线编号目录</sub>
+      <b>立论大字封面 (Poster Cover)</b><br>
+      <sub>火漆印章 · 档案打字机元信息</sub>
     </td>
     <td width="33.3%" align="center">
-      <a href="examples/demo_minimal_editorial.html#2"><img src="assets/previews/editorial_02.png" alt="02 闭环循环飞轮" /></a>
+      <a href="examples/demo_artisan_paper.html#2"><img src="assets/previews/artisan_02.png" alt="双联活页大纲" /></a>
       <br>
-      <b>02 · 闭环循环飞轮 (Loop Flow Cycle)</b><br>
-      <sub>因果回路 · 发丝线几何图表</sub>
+      <b>双联活页大纲 (Rowland Split)</b><br>
+      <sub>打孔透光内阴影 · 双栏结构导轨</sub>
     </td>
     <td width="33.3%" align="center">
-      <a href="examples/demo_minimal_editorial.html#3"><img src="assets/previews/editorial_03.png" alt="03 拱顶色带对比" /></a>
+      <a href="examples/demo_artisan_paper.html#3"><img src="assets/previews/artisan_03.png" alt="锯齿票券论断" /></a>
       <br>
-      <b>03 · 拱顶色带对比 (Banded Attribute)</b><br>
-      <sub>横向色带矩阵 · 高对比度分析</sub>
+      <b>锯齿撕边票券 (Sawtooth Ticket)</b><br>
+      <sub>物理圆弧齿孔 · 悬浮金句卡片</sub>
     </td>
   </tr>
+</table>
+
+---
+
+### 4. 🏛️ 静奢编辑与四声部排印 (Quiet Luxury Minimal Editorial)
+
+象牙暖白底色、0.5–1px 发丝细线几何、不对称留白、三色上限，如独立杂志画册般沉静：
+
+<table width="100%">
   <tr>
     <td width="33.3%" align="center">
-      <a href="examples/demo_minimal_editorial.html#4"><img src="assets/previews/editorial_04.png" alt="04 十字象限散点" /></a>
+      <a href="examples/demo_minimal_editorial.html#1"><img src="assets/previews/editorial_01.png" alt="空镜巨字与目录" /></a>
       <br>
-      <b>04 · 十字象限散点 (Quadrant Matrix)</b><br>
-      <sub>双轴四象限 · 战略坐标定位</sub>
+      <b>空镜巨字与目录 (Hero-Word & TOC)</b><br>
+      <sub>不对称留白 · 老式衬线编号目录</sub>
     </td>
     <td width="33.3%" align="center">
-      <a href="examples/demo_minimal_editorial.html#5"><img src="assets/previews/editorial_05.png" alt="05 极简数字陈述" /></a>
+      <a href="examples/04_banded_list.html"><img src="assets/previews/editorial_03.png" alt="拱顶色带对比" /></a>
       <br>
-      <b>05 · 极简数字陈述 (Number Statement)</b><br>
-      <sub>大字号纯粹断言 · 最大数据墨水比</sub>
+      <b>拱顶色带对比 (Banded Attribute)</b><br>
+      <sub>拱顶题名 · 高对比三色带对照列表</sub>
     </td>
     <td width="33.3%" align="center">
-      <a href="examples/demo_minimal_editorial.html#6"><img src="assets/previews/editorial_06.png" alt="06 极简行动尾页" /></a>
+      <a href="examples/demo_minimal_editorial.html#6"><img src="assets/previews/editorial_06.png" alt="极简行动尾页" /></a>
       <br>
-      <b>06 · 极简行动尾页 (Action Outro)</b><br>
-      <sub>克制留白 · 行动呼吁与落款</sub>
+      <b>极简行动尾页 (Action Outro)</b><br>
+      <sub>发丝细线边框 · 克制行动呼吁落款</sub>
     </td>
   </tr>
 </table>
@@ -229,23 +248,18 @@ git clone https://github.com/gaoyatting/artisan-paper-deck.git
 
 ```
 artisan-paper-deck/
-├── SKILL.md                          # 核心技能规范（双风格哲学、图示语法、交互定律）
-├── templates/                        # 开箱即用模板脚手架
-│   ├── deck_template.html            # 标准 16:9 多页完整 Deck 脚手架
-│   └── editorial_card_scaffold.html  # 静奢单页/卡片快速脚手架
-├── examples/                         # 经典版式与完整多页双风格范例
-│   ├── demo_artisan_paper.html       # 风格 A：手工纸质物料 6 页完整演示文稿
-│   ├── demo_minimal_editorial.html   # 风格 B：留白辑要极简 6 页完整演示文稿
-│   ├── 01_intro_deck.html            # 经典 5 页介绍 Deck
-│   ├── 02_loop_cycle.html            # 闭环循环飞轮范例
-│   ├── 03_nested_circles.html        # 同心嵌套圆范例
-│   ├── 04_banded_list.html           # 拱顶题名色带列表范例
-│   ├── 05_quadrant_chart.html        # 十字象限散点矩阵范例
-│   ├── 06_tick_timeline.html         # 细密刻度时间线范例
-│   ├── 07_side_rule_columns.html     # 侧线三列编号支柱范例
-│   ├── 08_number_statement.html      # 极简巨型数字陈述范例
-│   └── 09_crop_mark_frame.html       # 工业裁切标定画框范例
-├── assets/previews/                  # 范例高清缩略图、色卡矩阵与画廊图片
+├── SKILL.md                          # 核心规范与思维引擎（排版哲学、图示族谱、交互定律）
+├── templates/                        # 开箱即用底座脚手架（自适应 16:9 舞台与交互脚本）
+│   ├── deck_template.html            # 标准 16:9 多页交互 Deck 基础容器
+│   └── editorial_card_scaffold.html  # 单页极简卡片轻量脚手架
+├── examples/                         # 排版灵感与设计思考参考（图表/纯数字/物料/极简思路原型，拒绝模板套用）
+│   ├── 10_column_bar_chart.html      # 柱形对比图表原型
+│   ├── 11_donut_ring_chart.html      # 结构比例圆环图原型
+│   ├── 12_pure_number_stats.html     # 纯数字度量衡大版原型
+│   ├── demo_artisan_paper.html       # 风格 A 手工纸质物料完整多页参考
+│   ├── demo_minimal_editorial.html   # 风格 B 静奢极简完整多页参考
+│   └── ...                           # 闭环飞轮、时间线、象限等其他思路原型
+├── assets/previews/                  # 高清缩略图、图表与色卡矩阵图片
 └── scripts/
     └── export_pdf.js                 # 基于 Puppeteer 的无损 16:9 矢量批量导出脚本
 ```

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>范例 10 · 柱形图 — 权威数据图表</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Noto+Serif+SC:wght@400;600&family=Jost:wght@300;400;500;600&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F2F0EB;
+    --ink:#1E1C1A;
+    --accent:#A65235;
+    --muted:rgba(30,28,26,.62);
+    --hairline:rgba(30,28,26,.22);
+    --bar-active:#9B4F3B;
+    --bar-base:#D4CDC3;
+    --bar-target:rgba(30,28,26,.3);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{height:100%;background:var(--bg);overflow:hidden;display:flex;align-items:center;justify-content:center;}
+  .stage{width:1280px;height:720px;background:var(--bg);position:relative;flex:none;transform-origin:center;
+         font-family:'Jost',-apple-system,'PingFang SC',sans-serif;color:var(--ink);padding:48px 100px;
+         display:flex;flex-direction:column;justify-content:space-between;}
+
+  .meta-top{display:flex;justify-content:space-between;font-family:'Courier Prime',monospace;
+            font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--hairline);padding-bottom:12px;}
+
+  /* 标题立论区 */
+  .header{margin-top:20px;}
+  .kicker{font-family:'Courier Prime',monospace;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);}
+  h1{font-family:'Noto Serif SC',serif;font-size:36px;font-weight:600;letter-spacing:.04em;margin-top:6px;line-height:1.2;}
+  h1 .anno{font-family:'Playfair Display',serif;font-style:italic;font-weight:400;color:var(--accent);margin-left:8px;}
+  .desc{margin-top:6px;font-weight:300;font-size:13.5px;color:var(--muted);letter-spacing:.02em;}
+
+  /* 柱状图主体容器 */
+  .chart-container{flex:1;margin:28px 0 20px;display:flex;position:relative;border-bottom:1px solid var(--ink);}
+  
+  /* 左侧 Y 轴刻度 */
+  .y-axis{width:64px;display:flex;flex-direction:column;justify-content:space-between;padding-bottom:28px;
+          font-family:'Courier Prime',monospace;font-size:11px;color:var(--muted);text-align:right;padding-right:16px;}
+  
+  /* 图表绘图区 */
+  .plot-area{flex:1;position:relative;display:flex;align-items:flex-end;justify-content:space-between;padding:0 30px 28px;}
+  
+  /* 背景参考基线 */
+  .grid-lines{position:absolute;inset:0 0 28px 0;display:flex;flex-direction:column;justify-content:space-between;pointer-events:none;}
+  .grid-line{width:100%;border-top:1px dashed var(--hairline);}
+
+  /* 单个柱子组合 */
+  .bar-group{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;width:90px;}
+  
+  /* 柱形条本体 */
+  .bar-pillar{width:46px;border-radius:2px 2px 0 0;position:relative;transition:transform .3s ease;}
+  .bar-pillar.base{background:var(--bar-base);}
+  .bar-pillar.highlight{background:var(--bar-active);}
+  
+  /* 柱顶数字与增幅 */
+  .bar-val{font-family:'Playfair Display',serif;font-size:20px;font-weight:600;margin-bottom:6px;color:var(--ink);line-height:1;}
+  .bar-val-badge{font-family:'Courier Prime',monospace;font-size:10px;background:var(--accent);color:#FFF;
+                 padding:2px 6px;border-radius:2px;font-weight:bold;margin-bottom:4px;display:inline-block;}
+
+  /* X 轴标签 */
+  .x-label{position:absolute;bottom:-26px;font-family:'Courier Prime',monospace;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;white-space:nowrap;}
+
+  /* 右侧关键结论侧栏卡片 */
+  .sidebar-card{width:260px;margin-left:48px;border-left:1px solid var(--hairline);padding-left:32px;display:flex;flex-direction:column;justify-content:center;}
+  .stat-badge{font-family:'Playfair Display',serif;font-size:46px;font-weight:600;color:var(--accent);line-height:1;}
+  .stat-badge small{font-size:20px;font-family:'Courier Prime',monospace;}
+  .stat-desc{margin-top:10px;font-size:13px;line-height:1.6;color:var(--muted);}
+  .stat-tag{display:inline-block;margin-top:16px;font-family:'Courier Prime',monospace;font-size:10px;text-transform:uppercase;
+            padding:4px 8px;border:1px solid var(--hairline);border-radius:2px;color:var(--muted);}
+
+  /* 底部元信息 */
+  .footer-meta{display:flex;justify-content:space-between;font-family:'Courier Prime',monospace;font-size:10px;color:var(--muted);letter-spacing:.15em;border-top:1px solid var(--hairline);padding-top:10px;}
+</style>
+</head>
+<body>
+
+<div class="stage" id="deck-stage">
+  <!-- 顶栏元信息 -->
+  <div class="meta-top">
+    <span>EXHIBIT 10 &middot; COLUMN BAR CHART</span>
+    <span>QUARTERLY GROWTH TRAJECTORY</span>
+    <span>FIG. 04 / METRICS</span>
+  </div>
+
+  <!-- 标题论断区 (Action Title) -->
+  <div class="header">
+    <div class="kicker">&bull; REVENUE MOMENTUM &middot; 增长动量</div>
+    <h1>四季度复合产值突破 142M，高附加值工艺占比跃升 64%<span class="anno">/ Record Peak</span></h1>
+    <div class="desc">以真实的物理发丝线标尺替代花哨三维图表，严谨遵循爱德华·塔夫特数据墨水比原则。</div>
+  </div>
+
+  <!-- 图表核心区域 -->
+  <div style="display:flex; flex:1; align-items:stretch;">
+    <div class="chart-container">
+      <!-- 背景参考线 -->
+      <div class="grid-lines">
+        <div class="grid-line"></div>
+        <div class="grid-line"></div>
+        <div class="grid-line"></div>
+        <div class="grid-line"></div>
+      </div>
+
+      <!-- Y 轴刻度 -->
+      <div class="y-axis">
+        <span>150M</span>
+        <span>100M</span>
+        <span>50M</span>
+        <span>0M</span>
+      </div>
+
+      <!-- 柱状图主区域 -->
+      <div class="plot-area">
+        <!-- 柱 1: Q1 -->
+        <div class="bar-group">
+          <div class="bar-val">48M</div>
+          <div class="bar-pillar base" style="height: 96px;"></div>
+          <div class="x-label">2025 Q1</div>
+        </div>
+
+        <!-- 柱 2: Q2 -->
+        <div class="bar-group">
+          <div class="bar-val">68M</div>
+          <div class="bar-pillar base" style="height: 136px;"></div>
+          <div class="x-label">2025 Q2</div>
+        </div>
+
+        <!-- 柱 3: Q3 -->
+        <div class="bar-group">
+          <div class="bar-val">95M</div>
+          <div class="bar-pillar base" style="height: 190px;"></div>
+          <div class="x-label">2025 Q3</div>
+        </div>
+
+        <!-- 柱 4: Q4 (高亮突破) -->
+        <div class="bar-group">
+          <div class="bar-val-badge">+49.5%</div>
+          <div class="bar-val" style="color:var(--accent);">142M</div>
+          <div class="bar-pillar highlight" style="height: 254px;"></div>
+          <div class="x-label" style="color:var(--accent);font-weight:bold;">2025 Q4 &bull; PEAK</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 右侧论断侧栏卡片 -->
+    <div class="sidebar-card">
+      <div class="kicker">KEY TAKEAWAY</div>
+      <div class="stat-badge">2.96<small>&times;</small></div>
+      <div class="stat-desc">
+        较第一季度实现近三倍体量扩张，第四季度单季即达到全年总营收的 <strong>40.2%</strong>。
+      </div>
+      <div class="stat-tag">DATA-INK RATIO: 0.94</div>
+    </div>
+  </div>
+
+  <!-- 底栏元信息 -->
+  <div class="footer-meta">
+    <span>AUDITED FINANCIALS &middot; GAOYATTING ATELIER</span>
+    <span>SOURCE: ARCHIVE-LEDGER-2025-Q4 &middot; STRICT CONFIDENTIAL</span>
+  </div>
+</div>
+
+<script>
+  function scaleDeck(){
+    const s=Math.min(window.innerWidth/1280,window.innerHeight/720);
+    document.getElementById('deck-stage').style.transform=`scale(${s})`;
+  }
+  window.addEventListener('resize',scaleDeck);
+  scaleDeck();
+</script>
+</body>
+</html>

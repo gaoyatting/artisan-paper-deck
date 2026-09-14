@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>范例 12 · 纯数字陈述 — 极简度量衡与数据印证</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=Noto+Serif+SC:wght@400;600&family=Jost:wght@300;400;500&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F2F0EB;
+    --ink:#1E1C1A;
+    --accent:#A65235;
+    --muted:rgba(30,28,26,.62);
+    --hairline:rgba(30,28,26,.22);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{height:100%;background:var(--bg);overflow:hidden;display:flex;align-items:center;justify-content:center;}
+  .stage{width:1280px;height:720px;background:var(--bg);position:relative;flex:none;transform-origin:center;
+         font-family:'Jost',-apple-system,'PingFang SC',sans-serif;color:var(--ink);padding:52px 108px;
+         display:flex;flex-direction:column;justify-content:space-between;}
+
+  .meta-top{display:flex;justify-content:space-between;font-family:'Courier Prime',monospace;
+            font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--hairline);padding-bottom:12px;}
+
+  /* 标题立论区 */
+  .header{margin-top:20px;}
+  .kicker{font-family:'Courier Prime',monospace;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);}
+  h1{font-family:'Noto Serif SC',serif;font-size:36px;font-weight:600;letter-spacing:.04em;margin-top:6px;line-height:1.2;}
+  h1 .anno{font-family:'Playfair Display',serif;font-style:italic;font-weight:400;color:var(--accent);margin-left:8px;}
+  .desc{margin-top:6px;font-weight:300;font-size:13.5px;color:var(--muted);letter-spacing:.02em;}
+
+  /* 纯数字三列大版主体 */
+  .numbers-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;margin:auto 0;align-items:flex-end;}
+
+  .num-card{border-top:1.5px solid var(--ink);padding-top:24px;position:relative;}
+  .num-card.featured{border-top:2px solid var(--accent);}
+  
+  .num-prefix{font-family:'Courier Prime',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.2em;color:var(--muted);margin-bottom:8px;}
+  .num-val{font-family:'Playfair Display',serif;font-size:84px;font-weight:600;line-height:0.92;letter-spacing:-0.02em;color:var(--ink);}
+  .num-val.accent{color:var(--accent);}
+  .num-unit{font-family:'Courier Prime',monospace;font-size:24px;font-weight:400;margin-left:4px;vertical-align:baseline;}
+
+  .num-label{font-family:'Noto Serif SC',serif;font-size:19px;font-weight:600;margin-top:18px;letter-spacing:.04em;}
+  .num-sub{margin-top:8px;font-size:12.5px;line-height:1.6;color:var(--muted);font-weight:300;}
+
+  /* 底部元信息 */
+  .footer-meta{display:flex;justify-content:space-between;font-family:'Courier Prime',monospace;font-size:10px;color:var(--muted);letter-spacing:.15em;border-top:1px solid var(--hairline);padding-top:10px;}
+</style>
+</head>
+<body>
+
+<div class="stage" id="deck-stage">
+  <!-- 顶栏元信息 -->
+  <div class="meta-top">
+    <span>EXHIBIT 12 &middot; PURE NUMERIC STATEMENT</span>
+    <span>QUANTITATIVE METRICS &middot; 极简纯数字</span>
+    <span>FIG. 06 / STATS</span>
+  </div>
+
+  <!-- 标题论断区 (Action Title) -->
+  <div class="header">
+    <div class="kicker">&bull; CORE METRICS &middot; 核心度量衡</div>
+    <h1>三大极限量化标尺：以纯粹数字印证真实工艺与规模体量<span class="anno">/ Pure Numbers</span></h1>
+    <div class="desc">摒弃繁杂装饰，以超高数据墨水比释放大字号纯数字的视觉冲击力与叙事力量。</div>
+  </div>
+
+  <!-- 纯数字三大列主体 -->
+  <div class="numbers-grid">
+    <!-- 数字 1: 99.8% -->
+    <div class="num-card">
+      <div class="num-prefix">01 &middot; RELIABILITY</div>
+      <div class="num-val">99.8<span class="num-unit">%</span></div>
+      <div class="num-label">印刷交付合规率</div>
+      <div class="num-sub">在 1,420 套高难度特种纸品印制项目中，色差与裁切公差控制在 &plusmn;0.1mm 内。</div>
+    </div>
+
+    <!-- 数字 2: 450 GSM (高亮核心) -->
+    <div class="num-card featured">
+      <div class="num-prefix" style="color:var(--accent);font-weight:bold;">02 &middot; TACTILE WEIGHT &bull; CORE</div>
+      <div class="num-val accent">450<span class="num-unit">GSM</span></div>
+      <div class="num-label">冷压重磅纯棉浆底板</div>
+      <div class="num-sub">彻底消除数码塑料感，以物理纸张的厚重与纤维肌理唤醒观众的触觉潜意识。</div>
+    </div>
+
+    <!-- 数字 3: 3.6x -->
+    <div class="num-card">
+      <div class="num-prefix">03 &middot; EFFICIENCY</div>
+      <div class="num-val">3.6<span class="num-unit">&times;</span></div>
+      <div class="num-label">叙事信噪比倍率</div>
+      <div class="num-sub">单页汉字严格压缩在 45 字以内，观众对核心观点的 3 秒理解与留存率提升 260%。</div>
+    </div>
+  </div>
+
+  <!-- 底栏元信息 -->
+  <div class="footer-meta">
+    <span>EDWARD TUFTE MAX DATA-INK DOCTRINE</span>
+    <span>VERIFIED METRICS 2026 &middot; STRICT EDITORIAL DISCIPLINE</span>
+  </div>
+</div>
+
+<script>
+  function scaleDeck(){
+    const s=Math.min(window.innerWidth/1280,window.innerHeight/720);
+    document.getElementById('deck-stage').style.transform=`scale(${s})`;
+  }
+  window.addEventListener('resize',scaleDeck);
+  scaleDeck();
+</script>
+</body>
+</html>
