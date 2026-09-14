@@ -123,6 +123,30 @@
       border-radius: 0 !important;
     }
 
+    /* 顶部「编辑文案 / 完成编辑」按钮状态与 hover 表现（坚决杜绝白字白底） */
+    #btn-toggle-edit {
+      background-color: #FAF8F4;
+      color: #242321;
+      border: 1px solid #DCD6C8;
+      transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+    }
+    #btn-toggle-edit:hover {
+      background-color: #FFFFFF !important;
+      border-color: #C2B8A8 !important;
+      color: #000000 !important;
+    }
+    body.is-editing-mode #btn-toggle-edit {
+      background-color: #823838 !important;
+      color: #FFFFFF !important;
+      border-color: #823838 !important;
+      box-shadow: 0 1px 4px rgba(130, 56, 56, 0.4);
+    }
+    body.is-editing-mode #btn-toggle-edit:hover {
+      background-color: #632626 !important;
+      border-color: #632626 !important;
+      color: #FFFFFF !important;
+    }
+
     /* 行内即时编辑 (E) 焦点虚线高亮 */
     body.is-editing-mode [data-editable="true"] {
       outline: 1.5px dashed #F7F3EC !important;
@@ -269,7 +293,7 @@
         [←/→] 翻页 &middot; [F] 全屏演讲 &middot; [E] 编辑文案 &middot; [Cmd+S] 保存 &middot; [R] 重感动效 &middot; [P] 打印
       </span>
 
-      <button id="btn-toggle-edit" title="开启网页直编 (E)" class="px-3.5 py-1.5 rounded text-xs active:scale-95 flex items-center justify-center font-medium cursor-pointer border border-neutral-300 bg-white hover:bg-neutral-50 text-neutral-700">
+      <button id="btn-toggle-edit" title="开启网页直编 (E)" class="px-3.5 py-1.5 rounded text-xs active:scale-95 flex items-center justify-center font-medium cursor-pointer">
         <span id="edit-mode-text">编辑文案</span>
       </button>
 
@@ -996,15 +1020,12 @@
         el.spellcheck = false;
       });
 
-      const btnEdit = document.getElementById('btn-toggle-edit');
       const text = document.getElementById('edit-mode-text');
-      if (btnEdit && text) {
+      if (text) {
         if (isEditingMode) {
-          btnEdit.className = 'px-3.5 py-1.5 rounded text-xs active:scale-95 flex items-center justify-center font-bold cursor-pointer bg-[#F6F3EC] text-[#242321] border border-white';
-          text.textContent = '退出编辑 (Cmd+S保存)';
+          text.textContent = '完成编辑 (Cmd+S)';
           showToast('✏️ 已开启文字直编，按 Cmd+S 保存修改');
         } else {
-          btnEdit.className = 'px-3.5 py-1.5 rounded text-xs active:scale-95 flex items-center justify-center font-medium cursor-pointer border border-neutral-300 bg-white hover:bg-neutral-50 text-neutral-700';
           text.textContent = '编辑文案';
           saveEditsToLocalStorage();
         }

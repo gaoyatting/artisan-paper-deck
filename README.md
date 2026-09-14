@@ -285,7 +285,8 @@ git clone https://github.com/gaoyatting/artisan-paper-deck.git
 artisan-paper-deck/
 ├── SKILL.md                          # 核心规范与思维引擎（排版哲学、图示族谱、交互定律）
 ├── templates/                        # 开箱即用底座脚手架（自适应 16:9 舞台与交互脚本）
-│   ├── deck_template.html            # 标准 16:9 多页交互 Deck 基础容器
+│   ├── deck_template.html            # 风格 A (Artisan Paper) 专属 16:9 多页交互 Deck 容器
+│   ├── deck_editorial_template.html  # 风格 B (Minimal Editorial) 专属 16:9 多页交互 Deck 容器
 │   └── editorial_card_scaffold.html  # 单页极简卡片轻量脚手架
 ├── examples/                         # 排版灵感与设计思考参考（图表/纯数字/物料/极简思路原型，拒绝模板套用）
 │   ├── 10_column_bar_chart.html      # 柱形对比图表原型

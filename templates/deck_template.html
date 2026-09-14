@@ -189,6 +189,30 @@
       pointer-events: none;
     }
 
+    /* 顶部「编辑文案 / 完成编辑」按钮状态与 hover 表现（坚决杜绝白字白底） */
+    #btn-toggle-edit {
+      background-color: #FAF8F4;
+      color: #242321;
+      border: 1px solid #DCD6C8;
+      transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+    }
+    #btn-toggle-edit:hover {
+      background-color: #FFFFFF !important;
+      border-color: #C2B8A8 !important;
+      color: #000000 !important;
+    }
+    body.is-editing-mode #btn-toggle-edit {
+      background-color: #823838 !important;
+      color: #FFFFFF !important;
+      border-color: #823838 !important;
+      box-shadow: 0 1px 4px rgba(130, 56, 56, 0.4);
+    }
+    body.is-editing-mode #btn-toggle-edit:hover {
+      background-color: #632626 !important;
+      border-color: #632626 !important;
+      color: #FFFFFF !important;
+    }
+
     /* 行内即时编辑 (Inline Editing) 焦点高亮与层级强保障 */
     body.is-editing-mode [data-editable="true"],
     body.is-editing-mode .editable-text,
@@ -385,7 +409,7 @@
       </span>
 
       <!-- 行内即时编辑按钮 (纯文字纯粹按钮) -->
-      <button id="btn-toggle-edit" title="开启/关闭网页内即时文字编辑 (快捷键: E)" class="px-3.5 py-1.5 bg-[#FAF8F4] hover:bg-white text-[#242321] border border-[#DCD6C8] rounded text-xs transition active:scale-95 flex items-center justify-center font-medium cursor-pointer">
+      <button id="btn-toggle-edit" title="开启/关闭网页内即时文字编辑 (快捷键: E)" class="px-3.5 py-1.5 rounded text-xs transition active:scale-95 flex items-center justify-center font-medium cursor-pointer">
         <span id="edit-mode-text">编辑文案</span>
       </button>
 
@@ -792,36 +816,18 @@
     <!-- 抽屉标题 -->
     <div class="p-5 border-b border-[#E5DFD3] flex items-center justify-between font-typewriter text-xs">
       <div class="flex items-center space-x-2">
-        <span class="font-bold tracking-wider uppercase text-[#823838]">&sect; 配置</span>
+        <span class="font-bold tracking-wider uppercase text-[#823838]">&sect; 工坊调配面板</span>
       </div>
       <button id="btn-close-drawer" class="text-neutral-400 hover:text-black font-mono text-base cursor-pointer">&times;</button>
     </div>
 
     <!-- 抽屉滚动内容 -->
     <div class="p-5 space-y-6 overflow-y-auto flex-1 text-xs">
-<!-- 风格切换 (Style Switcher) -->
-      <div class="space-y-2">
+      <!-- 配色方案切换 (9 大工坊纸质母色) -->
+      <div class="space-y-3">
         <div class="font-typewriter text-[11px] font-bold text-neutral-700 flex justify-between items-center">
-          <span>视觉设计风格 (Style)</span>
-          <span id="active-style-label" class="text-[10px] text-[#823838] font-bold uppercase">ARTISAN</span>
-        </div>
-        <div class="grid grid-cols-2 gap-2" id="style-switch-buttons">
-          <button id="btn-style-artisan" class="px-2.5 py-2 rounded border border-[#823838] bg-[#823838]/10 text-[#823838] text-xs transition cursor-pointer flex flex-col items-center">
-            <span class="font-bold text-[11px]">物料典藏风</span>
-            <span class="text-[9px] opacity-75 mt-0.5 font-typewriter">Artisan Paper</span>
-          </button>
-          <button id="btn-style-editorial" class="px-2.5 py-2 rounded border border-neutral-300 bg-white hover:bg-neutral-50 text-neutral-700 text-xs transition cursor-pointer flex flex-col items-center">
-            <span class="font-bold text-[11px]">留白静奢风</span>
-            <span class="text-[9px] opacity-75 mt-0.5 font-typewriter">Minimal Editorial</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- 配色方案切换 (自动随风格切换母色) -->
-      <div class="space-y-3 pt-2 border-t border-[#E5DFD3]">
-        <div class="font-typewriter text-[11px] font-bold text-neutral-700 flex justify-between items-center">
-          <span id="palette-group-title">9 大工坊母色调配</span>
-          <span class="text-[10px] text-neutral-400 font-normal">自动智能反转</span>
+          <span id="palette-group-title">9 大工坊纸质母色</span>
+          <span class="text-[10px] text-neutral-400 font-normal">自动智能文字反转</span>
         </div>
         <div class="grid grid-cols-3 gap-2" id="palette-buttons-grid">
           <!-- JS 动态渲染配色按钮 -->
@@ -1407,54 +1413,7 @@
     // 3. 风格与配色切换系统 (Style & Palettes Engine)
     // =========================================================================
     function getActivePaletteMap() {
-      return deckData.style === 'editorial' ? editorialPalettes : artisanPalettes;
-    }
-
-    function applyStyle(styleKey, save = true) {
-      deckData.style = styleKey;
-      const isEditorial = styleKey === 'editorial';
-      
-      // 1. 切换主体 body 与 stage 的 class
-      if (isEditorial) {
-        document.body.classList.remove('theme-artisan');
-        document.body.classList.add('theme-editorial');
-      } else {
-        document.body.classList.remove('theme-editorial');
-        document.body.classList.add('theme-artisan');
-      }
-
-      // 2. 抽屉风格按钮高亮切换
-      const btnArtisan = document.getElementById('btn-style-artisan');
-      const btnEditorial = document.getElementById('btn-style-editorial');
-      const styleLabel = document.getElementById('active-style-label');
-      const groupTitle = document.getElementById('palette-group-title');
-
-      if (btnArtisan && btnEditorial) {
-        if (isEditorial) {
-          btnEditorial.className = 'px-2.5 py-2 rounded border border-[#823838] bg-[#823838]/10 text-[#823838] text-xs transition cursor-pointer flex flex-col items-center';
-          btnArtisan.className = 'px-2.5 py-2 rounded border border-neutral-300 bg-white hover:bg-neutral-50 text-neutral-700 text-xs transition cursor-pointer flex flex-col items-center';
-        } else {
-          btnArtisan.className = 'px-2.5 py-2 rounded border border-[#823838] bg-[#823838]/10 text-[#823838] text-xs transition cursor-pointer flex flex-col items-center';
-          btnEditorial.className = 'px-2.5 py-2 rounded border border-neutral-300 bg-white hover:bg-neutral-50 text-neutral-700 text-xs transition cursor-pointer flex flex-col items-center';
-        }
-      }
-      if (styleLabel) styleLabel.textContent = isEditorial ? 'EDITORIAL' : 'ARTISAN';
-      if (groupTitle) groupTitle.textContent = isEditorial ? '6 大暖中性色调' : '9 大工坊母色调配';
-
-      // 3. 若当前选中的 palette 不在当前风格库中，自动切至风格默认色
-      const currentMap = getActivePaletteMap();
-      if (!currentMap[deckData.palette]) {
-        deckData.palette = isEditorial ? 'ivory' : 'celadon';
-      }
-
-      // 4. 应用颜色并重绘调配抽屉按钮
-      applyPalette(deckData.palette, false);
-      renderPaletteButtons();
-
-      if (save) {
-        saveDeckConfig();
-        showToast(`✨ 已切换为「${isEditorial ? '留白静奢编辑风' : '手工物料典藏风'}」`);
-      }
+      return artisanPalettes;
     }
 
     function renderPaletteButtons() {
@@ -1572,14 +1531,8 @@
         }
       }
 
-      // 2. 绑定双风格切换按钮与色盘渲染
-      const btnStyleArtisan = document.getElementById('btn-style-artisan');
-      if (btnStyleArtisan) btnStyleArtisan.addEventListener('click', () => applyStyle('artisan'));
-      const btnStyleEditorial = document.getElementById('btn-style-editorial');
-      if (btnStyleEditorial) btnStyleEditorial.addEventListener('click', () => applyStyle('editorial'));
-
-      // 初始加载当前风格与母色
-      applyStyle(deckData.style || 'artisan', false);
+      // 2. 初始加载工坊母色与色盘渲染
+      applyPalette(deckData.palette || 'terracotta', false);
       renderPaletteButtons();
 
       // 3. 翻页按钮安全绑定
@@ -1935,10 +1888,6 @@
         editableElements.forEach(el => {
           el.setAttribute('contenteditable', 'true');
         });
-        if (editBtn) {
-          editBtn.classList.remove('bg-[#FAF8F4]', 'text-[#242321]', 'border-[#DCD6C8]');
-          editBtn.classList.add('bg-[#823838]', 'text-white', 'border-[#823838]', 'shadow');
-        }
         if (editLabel) editLabel.textContent = '完成编辑';
         showToast('即时编辑已开启：点击任意文字即可修改，按 Cmd/Ctrl+S 保存');
         if (currentTimeline) currentTimeline.progress(1);
@@ -1947,10 +1896,6 @@
         editableElements.forEach(el => {
           el.removeAttribute('contenteditable');
         });
-        if (editBtn) {
-          editBtn.classList.remove('bg-[#823838]', 'text-white', 'border-[#823838]', 'shadow');
-          editBtn.classList.add('bg-[#FAF8F4]', 'text-[#242321]', 'border-[#DCD6C8]');
-        }
         if (editLabel) editLabel.textContent = '编辑文案';
         saveEditsToLocalStorage();
       }
