@@ -4,7 +4,7 @@
 [![Cursor Compatible](https://img.shields.io/badge/Cursor-Compatible-blue)](https://cursor.com)
 [![Antigravity Ready](https://img.shields.io/badge/Antigravity-Ready-orange)](https://deepmind.google/technologies/gemini/)
 [![GSAP](https://img.shields.io/badge/GSAP-Animation%20Engine-black)](https://gsap.com)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-orange.svg)](LICENSE)
 
 面向 AI 编程助手（Claude Code、Cursor、Antigravity、Copilot、Windsurf 等）的**高品质 16:9 网页级演示文稿、演讲胶片与 Pitch Deck 规范体系**。
 
@@ -17,6 +17,8 @@
 - 📜 **两大殿堂级美学体系**：
   - **风格 A · Artisan Paper（手工物料与纸质典藏风）**：将真实纸品物料、400GSM 棉浆纤维、活页打孔透光、印刷锯齿撕边票券与欧洲排印标本格式深度融入演示叙事；支持 9 套大师工匠纸色智能高对比反色引擎（深色底自动转为米白墨色）；
   - **风格 B · Minimal Editorial（留白辑要 · 静奢极简编辑风）**：源自高端品牌画册与独立杂志版面，单一暖中性底色、0.5–1px 发丝细线几何、三色上限、四声部排印、大面积呼吸空气感与不对称留白。
+- 🎯 **零摩擦单风格自主决断 (Autonomous Selection)**：
+  - 单次任务智能体自动研判文案场景并自主决断最契合的一套美学风格直接成卷（杜绝向用户反复确认打扰），成品交付后亦支持随时一键无损重构为另一风格。
 - 🏛️ **权威演示理论的工程化落地**：
   - **芭芭拉·明托《金字塔原理》**：结论先行（BLUF）与行动导向标题（Action Titles），杜绝名词短语式主标；
   - **南希·杜阿尔特《Slide:ology》**：3 秒看懂法则（The 3-Second Glance Test），主标断言与视觉焦点一览无余；
@@ -36,21 +38,76 @@
 
 ---
 
-## 🖼 版式范例预览 (Gallery)
+## 🖼 版式范例画廊 (Gallery)
 
-内置九种高质量 16:9 交互范例，源文件均位于 [examples/](examples/) 目录，双击任意 HTML 文件即可直接在浏览器体验：
+内置 9 套高质量 16:9 经典版式源码，均位于 [examples/](examples/) 目录，双击任意 HTML 文件即可在浏览器全屏交互体验：
 
-| 范例版式 | 视觉效果 |
-| :---: | :---: |
-| **01 · 五页完整介绍 Deck**<br>（目录 / 架构 / 特色 / 理论 / 结语） | ![五页介绍 Deck](assets/previews/01_intro_deck.png) |
-| **02 · 闭环循环飞轮** | ![闭环循环](assets/previews/02_loop_cycle.png) |
-| **03 · 同心嵌套圆** | ![同心嵌套圆](assets/previews/03_nested_circles.png) |
-| **04 · 拱顶题名色带列表** | ![拱顶题名色带列表](assets/previews/04_banded_list.png) |
-| **05 · 十字象限散点矩阵** | ![十字象限散点](assets/previews/05_quadrant_chart.png) |
-| **06 · 细密刻度时间线** | ![刻度尺时间线](assets/previews/06_tick_timeline.png) |
-| **07 · 侧线三列编号支柱** | ![侧线三列编号](assets/previews/07_side_rule_columns.png) |
-| **08 · 极简巨型数字陈述** | ![巨型数字陈述](assets/previews/08_number_statement.png) |
-| **09 · 工业裁切标定画框** | ![裁切标定画框](assets/previews/09_crop_mark_frame.png) |
+<table width="100%">
+  <tr>
+    <td width="50%" align="center">
+      <a href="examples/01_intro_deck.html"><img src="assets/previews/01_intro_deck.png" alt="01 五页介绍 Deck" /></a>
+      <br>
+      <b><a href="examples/01_intro_deck.html">01 · 五页完整介绍 Deck</a></b><br>
+      <sub>目录 / 架构 / 特色 / 理论 / 结语五联完整演示</sub>
+    </td>
+    <td width="50%" align="center">
+      <a href="examples/02_loop_cycle.html"><img src="assets/previews/02_loop_cycle.png" alt="02 闭环循环" /></a>
+      <br>
+      <b><a href="examples/02_loop_cycle.html">02 · 闭环循环飞轮</a></b><br>
+      <sub>四阶段因果闭环增强回路与自驱动飞轮</sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center">
+      <a href="examples/03_nested_circles.html"><img src="assets/previews/03_nested_circles.png" alt="03 同心嵌套圆" /></a>
+      <br>
+      <b><a href="examples/03_nested_circles.html">03 · 同心嵌套圆</a></b><br>
+      <sub>三层核心驱动、赋能与外围生态层级</sub>
+    </td>
+    <td width="50%" align="center">
+      <a href="examples/04_banded_list.html"><img src="assets/previews/04_banded_list.png" alt="04 拱顶题名色带列表" /></a>
+      <br>
+      <b><a href="examples/04_banded_list.html">04 · 拱顶题名色带列表</a></b><br>
+      <sub>高对比度三色带对比与横向属性矩阵</sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center">
+      <a href="examples/05_quadrant_chart.html"><img src="assets/previews/05_quadrant_chart.png" alt="05 十字象限散点" /></a>
+      <br>
+      <b><a href="examples/05_quadrant_chart.html">05 · 十字象限散点矩阵</a></b><br>
+      <sub>双轴四象限战略定位与散点标定</sub>
+    </td>
+    <td width="50%" align="center">
+      <a href="examples/06_tick_timeline.html"><img src="assets/previews/06_tick_timeline.png" alt="06 刻度尺时间线" /></a>
+      <br>
+      <b><a href="examples/06_tick_timeline.html">06 · 细密刻度时间线</a></b><br>
+      <sub>工业刻度尺微步进时间轴与里程碑节点</sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center">
+      <a href="examples/07_side_rule_columns.html"><img src="assets/previews/07_side_rule_columns.png" alt="07 侧线三列编号" /></a>
+      <br>
+      <b><a href="examples/07_side_rule_columns.html">07 · 侧线三列编号支柱</a></b><br>
+      <sub>竖向导轨三列排印与参数标本列阵</sub>
+    </td>
+    <td width="50%" align="center">
+      <a href="examples/08_number_statement.html"><img src="assets/previews/08_number_statement.png" alt="08 巨型数字陈述" /></a>
+      <br>
+      <b><a href="examples/08_number_statement.html">08 · 极简巨型数字陈述</a></b><br>
+      <sub>高墨水比纯粹断言与大字号数据印证</sub>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center">
+      <a href="examples/09_crop_mark_frame.html"><img src="assets/previews/09_crop_mark_frame.png" alt="09 裁切标定画框" style="max-width: 60%;" /></a>
+      <br>
+      <b><a href="examples/09_crop_mark_frame.html">09 · 工业裁切标定画框</a></b><br>
+      <sub>四个角标裁切规线与中央画框物料展陈</sub>
+    </td>
+  </tr>
+</table>
 
 ---
 
@@ -119,6 +176,12 @@ artisan-paper-deck/
 
 ---
 
-## 📄 许可证 (License)
+## 📄 许可证说明 (License & Terms)
 
-本项目采用 [MIT License](LICENSE) 开源许可证。
+本项目遵循 **[CC BY-NC 4.0](LICENSE) (知识共享 署名-非商业性使用 4.0 国际)** 许可协议：
+
+- ✅ **个人与非商业用途 (Free for Non-Commercial)**：
+  - 免费且自由用于个人学习、技术研究、内部非营利性演讲分享与衍生修改。
+- 💼 **商业营利性用途 (Commercial Authorization Required)**：
+  - 若用于商业营利行为（如面向付费客户交付的设计/咨询服务、商业付费培训教材、闭源商业产品集成打包、第三方商业模版转售等），**需事先取得原作者的书面商业许可或商务授权**。
+  - 如需商业合作洽谈或获取商用授权，欢迎通过 GitHub Issue 提交沟通。

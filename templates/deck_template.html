@@ -259,18 +259,21 @@
 
     /* 工坊火漆印章 */
     .artisan-stamp {
-      border: 1.5px dashed var(--ink-stamp);
-      color: var(--ink-stamp);
-      transform: rotate(-3deg);
-      letter-spacing: 0.15em;
-      opacity: 0.88;
+      border: 1px solid var(--board-border);
+      color: var(--board-text);
+      opacity: 0.75;
+      transform: none !important;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
       font-family: var(--font-mono);
-      font-weight: 700;
-      mix-blend-mode: multiply;
+      font-weight: 600;
+      font-size: 10px;
+      padding: 4px 12px;
+      border-radius: 2px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      background: rgba(0, 0, 0, 0.03);
     }
 
     /* 幻灯片过渡容器 (统一 flex 基础布局，确保子级 flex-col / justify-between 首屏即生效) */
