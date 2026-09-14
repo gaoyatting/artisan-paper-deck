@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>范例 02 · 闭环循环 — minimal-editorial-layout</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&family=Noto+Serif+SC:wght@400;600&family=Jost:wght@300;400&family=Courier+Prime&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F2F0EB;
+    --ink:#1E1C1A;
+    --accent:#A65235;
+    --muted:rgba(30,28,26,.6);
+    --hairline:rgba(30,28,26,.4);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{height:100%;background:var(--bg);overflow:hidden;display:flex;align-items:center;justify-content:center;}
+  .stage{width:1280px;height:720px;background:var(--bg);position:relative;flex:none;transform-origin:center;
+         font-family:'Jost',-apple-system,'PingFang SC',sans-serif;color:var(--ink);}
+
+  .meta-top{position:absolute;left:128px;right:128px;top:36px;display:flex;justify-content:space-between;
+        font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--muted);z-index:10;}
+
+  /* 顶部居中标题区 */
+  .header{position:absolute;left:0;right:0;top:68px;text-align:center;}
+  .kicker{font-size:11px;letter-spacing:.35em;text-transform:uppercase;color:var(--muted);}
+  h1{font-family:'Noto Serif SC',serif;font-size:44px;font-weight:600;letter-spacing:.08em;margin-top:8px;}
+  h1 .anno{font-family:'Playfair Display',serif;font-style:italic;font-weight:400;color:var(--accent);margin-left:8px;}
+  .desc{margin-top:8px;font-weight:300;font-size:14px;color:var(--muted);letter-spacing:.04em;white-space:nowrap;}
+
+  /* 中间居中图表区域 (舞台绝对居中: left 240px, width 800px, 中心坐标 640px) */
+  .diagram-box{position:absolute;left:240px;top:190px;width:800px;height:450px;}
+  svg.diagram{position:absolute;inset:0;width:100%;height:100%;overflow:visible;}
+
+  /* 中心徽标 (相对于 diagram-box 居中: left 340px, top 165px) */
+  .center-badge{position:absolute;left:340px;top:165px;width:120px;height:120px;border:1px solid var(--hairline);
+        border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;
+        text-align:center;background:var(--bg);z-index:2;}
+  .center-badge .zh{font-family:'Noto Serif SC',serif;font-size:16px;font-weight:600;letter-spacing:.18em;}
+  .center-badge .en{font-family:'Playfair Display',serif;font-style:italic;font-size:11px;color:var(--muted);margin-top:3px;}
+
+  /* 五个节点文字标签：设置 white-space: nowrap，彻底杜绝折行与重叠 */
+  .node{position:absolute;z-index:5;white-space:nowrap;}
+  .node h3{font-family:'Playfair Display',serif;font-size:16px;font-weight:400;letter-spacing:.05em;}
+  .node h3 span{color:var(--accent);margin-right:4px;}
+  .node p{margin-top:3px;font-weight:300;font-size:13px;color:var(--muted);letter-spacing:.02em;}
+
+  .foot-rule{position:absolute;left:128px;right:128px;bottom:36px;display:flex;
+        justify-content:space-between;align-items:baseline;
+        font-family:'Courier Prime',monospace;font-size:11px;letter-spacing:.18em;color:var(--muted);}
+  .foot-rule .center-note{text-align:center;letter-spacing:.25em;color:var(--muted);}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="meta-top"><span>Cycle Architecture</span><span>版式范例 · 01</span></div>
+
+  <div class="header">
+    <div class="kicker">Five Steps · One Loop</div>
+    <h1>静水循环<span class="anno">Flow Cycle</span></h1>
+    <p class="desc">从观察到生长：在五个微小而清晰的秩序中，完成自洽与生长的闭环运转。</p>
+  </div>
+
+  <div class="diagram-box">
+    <!-- 中心点: (400, 225), 半径: 155 -->
+    <svg class="diagram" viewBox="0 0 800 450">
+      <defs>
+        <marker id="ah" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto">
+          <path d="M1,1 L6,3.5 L1,6" fill="none" stroke="#1E1C1A" stroke-width="1"/>
+        </marker>
+      </defs>
+      <!-- 辅助虚线圆 -->
+      <circle cx="400" cy="225" r="155" fill="none" stroke="rgba(30,28,26,.15)" stroke-width="1" stroke-dasharray="3 5"/>
+      <!-- 五段圆弧连线 (角度: -90°, -18°, 54°, 126°, 198°) -->
+      <!-- P1: (400, 70), P2: (547, 177), P3: (491, 350), P4: (309, 350), P5: (253, 177) -->
+      <path d="M400,70 A155,155 0 0 1 547,177" fill="none" stroke="#1E1C1A" stroke-width="1" marker-end="url(#ah)"/>
+      <path d="M547,177 A155,155 0 0 1 491,350" fill="none" stroke="#1E1C1A" stroke-width="1" marker-end="url(#ah)"/>
+      <path d="M491,350 A155,155 0 0 1 309,350" fill="none" stroke="#1E1C1A" stroke-width="1" marker-end="url(#ah)"/>
+      <path d="M309,350 A155,155 0 0 1 253,177" fill="none" stroke="#1E1C1A" stroke-width="1" marker-end="url(#ah)"/>
+      <path d="M253,177 A155,155 0 0 1 400,70" fill="none" stroke="#1E1C1A" stroke-width="1" marker-end="url(#ah)"/>
+
+      <!-- 节点圆点 -->
+      <circle cx="400" cy="70" r="4" fill="#1E1C1A"/>
+      <circle cx="547" cy="177" r="4" fill="#1E1C1A"/>
+      <circle cx="491" cy="350" r="4" fill="#1E1C1A"/>
+      <circle cx="309" cy="350" r="4" fill="#1E1C1A"/>
+      <circle cx="253" cy="177" r="4" fill="#1E1C1A"/>
+    </svg>
+
+    <!-- 中心徽标 -->
+    <div class="center-badge">
+      <span class="zh">静水运转</span>
+      <span class="en">equilibrium</span>
+    </div>
+
+    <!-- 01 顶端：中心 400px，置于圆点上方 25px，绝不遮挡 -->
+    <div class="node" style="left:400px;top:10px;transform:translateX(-50%);text-align:center;">
+      <h3><span>01.</span>Observe</h3>
+      <p>观察而不急着判断</p>
+    </div>
+
+    <!-- 02 右上：置于圆点 (547, 177) 右外侧 20px -->
+    <div class="node" style="left:570px;top:160px;text-align:left;">
+      <h3><span>02.</span>Feel</h3>
+      <p>接纳情绪的形状</p>
+    </div>
+
+    <!-- 03 右下：置于圆点 (491, 350) 右下外侧 -->
+    <div class="node" style="left:515px;top:338px;text-align:left;">
+      <h3><span>03.</span>Reflect</h3>
+      <p>追溯情绪的来处</p>
+    </div>
+
+    <!-- 04 左下：置于圆点 (309, 350) 左下外侧 -->
+    <div class="node" style="right:515px;top:338px;text-align:right;">
+      <h3><span>04.</span>Act</h3>
+      <p>跟随直觉行动</p>
+    </div>
+
+    <!-- 05 左上：置于圆点 (253, 177) 左外侧 20px -->
+    <div class="node" style="right:570px;top:160px;text-align:right;">
+      <h3><span>05.</span>Grow</h3>
+      <p>在简单里生长</p>
+    </div>
+  </div>
+
+  <div class="foot-rule">
+    <span>SYSTEM CONTINUUM</span>
+    <span class="center-note">EQUILIBRIUM PROTOCOL</span>
+    <span>01 / 05</span>
+  </div>
+</div>
+<script>
+  const W=1280,H=720;
+  function fit(){
+    const s=Math.min(innerWidth/W,innerHeight/H);
+    document.querySelector('.stage').style.transform=`scale(${s})`;
+  }
+  addEventListener('resize',fit);fit();
+</script>
+</body>
+</html>

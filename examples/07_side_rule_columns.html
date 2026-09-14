@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>范例 07 · 侧线三列编号 — minimal-editorial-layout</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&family=Noto+Serif+SC:wght@400;600&family=Jost:wght@300;400&family=Courier+Prime&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F2F0EB;
+    --ink:#1E1C1A;
+    --accent:#A65235;
+    --muted:rgba(30,28,26,.6);
+    --hairline:rgba(30,28,26,.45);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{height:100%;background:var(--bg);overflow:hidden;display:flex;align-items:center;justify-content:center;}
+  .stage{width:1280px;height:720px;background:var(--bg);position:relative;flex:none;transform-origin:center;
+         font-family:'Jost',-apple-system,'PingFang SC',sans-serif;color:var(--ink);}
+
+  .meta-top{position:absolute;left:128px;right:128px;top:36px;display:flex;justify-content:space-between;
+        font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--muted);z-index:10;}
+
+  /* 贯穿全高的左侧发丝脊柱线 */
+  .spine{position:absolute;left:128px;top:90px;bottom:70px;width:1px;background:var(--hairline);}
+
+  /* 顶部标题区（附着于侧线右侧） */
+  .head{position:absolute;left:168px;right:128px;top:100px;display:flex;align-items:flex-end;justify-content:space-between;}
+  .head-left h1{font-family:'Noto Serif SC',serif;font-size:52px;font-weight:600;letter-spacing:.08em;line-height:1.15;}
+  .head-left h1 em{font-family:'Playfair Display',serif;font-style:italic;font-weight:400;color:var(--accent);margin-right:8px;}
+  .head-right{max-width:440px;font-weight:300;font-size:14.5px;line-height:1.8;color:var(--muted);letter-spacing:.02em;}
+
+  .head-rule{position:absolute;left:168px;right:128px;top:230px;height:1px;background:var(--hairline);}
+
+  /* 三列横向阵列 */
+  .cols{position:absolute;left:168px;right:128px;top:280px;display:grid;
+        grid-template-columns:repeat(3,1fr);column-gap:56px;}
+  .col{position:relative;}
+  .col .no{font-family:'Playfair Display',serif;font-style:italic;font-size:46px;line-height:1;}
+  .col .no::after{content:".";color:var(--accent);}
+  .col h3{font-family:'Noto Serif SC',serif;font-size:19px;font-weight:600;
+        letter-spacing:.1em;margin:18px 0 12px;}
+  .col p{font-weight:300;font-size:14px;line-height:1.85;color:var(--muted);letter-spacing:.02em;}
+  .col .tag{margin-top:20px;font-family:'Courier Prime',monospace;font-size:11px;letter-spacing:.15em;
+            color:var(--muted);text-transform:uppercase;}
+
+  .foot-rule{position:absolute;left:168px;bottom:54px;display:flex;align-items:baseline;gap:20px;
+        font-family:'Courier Prime',monospace;font-size:11px;letter-spacing:.18em;color:var(--muted);}
+  .foot-rule .line{width:120px;height:1px;background:var(--hairline);}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="meta-top"><span>Side Rule Columns</span><span>版式范例 · 06</span></div>
+  <div class="spine"></div>
+
+  <div class="head">
+    <div class="head-left">
+      <h1><em>Quiet</em>杂志感日常</h1>
+    </div>
+    <div class="head-right">
+      拍摄与梳理内容时留意光线与材质——三条编辑纪律，让日常记录也具备高级画册般的从容与秩序。
+    </div>
+  </div>
+
+  <div class="head-rule"></div>
+
+  <div class="cols">
+    <div class="col">
+      <div class="no">01</div>
+      <h3>色板校准</h3>
+      <p>亲手把色卡并置、挪动、比较。在同一种中性底色上感受微小的冷暖倾向，保持整组画面的纯净基底。</p>
+      <div class="tag">01 / Palette</div>
+    </div>
+    <div class="col">
+      <div class="no">02</div>
+      <h3>情绪板拼贴</h3>
+      <p>从一块空白桌面开始，逐步加入关键元素。严格限制物件数量与比例，让画面随时保持干脆通透的呼吸感。</p>
+      <div class="tag">02 / Moodboard</div>
+    </div>
+    <div class="col">
+      <div class="no">03</div>
+      <h3>材质肌理</h3>
+      <p>给台面和印刷品近景特写：捕捉纤维纹理与边缘收口，用极简的排版文字点出设计背后的触感与温度。</p>
+      <div class="tag">03 / Texture</div>
+    </div>
+  </div>
+
+  <div class="foot-rule">
+    <span>EDITORIAL THREE COLUMNS</span>
+    <span class="line"></span>
+    <span>06 / 08</span>
+  </div>
+</div>
+<script>
+  const W=1280,H=720;
+  function fit(){
+    const s=Math.min(innerWidth/W,innerHeight/H);
+    document.querySelector('.stage').style.transform=`scale(${s})`;
+  }
+  addEventListener('resize',fit);fit();
+</script>
+</body>
+</html>

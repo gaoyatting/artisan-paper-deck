@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>范例 08 · 巨号编号陈述 — minimal-editorial-layout</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&family=Noto+Serif+SC:wght@400;600&family=Jost:wght@300;400&family=Courier+Prime&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EDEAE3;
+    --ink:#24211D;
+    --accent:#A65235;
+    --muted:rgba(36,33,29,.6);
+    --hairline:rgba(36,33,29,.4);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{height:100%;background:var(--bg);overflow:hidden;display:flex;align-items:center;justify-content:center;}
+  .stage{width:1280px;height:720px;background:var(--bg);position:relative;flex:none;transform-origin:center;
+         font-family:'Jost',-apple-system,'PingFang SC',sans-serif;color:var(--ink);}
+
+  .meta-top{position:absolute;left:128px;right:128px;top:36px;display:flex;justify-content:space-between;
+        font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--muted);z-index:10;}
+
+  /* 左侧：巨号 + 单行有力标题 */
+  .left-pane{position:absolute;left:128px;top:150px;width:510px;}
+  .big-no{font-family:'Playfair Display',serif;font-size:160px;line-height:1;
+          color:var(--ink);letter-spacing:.02em;}
+  .big-no::after{content:".";color:var(--accent);}
+  h1{font-family:'Noto Serif SC',serif;font-size:33px;font-weight:600;letter-spacing:.04em;
+     line-height:1.2;margin-top:20px;white-space:nowrap;}
+
+  /* 纵向发丝分隔线 (居中偏右 left 680px) */
+  .v-rule{position:absolute;left:680px;top:120px;bottom:90px;width:1px;background:var(--hairline);}
+
+  /* 右侧：正文陈述 */
+  .right-pane{position:absolute;left:730px;right:128px;top:170px;}
+  .kicker{font-size:11px;letter-spacing:.35em;text-transform:uppercase;color:var(--muted);margin-bottom:24px;}
+  .body-text{font-weight:300;font-size:17px;line-height:2.1;letter-spacing:.02em;color:var(--ink);}
+
+  /* 底部横线 + 页脚 */
+  .end-rule{position:absolute;left:730px;right:128px;bottom:130px;height:1px;background:var(--hairline);}
+  .footer{position:absolute;left:730px;right:128px;bottom:80px;display:flex;
+          justify-content:space-between;align-items:baseline;}
+  .footer span{font-weight:300;font-size:14px;letter-spacing:.06em;color:var(--muted);white-space:nowrap;}
+  .footer .arrow{font-family:'Playfair Display',serif;font-size:22px;color:var(--ink);}
+
+  .foot-rule{position:absolute;left:128px;bottom:36px;display:flex;align-items:baseline;gap:20px;
+        font-family:'Courier Prime',monospace;font-size:11px;letter-spacing:.18em;color:var(--muted);}
+  .foot-rule .line{width:120px;height:1px;background:var(--hairline);}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="meta-top"><span>Numbered Statement</span><span>版式范例 · 07</span></div>
+
+  <div class="left-pane">
+    <div class="big-no">04</div>
+    <h1>方案已就绪，把它正式定下来。</h1>
+  </div>
+
+  <div class="v-rule"></div>
+
+  <div class="right-pane">
+    <div class="kicker">Process Commitment</div>
+    <div class="body-text">
+      你会收到一份详细的项目时间表，每一步都提前可见。<br>
+      高效、沟通清晰、零混乱——<br>
+      我们在这里就是这样做的。
+    </div>
+  </div>
+
+  <div class="end-rule"></div>
+  <div class="footer">
+    <span>设计之前，我们先谈具体。</span>
+    <span class="arrow">→</span>
+  </div>
+
+  <div class="foot-rule">
+    <span>NUMBERED STATEMENT</span>
+    <span class="line"></span>
+    <span>07 / 08</span>
+  </div>
+</div>
+<script>
+  const W=1280,H=720;
+  function fit(){
+    const s=Math.min(innerWidth/W,innerHeight/H);
+    document.querySelector('.stage').style.transform=`scale(${s})`;
+  }
+  addEventListener('resize',fit);fit();
+</script>
+</body>
+</html>

@@ -1,0 +1,2068 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Artisan Paper Deck — 手工物料与典藏纸质演示文稿</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- GSAP CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  
+  <!-- Google Fonts: Playfair Display, Courier Prime, Noto Serif SC, Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Noto+Serif+SC:wght@400;600;700;900&family=Jost:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      /* 经典默认：冷杉青绿 (Celadon) */
+      --bg-stage: #E4EAE7;
+      --board-bg: #9EABA2;
+      --board-text: #1E2826;
+      --board-muted: #53625B;
+      --board-border: rgba(30, 40, 38, 0.16);
+      --card-bg: #F7F4EC;
+      --card-text: #202624;
+      --card-muted: #6A7A75;
+      --ink-stamp: #823838;
+      --border-ink: rgba(30, 40, 38, 0.14);
+      --font-mono: 'Courier Prime', Courier, monospace;
+      --font-serif: 'Playfair Display', 'Noto Serif SC', -apple-system, serif;
+      --font-sub: -apple-system, BlinkMacSystemFont, "PingFang SC", "Plus Jakarta Sans", sans-serif;
+      --font-headline: 'Playfair Display', 'Noto Serif SC', serif;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: var(--bg-stage);
+      font-family: var(--font-sub);
+      color: var(--board-text);
+      user-select: none;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.4s ease, color 0.4s ease;
+    }
+
+    .font-typewriter { font-family: var(--font-mono); letter-spacing: -0.015em; }
+
+    /* 双风格系统变量与四声部排印 (Dual-Style & Four Voices) */
+    :root {
+      --hairline: rgba(30, 40, 38, 0.28);
+      --accent: #823838;
+      --font-jost: 'Jost', -apple-system, sans-serif;
+    }
+
+    .font-display { font-family: var(--font-headline); letter-spacing: 0.02em; }
+    .font-kicker { font-size: 11px; letter-spacing: 0.32em; text-transform: uppercase; opacity: 0.75; }
+    .font-body { font-family: var(--font-jost); font-weight: 300; letter-spacing: 0.02em; }
+    .font-anno { font-family: 'Playfair Display', 'Noto Serif SC', serif; font-style: italic; color: var(--accent); }
+
+    /* 风格 A: Artisan Paper (物料典藏) */
+    body.theme-artisan #paper-fiber-overlay {
+      display: block;
+      opacity: 0.38;
+    }
+
+    /* 风格 B: Minimal Editorial (留白静奢) */
+    body.theme-editorial #paper-fiber-overlay {
+      display: none !important;
+    }
+    body.theme-editorial #deck-stage {
+      box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.08);
+      border-radius: 2px;
+    }
+    body.theme-editorial .rowland-hole {
+      background-color: transparent !important;
+      box-shadow: none !important;
+      border: 1px solid var(--hairline) !important;
+      width: 10px !important;
+      height: 10px !important;
+    }
+    body.theme-editorial .ticket-sawtooth-top,
+    body.theme-editorial .ticket-sawtooth-bottom {
+      background-image: none !important;
+      border-top: 1px solid var(--hairline) !important;
+    }
+    body.theme-editorial .artisan-stamp {
+      border: 1px solid var(--board-border) !important;
+      color: var(--board-text) !important;
+      transform: none !important;
+      border-radius: 9999px !important;
+      padding: 3px 14px !important;
+      font-size: 10px !important;
+      letter-spacing: 0.25em !important;
+      mix-blend-mode: normal !important;
+      background: transparent !important;
+      box-shadow: none !important;
+    }
+    body.theme-editorial .card-zero-shadow {
+      background-color: transparent !important;
+      border-color: var(--hairline) !important;
+    }
+    body.theme-editorial .editorial-card-neutral {
+      background-color: rgba(30, 28, 26, 0.03) !important;
+      border-color: var(--hairline) !important;
+    }
+
+    .font-editorial-serif { font-family: var(--font-headline); letter-spacing: -0.02em; }
+    .font-modern-sub { font-family: var(--font-sub); }
+
+    /* 纸张物理微距噪点与纤维漫反射层 (Paper Fiber Overlay) */
+    #paper-fiber-overlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.38;
+      mix-blend-mode: multiply;
+      background-image: radial-gradient(rgba(0,0,0,0.14) 1px, transparent 0), radial-gradient(rgba(255,255,255,0.25) 1px, transparent 0);
+      background-size: 3px 3px, 5px 5px;
+      background-position: 0 0, 1.5px 1.5px;
+      z-index: 1;
+    }
+
+    /* 视口全屏弹性居中容器 */
+    #deck-viewport-wrap {
+      position: relative;
+      width: 100%;
+      flex: 1;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* 16:9 固定画布 (JS 等比 Transform 缩放矩阵) */
+    #deck-stage {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 1280px;
+      height: 720px;
+      transform-origin: center center;
+      transform: translate(-50%, -50%) scale(1);
+      background-color: var(--board-bg);
+      color: var(--board-text);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      border-radius: 4px;
+      overflow: hidden;
+      transition: background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.4s ease, box-shadow 0.3s ease;
+    }
+
+    /* 全屏放映模式：屏幕边缘无缝延展当前纸质底板色，杜绝突兀黑边 */
+    body.is-fullscreen {
+      background-color: var(--board-bg) !important;
+      overflow: hidden;
+    }
+    body.is-fullscreen #deck-top-bar {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    body.is-fullscreen #deck-top-bar:hover {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    body.is-fullscreen #deck-viewport-wrap {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 20;
+      padding: 0;
+    }
+    body.is-fullscreen #deck-stage {
+      box-shadow: none !important;
+      border-radius: 0 !important;
+    }
+    /* 全屏放映时严禁展示任何上页/下页外置按钮与边缘点击箭头 */
+    body.is-fullscreen .deck-edge-nav-btn {
+      display: none !important;
+    }
+    /* 全屏模式下鼠标静止自动隐退浮动指示器 */
+    body.is-fullscreen.is-idle #deck-floating-nav {
+      opacity: 0 !important;
+      pointer-events: none;
+    }
+
+    /* 行内即时编辑 (Inline Editing) 焦点高亮与层级强保障 */
+    body.is-editing-mode [data-editable="true"],
+    body.is-editing-mode .editable-text,
+    body.is-editing-mode .deck-text {
+      outline: 1.5px dashed rgba(130, 56, 56, 0.55) !important;
+      outline-offset: 3px;
+      border-radius: 2px;
+      cursor: text !important;
+      user-select: text !important;
+      pointer-events: auto !important;
+      position: relative;
+      z-index: 35 !important;
+      transition: outline 0.2s ease, background-color 0.2s ease;
+    }
+    body.is-editing-mode [data-editable="true"]:hover,
+    body.is-editing-mode .editable-text:hover,
+    body.is-editing-mode .deck-text:hover {
+      outline: 1.5px solid #823838 !important;
+      background-color: rgba(130, 56, 56, 0.12);
+    }
+    body.is-editing-mode [data-editable="true"]:focus,
+    body.is-editing-mode .editable-text:focus,
+    body.is-editing-mode .deck-text:focus {
+      outline: 2px solid #823838 !important;
+      background-color: rgba(255, 255, 255, 0.35);
+    }
+    /* 画布顶栏元数据栏在任何时候与编辑模式下均优先置顶，绝不被 slide-pane 遮挡 */
+    #deck-stage > div.relative.z-40 {
+      position: relative;
+      z-index: 50 !important;
+      pointer-events: auto !important;
+    }
+    body.is-editing-mode #deck-stage > div.relative.z-40 [data-editable="true"] {
+      z-index: 55 !important;
+    }
+    /* 确保当前处于激活态与编辑态的幻灯片内部所有元素 100% 可被鼠标点击拾取 */
+    body.is-editing-mode .slide-pane.active {
+      pointer-events: auto !important;
+      z-index: 30 !important;
+    }
+
+    /* 彻底移除底部轮播指示器胶囊，保证纯粹沉浸式画幅 */
+    #deck-floating-nav {
+      display: none !important;
+    }
+
+    /* 物理打孔穿透效果 (Rowland Holes) */
+    .rowland-hole {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background-color: var(--board-bg);
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+
+    /* 锯齿票据撕裂边 (Sawtooth Deckle Edge) */
+    .ticket-sawtooth-top {
+      background-image: radial-gradient(circle at 10px 0, transparent 7px, var(--card-bg) 7.5px);
+      background-size: 20px 10px;
+      background-repeat: repeat-x;
+    }
+    .ticket-sawtooth-bottom {
+      background-image: radial-gradient(circle at 10px 10px, transparent 7px, var(--card-bg) 7.5px);
+      background-size: 20px 10px;
+      background-repeat: repeat-x;
+    }
+
+    /* 工坊火漆印章 */
+    .artisan-stamp {
+      border: 1.5px dashed var(--ink-stamp);
+      color: var(--ink-stamp);
+      transform: rotate(-3deg);
+      letter-spacing: 0.15em;
+      opacity: 0.88;
+      text-transform: uppercase;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      mix-blend-mode: multiply;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* 幻灯片过渡容器 (统一 flex 基础布局，确保子级 flex-col / justify-between 首屏即生效) */
+    .slide-pane {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 10;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    .slide-pane.active {
+      visibility: visible;
+      opacity: 1;
+      pointer-events: auto;
+    }
+    #slide-2 {
+      display: grid !important;
+    }
+
+    /* 零阴影质感卡片 */
+    .card-zero-shadow {
+      box-shadow: none !important;
+      border: 1px solid var(--border-ink);
+    }
+
+    /* 防眩晕无障碍适配 */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    /* 打印/PDF 导出适配 */
+    @media print {
+      @page {
+        size: 16in 9in;
+        margin: 0;
+      }
+      html, body {
+        width: 100% !important;
+        height: 100% !important;
+        overflow: visible !important;
+        background: white !important;
+      }
+      #deck-top-bar, #deck-floating-nav, #drawer, #deck-progress-line, #deck-toast {
+        display: none !important;
+      }
+      #deck-viewport-wrap {
+        position: static !important;
+        display: block !important;
+        overflow: visible !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+        height: auto !important;
+      }
+      #deck-stage {
+        position: static !important;
+        transform: none !important;
+        width: 100vw !important;
+        height: auto !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+      }
+      .slide-pane {
+        position: relative !important;
+        width: 100vw !important;
+        height: 56.25vw !important;
+        min-height: 100vh !important;
+        display: flex !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        page-break-after: always !important;
+        page-break-inside: avoid !important;
+      }
+      #slide-2 {
+        display: grid !important;
+      }
+      .slide-pane * {
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+      }
+    }
+  </style>
+</head>
+<body class="theme-artisan h-screen w-screen overflow-hidden flex flex-col justify-between select-none">
+
+  <!-- 1. 顶部控制栏 (Top Bar) -->
+  <header id="deck-top-bar" class="w-full max-w-[1280px] mx-auto px-6 py-3 flex items-center justify-between font-typewriter text-xs z-40 transition-all duration-300">
+    <div class="flex items-center space-x-3">
+      <div class="w-2.5 h-2.5 rounded-full" style="background-color: var(--board-bg); border: 1px solid var(--board-text);"></div>
+      <span class="font-bold tracking-wider uppercase text-neutral-800">ARTISAN DECK</span>
+      <span class="text-neutral-400">/</span>
+      <span class="text-neutral-600 hidden sm:inline" id="deck-topic-label">典藏纸质物料演示系统</span>
+    </div>
+
+    <!-- 快捷键与配置 -->
+    <div class="flex items-center space-x-2">
+      <!-- 快捷键提示 -->
+      <span class="text-[11px] text-neutral-500 hidden xl:inline tracking-tight">
+        [←/→] 翻页 &middot; [F] 全屏 &middot; [E] 编辑文案 &middot; [R] 重感动效 &middot; [P] 打印
+      </span>
+
+      <!-- 行内即时编辑按钮 (纯文字纯粹按钮) -->
+      <button id="btn-toggle-edit" title="开启/关闭网页内即时文字编辑 (快捷键: E)" class="px-3.5 py-1.5 bg-[#FAF8F4] hover:bg-white text-[#242321] border border-[#DCD6C8] rounded text-xs transition active:scale-95 flex items-center justify-center font-medium cursor-pointer">
+        <span id="edit-mode-text">编辑文案</span>
+      </button>
+
+      <!-- 抽屉调配按钮 -->
+      <button id="btn-toggle-tune" class="px-3.5 py-1.5 bg-[#2E2820] hover:bg-black text-[#F6F3EC] rounded shadow-sm transition active:scale-95 flex items-center space-x-1.5 cursor-pointer">
+        <span>&equiv;</span>
+        <span>配置</span>
+      </button>
+    </div>
+  </header>
+  <!-- 浮动操作提示 (Toast) -->
+  <div id="deck-toast" class="fixed top-14 left-1/2 -translate-x-1/2 z-50 px-4 py-2 bg-[#242321]/95 text-[#F7F4EC] text-xs font-typewriter rounded shadow-xl opacity-0 pointer-events-none transition-all duration-300 transform -translate-y-2 flex items-center space-x-2 border border-[#823838]/40">
+    <span id="deck-toast-msg">提示信息</span>
+  </div>
+
+
+  <!-- 2. 16:9 幻灯片视口容器 (Presentation Viewport) -->
+  <main id="deck-viewport-wrap" class="relative w-full flex-1 overflow-hidden flex items-center justify-center p-0 m-0">
+    <div id="deck-stage" class="w-[1280px] h-[720px] rounded-[3px] absolute left-1/2 top-1/2 origin-center overflow-hidden flex flex-col justify-between select-none">
+      
+      <!-- 物理纸张微距纤维层 (仅作用于底层底板背景) -->
+      <div id="paper-fiber-overlay"></div>
+
+      <!-- 画布外围顶栏元数据 (Archival Slide Meta Bar) -->
+      <div class="relative z-40 px-12 pt-8 flex items-center justify-between font-typewriter text-xs tracking-wider pointer-events-auto" style="color: var(--board-text);">
+        <div class="flex items-center space-x-4">
+          <span class="font-bold tracking-widest uppercase opacity-90" id="slide-meta-project" data-editable="true" data-edit-id="slide-meta-project">ARTISAN SLIDES</span>
+          <span class="opacity-40">/</span>
+          <span class="opacity-75" id="slide-meta-section" data-editable="true" data-edit-id="slide-meta-section">SECTION 01</span>
+        </div>
+        <div class="flex items-center space-x-4">
+          <span class="opacity-65" id="slide-meta-archival" data-editable="true" data-edit-id="slide-meta-archival">ARCHIVAL 400GSM</span>
+          <span class="w-1.5 h-1.5 rounded-full bg-current opacity-40"></span>
+          <span class="font-bold uppercase tracking-widest opacity-90" id="slide-meta-num">SLIDE 01 / 06</span>
+        </div>
+      </div>
+
+      <!-- ================================================================= -->
+      <!-- SLIDE 1: 封面大版 (Poster Cover Architecture)                    -->
+      <!-- ================================================================= -->
+      <div id="slide-1" class="slide-pane active flex flex-col justify-between px-16 pb-14 pt-4">
+        <div></div>
+        
+        <div class="max-w-4xl space-y-6">
+          <div class="inline-flex items-center space-x-3 font-typewriter text-xs tracking-widest uppercase py-1 px-3 border border-current rounded-sm opacity-80" data-editable="true" data-edit-id="s1-tag">
+            <span>KEYNOTE EDITION</span>
+            <span>&middot;</span>
+            <span>VOL. 2026</span>
+          </div>
+
+          <h1 class="font-editorial-serif text-6xl md:text-7xl font-normal leading-[1.08] tracking-tight" id="s1-display-title" data-editable="true" data-edit-id="s1-title">
+            手工物料与纸质典藏<br>
+            <span class="italic font-normal">Presentation System</span>
+          </h1>
+
+          <p class="font-modern-sub text-lg md:text-xl opacity-85 max-w-2xl font-normal leading-relaxed pt-2" id="s1-display-subtitle" data-editable="true" data-edit-id="s1-subtitle">
+            剔除浮夸数码渐变与塑料质感投影，回归 400GSM 棉纸纤维、物理打孔透光与日系杂志排印的触感叙事美学。
+          </p>
+        </div>
+
+        <div class="pt-8 border-t flex items-end justify-between font-typewriter text-xs" style="border-color: var(--board-border);">
+          <div class="space-y-1 opacity-75">
+            <div data-editable="true" data-edit-id="s1-presenter">PRESENTER: 高雅婷 / ARTISAN ATELIER</div>
+            <div data-editable="true" data-edit-id="s1-ref">ARCHIVE REF: SPEC-DECK-2026-N°09</div>
+          </div>
+
+          <!-- 工坊火漆印章 -->
+          <div class="artisan-stamp px-4 py-1.5 text-xs rounded-sm" data-editable="true" data-edit-id="s1-stamp">
+            WORKSHOP ARCHIVED &middot; VERIFIED
+          </div>
+        </div>
+      </div>
+
+      <!-- ================================================================= -->
+      <!-- SLIDE 2: 双联活页议程 (Split Rowland Binder Architecture)        -->
+      <!-- ================================================================= -->
+      <div id="slide-2" class="slide-pane inset-0 grid grid-cols-12 !p-0">
+        <!-- 左侧：深色底板纸与大纲目录 (随色彩联动反转) -->
+        <div class="col-span-5 h-full p-12 flex flex-col justify-between" style="color: var(--board-text);">
+          <div class="space-y-4">
+            <span class="font-typewriter text-xs tracking-widest opacity-70 uppercase" data-editable="true" data-edit-id="s2-agenda-tag">DECK AGENDA</span>
+            <h2 class="font-editorial-serif text-4xl font-normal tracking-tight" id="s2-display-title" data-editable="true" data-edit-id="s2-title">
+              全篇演进脉络
+            </h2>
+            <p class="font-modern-sub text-sm opacity-80 leading-relaxed" id="s2-display-subtitle" data-editable="true" data-edit-id="s2-subtitle">
+              以真实物料的触感与物理逻辑，解构数字界面的极简表达。
+            </p>
+          </div>
+
+          <!-- 4 章节导航标引 -->
+          <div class="space-y-4 font-typewriter text-xs">
+            <div class="p-3 border rounded-sm flex items-center justify-between" style="border-color: var(--board-border); background: rgba(0,0,0,0.03);" data-editable="true" data-edit-id="s2-agenda-1">
+              <span class="font-bold">01. 材质隐喻</span>
+              <span class="opacity-60">去数码阴影与纸纤维</span>
+            </div>
+            <div class="p-3 border rounded-sm flex items-center justify-between" style="border-color: var(--board-border); background: rgba(0,0,0,0.03);" data-editable="true" data-edit-id="s2-agenda-2">
+              <span class="font-bold">02. 版式哲学</span>
+              <span class="opacity-60">6 大物料排版架构</span>
+            </div>
+            <div class="p-3 border rounded-sm flex items-center justify-between" style="border-color: var(--board-border); background: rgba(0,0,0,0.03);" data-editable="true" data-edit-id="s2-agenda-3">
+              <span class="font-bold">03. 纸墨色谱</span>
+              <span class="opacity-60">9 套母色与文字反转</span>
+            </div>
+            <div class="p-3 border rounded-sm flex items-center justify-between" style="border-color: var(--board-border); background: rgba(0,0,0,0.03);" data-editable="true" data-edit-id="s2-agenda-4">
+              <span class="font-bold">04. 交付闭环</span>
+              <span class="opacity-60">无损 PDF 与演讲模式</span>
+            </div>
+          </div>
+
+          <div class="font-typewriter text-[11px] opacity-60" data-editable="true" data-edit-id="s2-duration">
+            TOTAL 6 SECTIONS &middot; DURATION ~20 MIN
+          </div>
+        </div>
+
+        <!-- 右侧：米白活页内页 (双打孔中缝) -->
+        <div class="col-span-7 h-full relative p-12 flex flex-col justify-between" style="background-color: var(--card-bg); color: var(--card-text);">
+          <!-- 左缘活页打孔透视孔 -->
+          <div class="absolute -left-[7px] top-24 rowland-hole"></div>
+          <div class="absolute -left-[7px] bottom-24 rowland-hole"></div>
+
+          <div class="flex items-center justify-between pb-4 border-b font-typewriter text-xs opacity-70" style="border-color: var(--border-ink);">
+            <span data-editable="true" data-edit-id="s2-right-chapter">CHAPTER ARCHIVAL OVERVIEW</span>
+            <span data-editable="true" data-edit-id="s2-right-page">N° 02 / 06</span>
+          </div>
+
+          <div class="space-y-6 my-auto">
+            <div class="space-y-2">
+              <span class="font-typewriter text-xs uppercase tracking-widest text-[#823838] font-bold" id="s2-card-tag" data-editable="true" data-edit-id="s2-card-tag">CORE METHODOLOGY</span>
+              <h3 class="font-editorial-serif text-3xl font-normal" id="s2-card-headline" data-editable="true" data-edit-id="s2-card-headline">物料触感驱动的认知革命</h3>
+              <p class="font-modern-sub text-sm opacity-80 leading-relaxed" data-editable="true" data-edit-id="s2-card-desc">
+                传统演示文稿过度依赖高斯模糊、弥散发光与鲜艳渐变，导致视觉疲劳与信息同质化。本系统借鉴了 20 世纪中叶欧洲手工造纸工坊与书籍装帧档案的经典原则，为严肃论述提供温润、恒久、高可读性的物理视觉载体。
+              </p>
+            </div>
+
+            <!-- 核心数据要点对比 -->
+            <div class="grid grid-cols-2 gap-4 pt-2">
+              <div class="p-4 border rounded-sm space-y-1" style="border-color: var(--border-ink);" data-editable="true" data-edit-id="s2-stat-1">
+                <div class="font-typewriter text-2xl font-bold tracking-tight">400 GSM</div>
+                <div class="font-typewriter text-[11px] opacity-70 uppercase">COTTON FIBER WEIGHT</div>
+                <div class="text-xs opacity-80 pt-1">提供温润厚重的书卷质感与漫反射</div>
+              </div>
+              <div class="p-4 border rounded-sm space-y-1" style="border-color: var(--border-ink);" data-editable="true" data-edit-id="s2-stat-2">
+                <div class="font-typewriter text-2xl font-bold tracking-tight">&Delta;E &lt; 0.28</div>
+                <div class="font-typewriter text-[11px] opacity-70 uppercase">CONTRAST INVERSION</div>
+                <div class="text-xs opacity-80 pt-1">深浅底纸自动计算文字最优对比明度</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-between items-center pt-4 border-t font-typewriter text-xs opacity-70" style="border-color: var(--border-ink);">
+            <span data-editable="true" data-edit-id="s2-footer-left">ROWLAND SPLIT BINDER FORMAT</span>
+            <span data-editable="true" data-edit-id="s2-footer-right">APPROVED BY ATELIER</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================================================================= -->
+      <!-- SLIDE 3: 叠层悬浮重点卡 (Island Card Focus Architecture)         -->
+      <!-- ================================================================= -->
+      <div id="slide-3" class="slide-pane inset-0 flex items-center justify-center p-12">
+        <div class="w-[1080px] h-[520px] p-12 flex flex-col justify-between card-zero-shadow rounded-[2px]" style="background-color: var(--card-bg); color: var(--card-text);">
+          <!-- 卡片顶栏 -->
+          <div class="flex items-center justify-between pb-4 border-b font-typewriter text-xs" style="border-color: var(--border-ink);">
+            <div class="font-bold tracking-wider uppercase" data-editable="true" data-edit-id="s3-card-title">CORE THESIS &middot; 核心立论</div>
+            <div class="opacity-70" data-editable="true" data-edit-id="s3-card-spec">SPECIMEN NO. 03</div>
+          </div>
+
+          <!-- 卡片核心引言与立论 -->
+          <div class="my-auto space-y-8 max-w-4xl mx-auto text-center">
+            <div class="font-typewriter text-xs uppercase tracking-widest text-[#823838] font-bold" data-editable="true" data-edit-id="s3-tag">
+              [ PHILOSOPHICAL FOUNDATION ]
+            </div>
+
+            <blockquote class="font-editorial-serif text-3xl md:text-4xl font-normal leading-snug tracking-tight" id="s3-display-quote" data-editable="true" data-edit-id="s3-quote">
+              “纸张的物理触感与印刷咬合，不是数码时代应当丢弃的陈旧技术，而是唤醒观众深度专注与记忆铭刻的终极锚点。”
+            </blockquote>
+
+            <div class="grid grid-cols-3 gap-6 pt-4 text-left font-typewriter text-xs">
+              <div class="p-3 border rounded-sm" style="border-color: var(--border-ink);" data-editable="true" data-edit-id="s3-p1">
+                <div class="font-bold text-sm mb-1">01. 绝对去投影</div>
+                <div class="opacity-75">严禁任何数码发光与浮夸投影，靠真实的物理层叠与打孔展现纵深。</div>
+              </div>
+              <div class="p-3 border rounded-sm" style="border-color: var(--border-ink);" data-editable="true" data-edit-id="s3-p2">
+                <div class="font-bold text-sm mb-1">02. 漫反射微噪</div>
+                <div class="opacity-75">微距棉浆纤维底衬，使油墨字符如渗透纸面般柔和易读。</div>
+              </div>
+              <div class="p-3 border rounded-sm" style="border-color: var(--border-ink);" data-editable="true" data-edit-id="s3-p3">
+                <div class="font-bold text-sm mb-1">03. 严禁标签徽章</div>
+                <div class="opacity-75">剔除圆角胶囊与勋章标，代之以经典排印字阶与虚线印章。</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 卡片底栏 -->
+          <div class="flex items-center justify-between pt-4 border-t font-typewriter text-xs opacity-70" style="border-color: var(--border-ink);">
+            <span data-editable="true" data-edit-id="s3-footer-left">PUBLISHED IN TOKYO / LONDON ATELIER</span>
+            <span data-editable="true" data-edit-id="s3-footer-right">PAGE 03 / 06</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================================================================= -->
+      <!-- SLIDE 4: 锯齿连贯票券流程 (Ticket Roadmap Architecture)          -->
+      <!-- ================================================================= -->
+      <div id="slide-4" class="slide-pane inset-0 flex flex-col justify-between p-12">
+        <div class="space-y-1">
+          <div class="font-typewriter text-xs uppercase tracking-widest opacity-75" data-editable="true" data-edit-id="s4-tag">MILESTONES & PHASES</div>
+          <h2 class="font-editorial-serif text-3xl font-normal tracking-tight" id="s4-display-title" data-editable="true" data-edit-id="s4-title">
+            三阶段演进路线与交付凭证
+          </h2>
+        </div>
+
+        <!-- 3 联连续打孔锯齿票券 -->
+        <div class="grid grid-cols-3 gap-6 my-auto">
+          <!-- 票据 1 -->
+          <div class="relative p-6 flex flex-col justify-between rounded-[2px] card-zero-shadow ticket-sawtooth-top ticket-sawtooth-bottom" style="background-color: var(--card-bg); color: var(--card-text); min-height: 360px;">
+            <div class="space-y-2 pt-2">
+              <div class="flex justify-between items-center font-typewriter text-xs pb-2 border-b" style="border-color: var(--border-ink);">
+                <span class="font-bold text-[#823838]" data-editable="true" data-edit-id="s4-t1-badge">STAGE 01</span>
+                <span class="opacity-60" data-editable="true" data-edit-id="s4-t1-num">TICKET #801</span>
+              </div>
+              <h4 class="font-editorial-serif text-xl font-normal pt-2" data-editable="true" data-edit-id="s4-t1-title">材质溯源与拓印</h4>
+              <p class="font-modern-sub text-xs opacity-80 leading-relaxed" data-editable="true" data-edit-id="s4-t1-desc">
+                收集世界各地工坊纸样，建立高精度无缝物理纤维库与反射模型，确立 9 大母色度量基准。
+              </p>
+            </div>
+
+            <div class="space-y-2 pb-2">
+              <div class="font-typewriter text-[11px] p-2 bg-black/5 rounded-sm space-y-1">
+                <div data-editable="true" data-edit-id="s4-t1-bullet1">&bull; 纸品克重采样: 180~600 GSM</div>
+                <div data-editable="true" data-edit-id="s4-t1-bullet2">&bull; 纤维噪点漫反射算法校准</div>
+              </div>
+              <div class="font-typewriter text-[10px] opacity-60 text-right" data-editable="true" data-edit-id="s4-t1-date">DATE: Q1 2026 &middot; COMPLETED</div>
+            </div>
+          </div>
+
+          <!-- 票据 2 -->
+          <div class="relative p-6 flex flex-col justify-between rounded-[2px] card-zero-shadow ticket-sawtooth-top ticket-sawtooth-bottom" style="background-color: var(--card-bg); color: var(--card-text); min-height: 360px;">
+            <div class="space-y-2 pt-2">
+              <div class="flex justify-between items-center font-typewriter text-xs pb-2 border-b" style="border-color: var(--border-ink);">
+                <span class="font-bold text-[#823838]" data-editable="true" data-edit-id="s4-t2-badge">STAGE 02</span>
+                <span class="opacity-60" data-editable="true" data-edit-id="s4-t2-num">TICKET #802</span>
+              </div>
+              <h4 class="font-editorial-serif text-xl font-normal pt-2" data-editable="true" data-edit-id="s4-t2-title">版式结构与几何</h4>
+              <p class="font-modern-sub text-xs opacity-80 leading-relaxed" data-editable="true" data-edit-id="s4-t2-desc">
+                确立 16:9 幻灯片专属 6 大物料排版架构，贯彻「文案守恒律」，让复杂业务内容在不同形态中自适应。
+              </p>
+            </div>
+
+            <div class="space-y-2 pb-2">
+              <div class="font-typewriter text-[11px] p-2 bg-black/5 rounded-sm space-y-1">
+                <div data-editable="true" data-edit-id="s4-t2-bullet1">&bull; 活页、子卡、票据、标本单</div>
+                <div data-editable="true" data-edit-id="s4-t2-bullet2">&bull; 键盘无缝翻页与演讲者模式</div>
+              </div>
+              <div class="font-typewriter text-[10px] opacity-60 text-right" data-editable="true" data-edit-id="s4-t2-date">DATE: Q2 2026 &middot; ACTIVE</div>
+            </div>
+          </div>
+
+          <!-- 票据 3 -->
+          <div class="relative p-6 flex flex-col justify-between rounded-[2px] card-zero-shadow ticket-sawtooth-top ticket-sawtooth-bottom" style="background-color: var(--card-bg); color: var(--card-text); min-height: 360px;">
+            <div class="space-y-2 pt-2">
+              <div class="flex justify-between items-center font-typewriter text-xs pb-2 border-b" style="border-color: var(--border-ink);">
+                <span class="font-bold text-[#823838]" data-editable="true" data-edit-id="s4-t3-badge">STAGE 03</span>
+                <span class="opacity-60" data-editable="true" data-edit-id="s4-t3-num">TICKET #803</span>
+              </div>
+              <h4 class="font-editorial-serif text-xl font-normal pt-2" data-editable="true" data-edit-id="s4-t3-title">工业级交付与导出</h4>
+              <p class="font-modern-sub text-xs opacity-80 leading-relaxed" data-editable="true" data-edit-id="s4-t3-desc">
+                打通浏览器 Cmd+P 无损矢量 PDF 打印管道与自动化无头脚本，实现一键生成可演示、可打印的胶片。
+              </p>
+            </div>
+
+            <div class="space-y-2 pb-2">
+              <div class="font-typewriter text-[11px] p-2 bg-black/5 rounded-sm space-y-1">
+                <div data-editable="true" data-edit-id="s4-t3-bullet1">&bull; 16in x 9in 印刷级 PDF 渲染</div>
+                <div data-editable="true" data-edit-id="s4-t3-bullet2">&bull; 纯净独立 HTML 单文件便携分发</div>
+              </div>
+              <div class="font-typewriter text-[10px] opacity-60 text-right" data-editable="true" data-edit-id="s4-t3-date">DATE: Q3 2026 &middot; SCHEDULED</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-between items-center font-typewriter text-xs opacity-75">
+          <span data-editable="true" data-edit-id="s4-footer-left">SAWTOOTH VOUCHER SYSTEM</span>
+          <span data-editable="true" data-edit-id="s4-footer-right">ALL TICKETS NUMBERED & SEALED</span>
+        </div>
+      </div>
+
+      <!-- ================================================================= -->
+      <!-- SLIDE 5: 标本参数与技术矩阵 (Specimen Matrix Architecture)        -->
+      <!-- ================================================================= -->
+      <div id="slide-5" class="slide-pane inset-0 flex flex-col justify-between p-12">
+        <div class="flex justify-between items-end pb-4 border-b" style="border-color: var(--board-border);">
+          <div class="space-y-1">
+            <span class="font-typewriter text-xs uppercase tracking-widest opacity-75" data-editable="true" data-edit-id="s5-tag">TECHNICAL SPECIFICATION</span>
+            <h2 class="font-editorial-serif text-3xl font-normal tracking-tight" id="s5-display-title" data-editable="true" data-edit-id="s5-title">
+              工艺技术矩阵与度量衡标本
+            </h2>
+          </div>
+          <div class="font-typewriter text-xs opacity-70" data-editable="true" data-edit-id="s5-spec-no">
+            SPEC NO. DECK-05/06
+          </div>
+        </div>
+
+        <!-- 4 栏紧凑标本参数格 -->
+        <div class="grid grid-cols-4 gap-4 my-auto">
+          <div class="p-6 rounded-[2px] card-zero-shadow space-y-3" style="background-color: var(--card-bg); color: var(--card-text);">
+            <div class="font-typewriter text-xs opacity-60" data-editable="true" data-edit-id="s5-m1-tag">METRIC 01</div>
+            <div class="font-typewriter text-4xl font-bold tracking-tight" data-editable="true" data-edit-id="s5-m1-val">400<span class="text-sm font-normal ml-1">GSM</span></div>
+            <div class="font-bold text-sm" data-editable="true" data-edit-id="s5-m1-name">纸品克重厚度</div>
+            <p class="font-modern-sub text-xs opacity-75 leading-relaxed" data-editable="true" data-edit-id="s5-m1-desc">采用特级重磅纯棉浆原纸，手感温润平展，绝不透光。</p>
+          </div>
+
+          <div class="p-6 rounded-[2px] card-zero-shadow space-y-3" style="background-color: var(--card-bg); color: var(--card-text);">
+            <div class="font-typewriter text-xs opacity-60" data-editable="true" data-edit-id="s5-m2-tag">METRIC 02</div>
+            <div class="font-typewriter text-4xl font-bold tracking-tight" data-editable="true" data-edit-id="s5-m2-val">9<span class="text-sm font-normal ml-1">PALETTES</span></div>
+            <div class="font-bold text-sm" data-editable="true" data-edit-id="s5-m2-name">工坊典藏母色</div>
+            <p class="font-modern-sub text-xs opacity-75 leading-relaxed" data-editable="true" data-edit-id="s5-m2-desc">冷杉、陶土、黄油、橄榄、燕麦等 9 套历史校准自然色谱。</p>
+          </div>
+
+          <div class="p-6 rounded-[2px] card-zero-shadow space-y-3" style="background-color: var(--card-bg); color: var(--card-text);">
+            <div class="font-typewriter text-xs opacity-60" data-editable="true" data-edit-id="s5-m3-tag">METRIC 03</div>
+            <div class="font-typewriter text-4xl font-bold tracking-tight" data-editable="true" data-edit-id="s5-m3-val">100%<span class="text-sm font-normal ml-1">VECTOR</span></div>
+            <div class="font-bold text-sm" data-editable="true" data-edit-id="s5-m3-name">无损矢量直出</div>
+            <p class="font-modern-sub text-xs opacity-75 leading-relaxed" data-editable="true" data-edit-id="s5-m3-desc">纯 CSS/SVG/WebFont 实现，任意缩放无锯齿，打印超高清。</p>
+          </div>
+
+          <div class="p-6 rounded-[2px] card-zero-shadow space-y-3" style="background-color: var(--card-bg); color: var(--card-text);">
+            <div class="font-typewriter text-xs opacity-60" data-editable="true" data-edit-id="s5-m4-tag">METRIC 04</div>
+            <div class="font-typewriter text-4xl font-bold tracking-tight" data-editable="true" data-edit-id="s5-m4-val">0<span class="text-sm font-normal ml-1">SHADOW</span></div>
+            <div class="font-bold text-sm" data-editable="true" data-edit-id="s5-m4-name">绝对零数码阴影</div>
+            <p class="font-modern-sub text-xs opacity-75 leading-relaxed" data-editable="true" data-edit-id="s5-m4-desc">拒绝大面积粗暴阴影，用真实开孔、虚线与层叠构建秩序。</p>
+          </div>
+        </div>
+
+        <!-- 详细数据对照表 (Type Specimen Table) -->
+        <div class="p-4 rounded-[2px] card-zero-shadow font-typewriter text-xs" style="background-color: var(--card-bg); color: var(--card-text);">
+          <div class="grid grid-cols-4 pb-2 border-b opacity-60 font-bold" style="border-color: var(--border-ink);">
+            <div data-editable="true" data-edit-id="s5-th-1">PARAMETER / 参数</div>
+            <div data-editable="true" data-edit-id="s5-th-2">SPECIFICATION / 规格</div>
+            <div data-editable="true" data-edit-id="s5-th-3">STATUS / 状态</div>
+            <div data-editable="true" data-edit-id="s5-th-4">BENCHMARK / 行业基准</div>
+          </div>
+          <div class="grid grid-cols-4 py-2 border-b opacity-85" style="border-color: var(--border-ink);">
+            <div data-editable="true" data-edit-id="s5-r1-c1">Font Scale (字阶体系)</div>
+            <div data-editable="true" data-edit-id="s5-r1-c2">Playfair / Noto Serif SC + Courier</div>
+            <div class="text-[#823838] font-bold" data-editable="true" data-edit-id="s5-r1-c3">READY</div>
+            <div data-editable="true" data-edit-id="s5-r1-c4">Classic Typography Standard</div>
+          </div>
+          <div class="grid grid-cols-4 pt-2 opacity-85">
+            <div data-editable="true" data-edit-id="s5-r2-c1">Print Compatibility (打印适配)</div>
+            <div data-editable="true" data-edit-id="s5-r2-c2">16:9 Landscape Seamless PDF</div>
+            <div class="text-[#823838] font-bold" data-editable="true" data-edit-id="s5-r2-c3">PASS</div>
+            <div data-editable="true" data-edit-id="s5-r2-c4">ISO 216 Archival Print Spec</div>
+          </div>
+        </div>
+
+        <div class="flex justify-between items-center font-typewriter text-xs opacity-75">
+          <span data-editable="true" data-edit-id="s5-footer-left">SUPERCREATIVE TYPE SPECIMEN FORMAT</span>
+          <span data-editable="true" data-edit-id="s5-footer-right">CALIBRATED ACCURACY &plusmn;0.05MM</span>
+        </div>
+      </div>
+
+      <!-- ================================================================= -->
+      <!-- SLIDE 6: 封底印章与结语 (Colophon Back Cover Architecture)        -->
+      <!-- ================================================================= -->
+      <div id="slide-6" class="slide-pane inset-0 flex flex-col justify-between p-16 text-center">
+        <div></div>
+
+        <div class="max-w-2xl mx-auto space-y-6">
+          <div class="artisan-stamp px-6 py-2 text-sm rounded-sm mx-auto" data-editable="true" data-edit-id="s6-stamp">
+            FINAL ARCHIVE &middot; FINISHED
+          </div>
+
+          <h2 class="font-editorial-serif text-5xl md:text-6xl font-normal tracking-tight" id="s6-display-title" data-editable="true" data-edit-id="s6-title">
+            感谢聆听与共同探索
+          </h2>
+
+          <p class="font-modern-sub text-base opacity-80 leading-relaxed" id="s6-display-subtitle" data-editable="true" data-edit-id="s6-subtitle">
+            “当演示回归真实的物理温度，思想才得以被长久地珍藏与审视。”
+          </p>
+          
+          <div class="pt-6 font-typewriter text-xs opacity-75 space-y-1">
+            <div data-editable="true" data-edit-id="s6-workshop-title">WORKSHOP: GAOYATING ARTISAN LAB</div>
+            <div data-editable="true" data-edit-id="s6-workshop-site">WEBSITE: ARTISAN.PAPER.DECK &middot; CONTACT@DECK.IO</div>
+          </div>
+        </div>
+
+        <div class="pt-8 border-t flex justify-between items-center font-typewriter text-xs opacity-70" style="border-color: var(--board-border);">
+          <div data-editable="true" data-edit-id="s6-footer-copy">COPYRIGHT &copy; 2026 ARTISAN DECK LAB. ALL RIGHTS RESERVED.</div>
+          <div data-editable="true" data-edit-id="s6-footer-print">PRINTED IN ARCHIVAL MONOSPACE</div>
+        </div>
+      </div>
+
+
+
+      <!-- 幻灯片底部进度细线 (Progress Bar) -->
+      <div class="absolute bottom-0 left-0 h-[3px] bg-[#823838] z-30 transition-all duration-300" id="deck-progress-line" style="width: 16.66%;"></div>
+
+    </div>
+  </div>
+
+  <!-- 4. 文案与调配抽屉 (Artisan Tuning Drawer: 无遮罩蒙层与模糊，纯净右侧浮动调配面板) -->
+  <aside id="drawer" class="fixed top-0 right-0 w-80 h-full bg-[#FAF8F4] text-[#242321] shadow-2xl border-l border-[#DCD6C8] z-50 transform translate-x-full transition-transform duration-300 flex flex-col justify-between font-modern-sub">
+    <!-- 抽屉标题 -->
+    <div class="p-5 border-b border-[#E5DFD3] flex items-center justify-between font-typewriter text-xs">
+      <div class="flex items-center space-x-2">
+        <span class="font-bold tracking-wider uppercase text-[#823838]">&sect; 配置</span>
+      </div>
+      <button id="btn-close-drawer" class="text-neutral-400 hover:text-black font-mono text-base cursor-pointer">&times;</button>
+    </div>
+
+    <!-- 抽屉滚动内容 -->
+    <div class="p-5 space-y-6 overflow-y-auto flex-1 text-xs">
+<!-- 风格切换 (Style Switcher) -->
+      <div class="space-y-2">
+        <div class="font-typewriter text-[11px] font-bold text-neutral-700 flex justify-between items-center">
+          <span>视觉设计风格 (Style)</span>
+          <span id="active-style-label" class="text-[10px] text-[#823838] font-bold uppercase">ARTISAN</span>
+        </div>
+        <div class="grid grid-cols-2 gap-2" id="style-switch-buttons">
+          <button id="btn-style-artisan" class="px-2.5 py-2 rounded border border-[#823838] bg-[#823838]/10 text-[#823838] text-xs transition cursor-pointer flex flex-col items-center">
+            <span class="font-bold text-[11px]">物料典藏风</span>
+            <span class="text-[9px] opacity-75 mt-0.5 font-typewriter">Artisan Paper</span>
+          </button>
+          <button id="btn-style-editorial" class="px-2.5 py-2 rounded border border-neutral-300 bg-white hover:bg-neutral-50 text-neutral-700 text-xs transition cursor-pointer flex flex-col items-center">
+            <span class="font-bold text-[11px]">留白静奢风</span>
+            <span class="text-[9px] opacity-75 mt-0.5 font-typewriter">Minimal Editorial</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 配色方案切换 (自动随风格切换母色) -->
+      <div class="space-y-3 pt-2 border-t border-[#E5DFD3]">
+        <div class="font-typewriter text-[11px] font-bold text-neutral-700 flex justify-between items-center">
+          <span id="palette-group-title">9 大工坊母色调配</span>
+          <span class="text-[10px] text-neutral-400 font-normal">自动智能反转</span>
+        </div>
+        <div class="grid grid-cols-3 gap-2" id="palette-buttons-grid">
+          <!-- JS 动态渲染配色按钮 -->
+        </div>
+      </div>
+
+
+      <!-- 字体性格切换 -->
+      <div class="space-y-2 pt-2 border-t border-[#E5DFD3]">
+        <div class="font-typewriter text-[11px] font-bold text-neutral-700">排印字体性格</div>
+        <div class="grid grid-cols-2 gap-2">
+          <button id="btn-font-serif" class="px-3 py-1.5 rounded border border-[#823838] bg-[#823838]/10 text-[#823838] font-bold font-serif text-xs transition cursor-pointer">
+            古典宋体/衬线
+          </button>
+          <button id="btn-font-sans" class="px-3 py-1.5 rounded border border-neutral-300 bg-white hover:bg-neutral-50 text-neutral-700 font-sans text-xs transition cursor-pointer">
+            现代黑体/无衬线
+          </button>
+        </div>
+      </div>
+
+
+    
+      <!-- 文案持久化与导出 -->
+      <div class="space-y-2.5 pt-2 border-t border-[#E5DFD3]">
+        <div class="font-typewriter text-[11px] font-bold text-neutral-700 flex justify-between items-center">
+          <span>文案持久化与导出</span>
+          <span class="text-[10px] text-neutral-400 font-normal">独立文件保存</span>
+        </div>
+
+        <p class="text-[11px] text-neutral-500 leading-relaxed font-modern-sub">
+          提示：页面内所有文字、数字与印章均支持直接点击编辑（快捷键 E）。修改仅保存在当前电脑浏览器本地，发给他人请导出独立放映版 HTML。
+        </p>
+
+        <div class="grid grid-cols-2 gap-2 pt-1">
+          <button id="btn-export-html" class="px-3 py-1.5 bg-[#2E2820] hover:bg-black text-[#F6F3EC] rounded text-xs font-medium transition active:scale-95 flex items-center justify-center cursor-pointer">
+            导出新 HTML
+          </button>
+          <button id="btn-clear-edits" class="px-3 py-1.5 bg-white hover:bg-neutral-50 text-neutral-700 border border-[#DCD6C8] rounded text-xs font-medium transition active:scale-95 flex items-center justify-center cursor-pointer">
+            清空编辑缓存
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 抽屉底栏 -->
+    <div class="p-4 border-t border-[#E5DFD3] flex items-center justify-between font-typewriter text-[11px]">
+      <button id="btn-reset-preset" class="text-neutral-500 hover:text-black underline cursor-pointer">
+        恢复默认设置
+      </button>
+      <span class="text-neutral-400">ARTISAN LAB</span>
+    </div>
+  </aside>
+
+  <script>
+    // =========================================================================
+    // 1. 数据模型与双风格母色系统 (Artisan 9 Palettes & Editorial 6 Neutrals)
+    // =========================================================================
+    const artisanPalettes = {
+      celadon: {
+        name: '冷杉青绿',
+        '--bg-stage': '#E4EAE7',
+        '--board-bg': '#9EABA2',
+        '--board-text': '#1E2826',
+        '--board-muted': '#53625B',
+        '--board-border': 'rgba(30, 40, 38, 0.16)',
+        '--card-bg': '#F7F4EC',
+        '--card-text': '#202624',
+        '--card-muted': '#6A7A75',
+        '--ink-stamp': '#823838',
+        '--border-ink': 'rgba(30, 40, 38, 0.14)',
+        '--hairline': 'rgba(30, 40, 38, 0.25)',
+        '--accent': '#823838'
+      },
+      terracotta: {
+        name: '陶土红棕',
+        '--bg-stage': '#E8E2D5',
+        '--board-bg': '#9B4F3B',
+        '--board-text': '#F7F3EC',
+        '--board-muted': '#E4D5CE',
+        '--board-border': 'rgba(255, 255, 255, 0.22)',
+        '--card-bg': '#F6F3EC',
+        '--card-text': '#231E1A',
+        '--card-muted': '#7E7265',
+        '--ink-stamp': '#922B22',
+        '--border-ink': 'rgba(35, 30, 26, 0.14)',
+        '--hairline': 'rgba(255, 255, 255, 0.28)',
+        '--accent': '#E5A594'
+      },
+      butter: {
+        name: '黄油票据',
+        '--bg-stage': '#E6DEC9',
+        '--board-bg': '#E5B84B',
+        '--board-text': '#221A0C',
+        '--board-muted': '#6B5424',
+        '--board-border': 'rgba(34, 26, 12, 0.18)',
+        '--card-bg': '#FFFDF7',
+        '--card-text': '#2B2317',
+        '--card-muted': '#7C6F5A',
+        '--ink-stamp': '#8C3524',
+        '--border-ink': 'rgba(43, 35, 23, 0.15)',
+        '--hairline': 'rgba(34, 26, 12, 0.22)',
+        '--accent': '#8C3524'
+      },
+      olive: {
+        name: '橄榄麻布',
+        '--bg-stage': '#DFDDD3',
+        '--board-bg': '#686034',
+        '--board-text': '#FAF8F0',
+        '--board-muted': '#DDD7C4',
+        '--board-border': 'rgba(255, 255, 255, 0.2)',
+        '--card-bg': '#F5F4EE',
+        '--card-text': '#25251D',
+        '--card-muted': '#6F6E60',
+        '--ink-stamp': '#A34828',
+        '--border-ink': 'rgba(37, 37, 29, 0.15)',
+        '--hairline': 'rgba(255, 255, 255, 0.26)',
+        '--accent': '#D7C797'
+      },
+      blush: {
+        name: '干枯粉彩',
+        '--bg-stage': '#EFE4DD',
+        '--board-bg': '#C7A296',
+        '--board-text': '#2A1D1B',
+        '--board-muted': '#6D534E',
+        '--board-border': 'rgba(42, 29, 27, 0.16)',
+        '--card-bg': '#FDFBF9',
+        '--card-text': '#2C1E1B',
+        '--card-muted': '#7A6460',
+        '--ink-stamp': '#872C22',
+        '--border-ink': 'rgba(44, 30, 27, 0.14)',
+        '--hairline': 'rgba(42, 29, 27, 0.22)',
+        '--accent': '#872C22'
+      },
+      beige: {
+        name: '燕麦米色',
+        '--bg-stage': '#EAE5DB',
+        '--board-bg': '#D8D2C4',
+        '--board-text': '#27231E',
+        '--board-muted': '#6E665D',
+        '--board-border': 'rgba(39, 35, 30, 0.15)',
+        '--card-bg': '#FAF8F4',
+        '--card-text': '#2A2520',
+        '--card-muted': '#787067',
+        '--ink-stamp': '#7F3323',
+        '--border-ink': 'rgba(42, 37, 32, 0.14)',
+        '--hairline': 'rgba(39, 35, 30, 0.22)',
+        '--accent': '#7F3323'
+      },
+      pistachio: {
+        name: '薄荷浅绿',
+        '--bg-stage': '#E7EDD7',
+        '--board-bg': '#D6E0B9',
+        '--board-text': '#1D2A1C',
+        '--board-muted': '#566650',
+        '--board-border': 'rgba(29, 42, 28, 0.16)',
+        '--card-bg': '#FCFDF7',
+        '--card-text': '#1F2B1D',
+        '--card-muted': '#6B7A66',
+        '--ink-stamp': '#873B2E',
+        '--border-ink': 'rgba(31, 43, 29, 0.14)',
+        '--hairline': 'rgba(29, 42, 28, 0.22)',
+        '--accent': '#873B2E'
+      },
+      oyster: {
+        name: '暖灰水泥',
+        '--bg-stage': '#EBE9E4',
+        '--board-bg': '#CECBC5',
+        '--board-text': '#242321',
+        '--board-muted': '#666460',
+        '--board-border': 'rgba(36, 35, 33, 0.16)',
+        '--card-bg': '#FCFBFA',
+        '--card-text': '#282725',
+        '--card-muted': '#72706C',
+        '--ink-stamp': '#6E4334',
+        '--border-ink': 'rgba(40, 39, 37, 0.15)',
+        '--hairline': 'rgba(36, 35, 33, 0.22)',
+        '--accent': '#6E4334'
+      },
+      laid: {
+        name: '古典棉纸',
+        '--bg-stage': '#DED8CB',
+        '--board-bg': '#4A4139',
+        '--board-text': '#F8F5EE',
+        '--board-muted': '#C8BFB5',
+        '--board-border': 'rgba(255, 255, 255, 0.2)',
+        '--card-bg': '#F7F5EE',
+        '--card-text': '#24201C',
+        '--card-muted': '#7A726A',
+        '--ink-stamp': '#9B3828',
+        '--border-ink': 'rgba(36, 32, 28, 0.15)',
+        '--hairline': 'rgba(255, 255, 255, 0.26)',
+        '--accent': '#DBCBB9'
+      }
+    };
+
+    const editorialPalettes = {
+      ivory: {
+        name: '象牙灰 (默认)',
+        '--bg-stage': '#E6E3DC',
+        '--board-bg': '#F2F0EB',
+        '--board-text': '#1E1C1A',
+        '--board-muted': 'rgba(30, 28, 26, 0.62)',
+        '--board-border': 'rgba(30, 28, 26, 0.18)',
+        '--card-bg': '#F8F7F3',
+        '--card-text': '#1E1C1A',
+        '--card-muted': 'rgba(30, 28, 26, 0.58)',
+        '--ink-stamp': '#A65235',
+        '--border-ink': 'rgba(30, 28, 26, 0.16)',
+        '--hairline': 'rgba(30, 28, 26, 0.35)',
+        '--accent': '#A65235'
+      },
+      greige: {
+        name: '暖米灰',
+        '--bg-stage': '#DAD5CA',
+        '--board-bg': '#E5E1D8',
+        '--board-text': '#26231F',
+        '--board-muted': 'rgba(38, 35, 31, 0.65)',
+        '--board-border': 'rgba(38, 35, 31, 0.18)',
+        '--card-bg': '#ECE8E0',
+        '--card-text': '#26231F',
+        '--card-muted': 'rgba(38, 35, 31, 0.6)',
+        '--ink-stamp': '#7A5C43',
+        '--border-ink': 'rgba(38, 35, 31, 0.16)',
+        '--hairline': 'rgba(38, 35, 31, 0.35)',
+        '--accent': '#7A5C43'
+      },
+      cream: {
+        name: '亚麻奶油',
+        '--bg-stage': '#EBE5D8',
+        '--board-bg': '#F5F1E6',
+        '--board-text': '#221F1A',
+        '--board-muted': 'rgba(34, 31, 26, 0.62)',
+        '--board-border': 'rgba(34, 31, 26, 0.18)',
+        '--card-bg': '#FAF8F0',
+        '--card-text': '#221F1A',
+        '--card-muted': 'rgba(34, 31, 26, 0.58)',
+        '--ink-stamp': '#A65235',
+        '--border-ink': 'rgba(34, 31, 26, 0.16)',
+        '--hairline': 'rgba(34, 31, 26, 0.35)',
+        '--accent': '#A65235'
+      },
+      taupe: {
+        name: '深陶土褐 (反转)',
+        '--bg-stage': '#6E665E',
+        '--board-bg': '#8A8177',
+        '--board-text': '#F5F2EA',
+        '--board-muted': '#D8D1C7',
+        '--board-border': 'rgba(255, 255, 255, 0.22)',
+        '--card-bg': '#988F85',
+        '--card-text': '#FAF8F4',
+        '--card-muted': '#DFD8CE',
+        '--ink-stamp': '#E5D3B8',
+        '--border-ink': 'rgba(255, 255, 255, 0.2)',
+        '--hairline': 'rgba(255, 255, 255, 0.35)',
+        '--accent': '#E5D3B8'
+      },
+      olive_beige: {
+        name: '橄榄米色',
+        '--bg-stage': '#D0C6B2',
+        '--board-bg': '#DDD5C4',
+        '--board-text': '#2A261C',
+        '--board-muted': 'rgba(42, 38, 28, 0.65)',
+        '--board-border': 'rgba(42, 38, 28, 0.18)',
+        '--card-bg': '#E6DFCE',
+        '--card-text': '#2A261C',
+        '--card-muted': 'rgba(42, 38, 28, 0.6)',
+        '--ink-stamp': '#4C4A2E',
+        '--border-ink': 'rgba(42, 38, 28, 0.16)',
+        '--hairline': 'rgba(42, 38, 28, 0.35)',
+        '--accent': '#4C4A2E'
+      },
+      oat: {
+        name: '燕麦净白',
+        '--bg-stage': '#DFDBD3',
+        '--board-bg': '#EDEAE3',
+        '--board-text': '#24211D',
+        '--board-muted': 'rgba(36, 33, 29, 0.62)',
+        '--board-border': 'rgba(36, 33, 29, 0.18)',
+        '--card-bg': '#F4F2EC',
+        '--card-text': '#24211D',
+        '--card-muted': 'rgba(36, 33, 29, 0.58)',
+        '--ink-stamp': '#9C8A6B',
+        '--border-ink': 'rgba(36, 33, 29, 0.16)',
+        '--hairline': 'rgba(36, 33, 29, 0.35)',
+        '--accent': '#9C8A6B'
+      }
+    };
+
+    // 默认母本调配数据
+    const defaultDeckData = {
+      style: 'artisan', // 'artisan' | 'editorial'
+      palette: 'celadon',
+      fontStyle: 'serif',
+      slides: [
+
+        {
+          id: 1,
+          section: 'SECTION 01',
+          title: '手工物料与纸质典藏\nPresentation System',
+          subtitle: '剔除浮夸数码渐变与塑料质感投影，回归 400GSM 棉纸纤维、物理打孔透光与日系杂志排印的触感叙事美学。'
+        },
+        {
+          id: 2,
+          section: 'SECTION 02',
+          title: '全篇演进脉络',
+          subtitle: '以真实物料的触感与物理逻辑，解构数字界面的极简表达。'
+        },
+        {
+          id: 3,
+          section: 'SECTION 03',
+          title: '核心立论：唤醒物理专注',
+          subtitle: '“纸张的物理触感与印刷咬合，不是数码时代应当丢弃的陈旧技术，而是唤醒观众深度专注与记忆铭刻的终极锚点。”'
+        },
+        {
+          id: 4,
+          section: 'SECTION 04',
+          title: '三阶段演进路线与交付凭证',
+          subtitle: '从手工纸张样本拓印，到 16:9 版式几何，最终打通工业级 PDF 与全屏演示闭环。'
+        },
+        {
+          id: 5,
+          section: 'SECTION 05',
+          title: '工艺技术矩阵与度量衡标本',
+          subtitle: '通过标准欧洲排印标本格式，呈现 400 GSM、9 大母色、矢量直出与零阴影的技术指标。'
+        },
+        {
+          id: 6,
+          section: 'SECTION 06',
+          title: '感谢聆听与共同探索',
+          subtitle: '“当演示回归真实的物理温度，思想才得以被长久地珍藏与审视。”'
+        }
+      ]
+    };
+
+    // 深度克隆函数 (防污染母本)
+    function getFreshDefaultData() {
+      return JSON.parse(JSON.stringify(defaultDeckData));
+    }
+
+    let deckData = getFreshDefaultData();
+    let currentSlide = 1;
+    const totalSlides = 6;
+
+    // =========================================================================
+    // 2. 幻灯片切换与页内渐进式微动效系统 (Slide Navigation & Staggered Reveal)
+    // =========================================================================
+    let currentTimeline = null;
+
+    function playSlideInnerAnimation(targetSlide) {
+      if (currentTimeline) {
+        currentTimeline.kill();
+      }
+
+      const tl = gsap.timeline();
+      currentTimeline = tl;
+
+      if (targetSlide === 1) {
+        // Slide 01: 封面大版层级渐进展开
+        tl.fromTo("#slide-1 .max-w-4xl > div:first-child", 
+          { opacity: 0, y: -12 }, 
+          { opacity: 0.85, y: 0, duration: 0.45, ease: "power2.out" }
+        )
+        .fromTo("#s1-display-title", 
+          { opacity: 0, y: 32 }, 
+          { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, 
+          "-=0.25"
+        )
+        .fromTo("#s1-display-subtitle", 
+          { opacity: 0, y: 18 }, 
+          { opacity: 0.85, y: 0, duration: 0.55, ease: "power2.out" }, 
+          "-=0.4"
+        )
+        .fromTo("#slide-1 .border-t", 
+          { opacity: 0, y: 12 }, 
+          { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, 
+          "-=0.3"
+        )
+        .fromTo("#slide-1 .artisan-stamp", 
+          { scale: 1.35, opacity: 0, rotation: -10 }, 
+          { scale: 1, opacity: 0.88, rotation: -3, duration: 0.45, ease: "back.out(1.6)" }, 
+          "-=0.2"
+        );
+      } else if (targetSlide === 2) {
+        // Slide 02: 双联活页议程层级渐进展开
+        tl.fromTo("#slide-2 .col-span-5 > div:first-child", 
+          { opacity: 0, y: 20 }, 
+          { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }
+        )
+        .fromTo("#slide-2 .col-span-5 .space-y-4 > div", 
+          { opacity: 0, x: -24 }, 
+          { opacity: 1, x: 0, duration: 0.45, stagger: 0.08, ease: "power2.out" }, 
+          "-=0.2"
+        )
+        .fromTo("#slide-2 .col-span-7", 
+          { opacity: 0, x: 25 }, 
+          { opacity: 1, x: 0, duration: 0.55, ease: "power2.out" }, 
+          "-=0.4"
+        )
+        .fromTo("#slide-2 .rowland-hole", 
+          { scale: 0, opacity: 0 }, 
+          { scale: 1, opacity: 1, duration: 0.35, stagger: 0.1, ease: "back.out(2)" }, 
+          "-=0.3"
+        )
+        .fromTo(["#s2-card-tag", "#s2-card-headline", "#slide-2 .space-y-6 p"], 
+          { opacity: 0, y: 16 }, 
+          { opacity: 1, y: 0, duration: 0.5, stagger: 0.1, ease: "power2.out" }, 
+          "-=0.25"
+        )
+        .fromTo("#slide-2 .grid-cols-2 > div", 
+          { opacity: 0, y: 20, scale: 0.97 }, 
+          { opacity: 1, y: 0, scale: 1, duration: 0.45, stagger: 0.12, ease: "power2.out" }, 
+          "-=0.2"
+        );
+      } else if (targetSlide === 3) {
+        // Slide 03: 叠层悬浮重点卡层级渐进展开
+        tl.fromTo("#slide-3 > div", 
+          { opacity: 0, y: 35, scale: 0.98 }, 
+          { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: "power3.out" }
+        )
+        .fromTo("#slide-3 .space-y-8 > div:first-child", 
+          { opacity: 0, y: -10 }, 
+          { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, 
+          "-=0.35"
+        )
+        .fromTo("#s3-display-quote", 
+          { opacity: 0, y: 22 }, 
+          { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, 
+          "-=0.25"
+        )
+        .fromTo("#slide-3 .grid-cols-3 > div", 
+          { opacity: 0, y: 20 }, 
+          { opacity: 1, y: 0, duration: 0.5, stagger: 0.1, ease: "power2.out" }, 
+          "-=0.3"
+        );
+      } else if (targetSlide === 4) {
+        // Slide 04: 3 联锯齿连贯票券波浪级联入场
+        tl.fromTo("#slide-4 .space-y-1", 
+          { opacity: 0, y: 16 }, 
+          { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" }
+        )
+        .fromTo("#slide-4 .grid-cols-3 > div", 
+          { opacity: 0, y: 45 }, 
+          { opacity: 1, y: 0, duration: 0.6, stagger: 0.13, ease: "power2.out" }, 
+          "-=0.2"
+        )
+        .fromTo("#slide-4 .grid-cols-3 .bg-black\\/5", 
+          { opacity: 0, scaleX: 0.92 }, 
+          { opacity: 1, scaleX: 1, duration: 0.35, stagger: 0.1, ease: "power2.out" }, 
+          "-=0.3"
+        );
+      } else if (targetSlide === 5) {
+        // Slide 05: 标本技术矩阵度量衡层级展开
+        tl.fromTo("#slide-5 > div:first-child", 
+          { opacity: 0, y: -15 }, 
+          { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" }
+        )
+        .fromTo("#slide-5 .grid-cols-4 > div", 
+          { opacity: 0, y: 28, scale: 0.96 }, 
+          { opacity: 1, y: 0, scale: 1, duration: 0.5, stagger: 0.09, ease: "power2.out" }, 
+          "-=0.25"
+        )
+        .fromTo("#slide-5 .card-zero-shadow.font-typewriter", 
+          { opacity: 0, y: 18 }, 
+          { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, 
+          "-=0.2"
+        )
+        .fromTo("#slide-5 .card-zero-shadow.font-typewriter > div", 
+          { opacity: 0, x: -14 }, 
+          { opacity: 1, x: 0, duration: 0.35, stagger: 0.08, ease: "power2.out" }, 
+          "-=0.3"
+        );
+      } else if (targetSlide === 6) {
+        // Slide 06: 封底结语印章与鸣谢层级展开
+        tl.fromTo("#slide-6 .artisan-stamp", 
+          { scale: 1.4, opacity: 0, rotation: -12 }, 
+          { scale: 1, opacity: 1, rotation: -3, duration: 0.55, ease: "back.out(1.6)" }
+        )
+        .fromTo("#s6-display-title", 
+          { opacity: 0, y: 28 }, 
+          { opacity: 1, y: 0, duration: 0.65, ease: "power3.out" }, 
+          "-=0.3"
+        )
+        .fromTo("#s6-display-subtitle", 
+          { opacity: 0, y: 16 }, 
+          { opacity: 0.8, y: 0, duration: 0.5, ease: "power2.out" }, 
+          "-=0.35"
+        )
+        .fromTo(["#slide-6 .space-y-1", "#slide-6 .border-t"], 
+          { opacity: 0, y: 12 }, 
+          { opacity: 0.7, y: 0, duration: 0.45, stagger: 0.1, ease: "power2.out" }, 
+          "-=0.25"
+        );
+      }
+    }
+
+    function goToSlide(targetSlide) {
+      if (targetSlide < 1 || targetSlide > totalSlides || targetSlide === currentSlide) return;
+
+      const currentEl = document.getElementById(`slide-${currentSlide}`);
+      const nextEl = document.getElementById(`slide-${targetSlide}`);
+      if (!currentEl || !nextEl) return;
+
+      const isNext = targetSlide > currentSlide;
+
+      // GSAP 纸质物理滑入过渡
+      gsap.killTweensOf([currentEl, nextEl]);
+
+      gsap.to(currentEl, {
+        opacity: 0,
+        x: isNext ? -20 : 20,
+        duration: 0.28,
+        ease: "power2.inOut",
+        onComplete: () => {
+          currentEl.classList.remove('active');
+          currentEl.style.display = 'none';
+        }
+      });
+
+      nextEl.style.display = (targetSlide === 2) ? 'grid' : 'flex';
+      nextEl.classList.add('active');
+      gsap.fromTo(nextEl, 
+        { opacity: 0, x: isNext ? 24 : -24 },
+        { 
+          opacity: 1, 
+          x: 0, 
+          duration: 0.35, 
+          ease: "power2.out", 
+          onComplete: () => {
+            playSlideInnerAnimation(targetSlide);
+          }
+        }
+      );
+      playSlideInnerAnimation(targetSlide);
+
+      currentSlide = targetSlide;
+      updateUIIndicators();
+      syncDrawerInputs();
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides) {
+        goToSlide(currentSlide + 1);
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) {
+        goToSlide(currentSlide - 1);
+      }
+    }
+
+    function updateUIIndicators() {
+      // 底部数字更新
+      const curReadout = document.getElementById('current-slide-readout'); if (curReadout) curReadout.textContent = `0${currentSlide} / 0${totalSlides}`;
+      document.getElementById('slide-meta-num').textContent = `SLIDE 0${currentSlide} / 0${totalSlides}`;
+      
+      const sData = deckData.slides[currentSlide - 1];
+      const metaSecEl = document.getElementById('slide-meta-section');
+      if (metaSecEl && !metaSecEl.dataset.customEdited) {
+        metaSecEl.textContent = sData.section || `SECTION 0${currentSlide}`;
+      }
+
+      // 底部进度条
+      const percent = (currentSlide / totalSlides) * 100;
+      const progressLine = document.getElementById('deck-progress-line');
+      if (progressLine) progressLine.style.width = `${percent}%`;
+
+      // 圆点指示器高亮
+      document.querySelectorAll('.slide-dot-btn').forEach((btn, idx) => {
+        if (idx + 1 === currentSlide) {
+          btn.classList.add('bg-neutral-800', 'w-6');
+          btn.classList.remove('bg-neutral-300', 'w-2');
+        } else {
+          btn.classList.remove('bg-neutral-800', 'w-6');
+          btn.classList.add('bg-neutral-300', 'w-2');
+        }
+      });
+    }
+
+    // =========================================================================
+    
+    // =========================================================================
+    // 3. 风格与配色切换系统 (Style & Palettes Engine)
+    // =========================================================================
+    function getActivePaletteMap() {
+      return deckData.style === 'editorial' ? editorialPalettes : artisanPalettes;
+    }
+
+    function applyStyle(styleKey, save = true) {
+      deckData.style = styleKey;
+      const isEditorial = styleKey === 'editorial';
+      
+      // 1. 切换主体 body 与 stage 的 class
+      if (isEditorial) {
+        document.body.classList.remove('theme-artisan');
+        document.body.classList.add('theme-editorial');
+      } else {
+        document.body.classList.remove('theme-editorial');
+        document.body.classList.add('theme-artisan');
+      }
+
+      // 2. 抽屉风格按钮高亮切换
+      const btnArtisan = document.getElementById('btn-style-artisan');
+      const btnEditorial = document.getElementById('btn-style-editorial');
+      const styleLabel = document.getElementById('active-style-label');
+      const groupTitle = document.getElementById('palette-group-title');
+
+      if (btnArtisan && btnEditorial) {
+        if (isEditorial) {
+          btnEditorial.className = 'px-2.5 py-2 rounded border border-[#823838] bg-[#823838]/10 text-[#823838] text-xs transition cursor-pointer flex flex-col items-center';
+          btnArtisan.className = 'px-2.5 py-2 rounded border border-neutral-300 bg-white hover:bg-neutral-50 text-neutral-700 text-xs transition cursor-pointer flex flex-col items-center';
+        } else {
+          btnArtisan.className = 'px-2.5 py-2 rounded border border-[#823838] bg-[#823838]/10 text-[#823838] text-xs transition cursor-pointer flex flex-col items-center';
+          btnEditorial.className = 'px-2.5 py-2 rounded border border-neutral-300 bg-white hover:bg-neutral-50 text-neutral-700 text-xs transition cursor-pointer flex flex-col items-center';
+        }
+      }
+      if (styleLabel) styleLabel.textContent = isEditorial ? 'EDITORIAL' : 'ARTISAN';
+      if (groupTitle) groupTitle.textContent = isEditorial ? '6 大暖中性色调' : '9 大工坊母色调配';
+
+      // 3. 若当前选中的 palette 不在当前风格库中，自动切至风格默认色
+      const currentMap = getActivePaletteMap();
+      if (!currentMap[deckData.palette]) {
+        deckData.palette = isEditorial ? 'ivory' : 'celadon';
+      }
+
+      // 4. 应用颜色并重绘调配抽屉按钮
+      applyPalette(deckData.palette, false);
+      renderPaletteButtons();
+
+      if (save) {
+        saveDeckConfig();
+        showToast(`✨ 已切换为「${isEditorial ? '留白静奢编辑风' : '手工物料典藏风'}」`);
+      }
+    }
+
+    function renderPaletteButtons() {
+      const pGrid = document.getElementById('palette-buttons-grid');
+      if (!pGrid) return;
+      pGrid.innerHTML = '';
+      const currentMap = getActivePaletteMap();
+
+      for (const [key, p] of Object.entries(currentMap)) {
+        const btn = document.createElement('button');
+        btn.className = `palette-btn p-1.5 rounded border border-[#DCD6C8] bg-white flex flex-col items-center space-y-1 transition cursor-pointer hover:border-neutral-500 ${key === deckData.palette ? 'ring-2 ring-[#823838] font-bold' : ''}`;
+        btn.dataset.palette = key;
+        btn.innerHTML = `
+          <div class="w-full h-4 rounded-sm flex overflow-hidden border border-black/10">
+            <div class="w-1/2 h-full" style="background-color: ${p['--board-bg']};"></div>
+            <div class="w-1/2 h-full" style="background-color: ${p['--card-bg']};"></div>
+          </div>
+          <span class="text-[10px] text-neutral-700">${p.name}</span>
+        `;
+        btn.addEventListener('click', () => applyPalette(key));
+        pGrid.appendChild(btn);
+      }
+    }
+
+    function applyPalette(paletteKey, save = true) {
+      const currentMap = getActivePaletteMap();
+      let p = currentMap[paletteKey];
+      if (!p) {
+        paletteKey = deckData.style === 'editorial' ? 'ivory' : 'celadon';
+        p = currentMap[paletteKey];
+      }
+      if (!p) return;
+      deckData.palette = paletteKey;
+
+      const root = document.documentElement;
+      for (const [key, val] of Object.entries(p)) {
+        if (key.startsWith('--')) {
+          root.style.setProperty(key, val);
+        }
+      }
+
+      // 调配抽屉按钮高亮
+      document.querySelectorAll('.palette-btn').forEach(btn => {
+        if (btn.dataset.palette === paletteKey) {
+          btn.classList.add('ring-2', 'ring-[#823838]', 'font-bold');
+        } else {
+          btn.classList.remove('ring-2', 'ring-[#823838]', 'font-bold');
+        }
+      });
+
+      if (save) {
+        saveDeckConfig();
+        showToast(`🎨 已应用「${p.name}」配色`);
+      }
+    }
+
+    function applyFontStyle(styleKey, save = true) {
+      deckData.fontStyle = styleKey;
+      const root = document.documentElement;
+      const btnSerif = document.getElementById('btn-font-serif');
+      const btnSans = document.getElementById('btn-font-sans');
+
+      if (styleKey === 'serif') {
+        root.style.setProperty('--font-headline', "'Playfair Display', 'Noto Serif SC', serif");
+        if (btnSerif) {
+          btnSerif.classList.add('border-[#823838]', 'bg-[#823838]/10', 'text-[#823838]', 'font-bold');
+          btnSerif.classList.remove('border-neutral-300', 'bg-white', 'text-neutral-700');
+        }
+        if (btnSans) {
+          btnSans.classList.remove('border-[#823838]', 'bg-[#823838]/10', 'text-[#823838]', 'font-bold');
+          btnSans.classList.add('border-neutral-300', 'bg-white', 'text-neutral-700');
+        }
+      } else {
+        root.style.setProperty('--font-headline', "-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Plus Jakarta Sans', sans-serif");
+        if (btnSans) {
+          btnSans.classList.add('border-[#823838]', 'bg-[#823838]/10', 'text-[#823838]', 'font-bold');
+          btnSans.classList.remove('border-neutral-300', 'bg-white', 'text-neutral-700');
+        }
+        if (btnSerif) {
+          btnSerif.classList.remove('border-[#823838]', 'bg-[#823838]/10', 'text-[#823838]', 'font-bold');
+          btnSerif.classList.add('border-neutral-300', 'bg-white', 'text-neutral-700');
+        }
+      }
+
+      if (save) {
+        saveDeckConfig();
+        showToast(`🔤 已切换字体为「${styleKey === 'serif' ? '古典宋体/衬线' : '现代黑体/无衬线'}」并保存`);
+      }
+    }
+
+    // =========================================================================
+    // 4. 抽屉同步助手 (Drawer Sync Helper)
+    // =========================================================================
+    function syncDrawerInputs() {
+      // 抽屉内现已移除冗余表单输入框，所有文案统一通过画布直接点击即时编辑 (快捷键 E)
+    }
+
+    // =========================================================================
+    // 5. 初始化与事件监听 (Init & Keyboard Listeners)
+    // =========================================================================
+    function init() {
+      autoRegisterEditableElements();
+      const s1 = document.getElementById('slide-1');
+      if (s1) s1.style.display = 'flex';
+      // 1. 底部轮播指示器已按需移除，保持纯净画幅
+      const dotsWrap = document.getElementById('slide-dots-container');
+      if (dotsWrap) {
+        dotsWrap.innerHTML = '';
+        for (let i = 1; i <= totalSlides; i++) {
+          const dot = document.createElement('button');
+          dot.className = `slide-dot-btn h-2 rounded-full transition-all duration-300 cursor-pointer ${i === 1 ? 'bg-neutral-800 w-6' : 'bg-neutral-300 w-2'}`;
+          dot.title = `跳转至第 0${i} 页`;
+          dot.addEventListener('click', () => goToSlide(i));
+          dotsWrap.appendChild(dot);
+        }
+      }
+
+      // 2. 绑定双风格切换按钮与色盘渲染
+      const btnStyleArtisan = document.getElementById('btn-style-artisan');
+      if (btnStyleArtisan) btnStyleArtisan.addEventListener('click', () => applyStyle('artisan'));
+      const btnStyleEditorial = document.getElementById('btn-style-editorial');
+      if (btnStyleEditorial) btnStyleEditorial.addEventListener('click', () => applyStyle('editorial'));
+
+      // 初始加载当前风格与母色
+      applyStyle(deckData.style || 'artisan', false);
+      renderPaletteButtons();
+
+      // 3. 翻页按钮安全绑定
+      const btnPrevEl = document.getElementById('btn-prev');
+      if (btnPrevEl) btnPrevEl.addEventListener('click', prevSlide);
+      const btnNextEl = document.getElementById('btn-next');
+      if (btnNextEl) btnNextEl.addEventListener('click', nextSlide);
+
+      // 4. 键盘事件监听 (带输入态严格隔离，彻底防止打字与光标微调误触翻页)
+      window.addEventListener('keydown', (e) => {
+        // (1) 全局保存快捷键 (Ctrl+S / Cmd+S)：在任何编辑状态下均可一键保存
+        if ((e.ctrlKey || e.metaKey) && (e.key === 's' || e.key === 'S')) {
+          e.preventDefault();
+          saveEditsToLocalStorage();
+          return;
+        }
+
+        // (2) 严格判断当前是否处于任何形式的打字/输入聚焦状态
+        const isTargetInput = (e.target && ['INPUT', 'TEXTAREA'].includes(e.target.tagName)) || 
+                              (document.activeElement && ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName));
+        const isTargetEditable = (e.target && e.target.isContentEditable) || 
+                                 (document.activeElement && document.activeElement.isContentEditable);
+        const isTyping = isTargetInput || isTargetEditable;
+
+        // 如果用户正在打字或光标在编辑框内：
+        if (isTyping) {
+          if (e.key === 'Escape') {
+            if (document.activeElement && document.activeElement.blur) {
+              document.activeElement.blur();
+            }
+            if (isEditingMode) {
+              toggleEditMode(false);
+            }
+            closeDrawer();
+          }
+          // 彻底阻断所有演讲翻页拦截！
+          // 让浏览器原生处理 ←/→ 移动光标、空格输入、文本选择、删除、字母输入，绝不误触翻页！
+          return;
+        }
+
+        // (3) 如果开启了编辑模式（即使光标暂时未点中文字），彻底屏蔽翻页与放映快捷键
+        if (isEditingMode) {
+          if (e.key === 'e' || e.key === 'E' || e.key === 'Escape') {
+            toggleEditMode(false);
+          }
+          // 编辑模式下禁止 ←/→、空格、F、R、P 等放映操作，杜绝误触
+          return;
+        }
+
+        // (4) 仅在正常放映模式下响应演讲快捷键
+        if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+          e.preventDefault();
+          nextSlide();
+        } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+          e.preventDefault();
+          prevSlide();
+        } else if (e.key === 'Home') {
+          e.preventDefault();
+          goToSlide(1);
+        } else if (e.key === 'End') {
+          e.preventDefault();
+          goToSlide(totalSlides);
+        } else if (e.key === 'f' || e.key === 'F') {
+          toggleFullScreen();
+        } else if (e.key === 'e' || e.key === 'E') {
+          toggleEditMode(true);
+        } else if (e.key === 'r' || e.key === 'R') {
+          playSlideInnerAnimation(currentSlide);
+          showToast('↺ 已重播当前页入场动效');
+        } else if (e.key === 'p' || e.key === 'P') {
+          window.print();
+        } else if (e.key === 'Escape') {
+          closeDrawer();
+        }
+      });
+
+      // 5. 全屏放映支持
+      function toggleFullScreen() {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().then(() => {
+            document.body.classList.add('is-fullscreen');
+          }).catch(() => {
+            document.body.classList.toggle('is-fullscreen');
+        setTimeout(updateStageScale, 50);
+          });
+        } else {
+          document.exitFullscreen().then(() => {
+            document.body.classList.remove('is-fullscreen');
+          });
+        }
+      }
+      document.addEventListener('fullscreenchange', () => {
+        if (!document.fullscreenElement) {
+          document.body.classList.remove('is-fullscreen');
+        }
+        setTimeout(updateStageScale, 80);
+      });
+
+      // 8. 调配抽屉交互 (安全防护：导出纯净版中无抽屉 DOM)
+      const drawer = document.getElementById('drawer');
+      const btnToggleTune = document.getElementById('btn-toggle-tune');
+
+      function isDrawerOpen() {
+        return drawer && !drawer.classList.contains('translate-x-full');
+      }
+
+      function openDrawer() {
+        if (!drawer) return;
+        drawer.classList.remove('translate-x-full');
+        if (btnToggleTune) btnToggleTune.classList.add('bg-black', 'ring-1', 'ring-[#823838]');
+        syncDrawerInputs();
+      }
+
+      function closeDrawer() {
+        if (!drawer) return;
+        drawer.classList.add('translate-x-full');
+        if (btnToggleTune) btnToggleTune.classList.remove('bg-black', 'ring-1', 'ring-[#823838]');
+      }
+
+      function toggleDrawer() {
+        if (isDrawerOpen()) {
+          closeDrawer();
+        } else {
+          openDrawer();
+        }
+      }
+
+      if (btnToggleTune) btnToggleTune.addEventListener('click', toggleDrawer);
+      const btnCloseDrawer = document.getElementById('btn-close-drawer');
+      if (btnCloseDrawer) btnCloseDrawer.addEventListener('click', closeDrawer);
+
+      // 9. 字体性格切换
+      const btnFontSerif = document.getElementById('btn-font-serif');
+      if (btnFontSerif) btnFontSerif.addEventListener('click', () => applyFontStyle('serif'));
+      const btnFontSans = document.getElementById('btn-font-sans');
+      if (btnFontSans) btnFontSans.addEventListener('click', () => applyFontStyle('sans'));
+
+      // 11. 恢复预设
+      const btnResetPreset = document.getElementById('btn-reset-preset');
+      if (btnResetPreset) btnResetPreset.addEventListener('click', () => {
+        if (confirm('确定要恢复出厂默认预设（冷杉青绿配色与衬线字体）吗？')) {
+          localStorage.removeItem(CONFIG_STORAGE_KEY);
+          deckData = getFreshDefaultData();
+          applyPalette(deckData.palette, false);
+          applyFontStyle(deckData.fontStyle, false);
+          showToast('↺ 已恢复默认配色与字体');
+        }
+        // 重新渲染全部幻灯片内容
+        deckData.slides.forEach(s => {
+          if (s.id === 1) {
+            document.getElementById('s1-display-title').innerHTML = s.title.replace(/\n/g, '<br>');
+            document.getElementById('s1-display-subtitle').textContent = s.subtitle;
+          } else if (s.id === 2) {
+            document.getElementById('s2-display-title').textContent = s.title;
+            document.getElementById('s2-display-subtitle').textContent = s.subtitle;
+          } else if (s.id === 3) {
+            document.getElementById('s3-display-quote').textContent = s.subtitle;
+          } else if (s.id === 4) {
+            document.getElementById('s4-display-title').textContent = s.title;
+          } else if (s.id === 5) {
+            document.getElementById('s5-display-title').textContent = s.title;
+          } else if (s.id === 6) {
+            document.getElementById('s6-display-title').textContent = s.title;
+            document.getElementById('s6-display-subtitle').textContent = s.subtitle;
+          }
+        });
+        syncDrawerInputs();
+        updateUIIndicators();
+      });
+
+      // 12. 全屏放映鼠标闲置隐退与点击翻页
+      let idleTimer = null;
+      function resetIdleTimer() {
+        document.body.classList.remove('is-idle');
+        clearTimeout(idleTimer);
+        if (document.body.classList.contains('is-fullscreen')) {
+          idleTimer = setTimeout(() => {
+            document.body.classList.add('is-idle');
+          }, 2200);
+        }
+      }
+      window.addEventListener('mousemove', resetIdleTimer);
+
+      // 全屏模式下点击画布左右区域翻页 (编辑模式或点击编辑框时禁止翻页)
+      document.getElementById('deck-stage').addEventListener('click', (e) => {
+        if (!document.body.classList.contains('is-fullscreen')) return;
+        // 编辑模式下或点击可编辑文本时绝对不触发翻页
+        if (isEditingMode || (e.target && e.target.isContentEditable) || e.target.closest('[data-editable="true"]')) return;
+        if (e.target.closest('#drawer') || e.target.closest('#deck-top-bar')) return;
+        const rect = e.currentTarget.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        if (x < rect.width * 0.35) {
+          prevSlide();
+        } else {
+          nextSlide();
+        }
+      });
+
+      // 初始化配置与文案加载 (支持刷新自动保持)
+      loadDeckConfig();
+      applyStyle(deckData.style || 'artisan', false);
+      applyPalette(deckData.palette, false);
+      applyFontStyle(deckData.fontStyle, false);
+      updateStageScale();
+      updateUIIndicators();
+      loadEditsFromLocalStorage();
+      syncDrawerInputs();
+
+      // 绑定直编按钮与持久化导出按钮
+      const btnEdit = document.getElementById('btn-toggle-edit');
+      if (btnEdit) {
+        btnEdit.addEventListener('click', (e) => {
+          e.stopPropagation();
+          toggleEditMode();
+        });
+      }
+
+      const btnExportHtml = document.getElementById('btn-export-html');
+      if (btnExportHtml) {
+        btnExportHtml.addEventListener('click', exportCustomizedHtml);
+      }
+
+      const btnClearEdits = document.getElementById('btn-clear-edits');
+      if (btnClearEdits) {
+        btnClearEdits.addEventListener('click', clearEditsCache);
+      }
+
+      setTimeout(() => {
+        playSlideInnerAnimation(1);
+      }, 150);
+    }
+
+
+    // =========================================================================
+    // 13. 固定 16:9 舞台等比自适应缩放引擎 (Fixed 16:9 Stage Scaling Engine)
+    // =========================================================================
+    function updateStageScale() {
+      const wrap = document.getElementById('deck-viewport-wrap');
+      const stage = document.getElementById('deck-stage');
+      if (!wrap || !stage) return;
+      const isFull = document.body.classList.contains('is-fullscreen');
+      const padX = isFull ? 0 : 20;
+      const padY = isFull ? 0 : 12;
+      const availW = Math.max(wrap.clientWidth - padX, 320);
+      const availH = Math.max(wrap.clientHeight - padY, 180);
+      const scale = Math.min(availW / 1280, availH / 720);
+      stage.style.transform = `translate(-50%, -50%) scale(${scale})`;
+    }
+    window.addEventListener('resize', updateStageScale);
+
+    // =========================================================================
+    // 14. 网页内即时直编与持久化引擎 (Inline Text Editing [E] & LocalStorage)
+    // =========================================================================
+    let isEditingMode = false;
+    const STORAGE_KEY = 'artisan_deck_edits_cache';
+    const CONFIG_STORAGE_KEY = 'artisan_deck_config_cache';
+
+    function saveDeckConfig() {
+      try {
+        const cfg = {
+          style: deckData.style,
+          palette: deckData.palette,
+          fontStyle: deckData.fontStyle
+        };
+        localStorage.setItem(CONFIG_STORAGE_KEY, JSON.stringify(cfg));
+      } catch (e) {
+        console.warn('Config save failed:', e);
+      }
+    }
+
+    function loadDeckConfig() {
+      try {
+        const saved = localStorage.getItem(CONFIG_STORAGE_KEY);
+        if (!saved) return;
+        const cfg = JSON.parse(saved);
+        if (cfg.style) {
+          deckData.style = cfg.style;
+        }
+        const activeMap = getActivePaletteMap();
+        if (cfg.palette && activeMap[cfg.palette]) {
+          deckData.palette = cfg.palette;
+        }
+        if (cfg.fontStyle) {
+          deckData.fontStyle = cfg.fontStyle;
+        }
+      } catch (e) {
+        console.warn('Config load failed:', e);
+      }
+    }
+
+    function showToast(msg, duration = 2600) {
+      const toast = document.getElementById('deck-toast');
+      const msgEl = document.getElementById('deck-toast-msg');
+      if (!toast || !msgEl) return;
+      msgEl.textContent = msg;
+      toast.classList.remove('opacity-0', '-translate-y-2', 'pointer-events-none');
+      toast.classList.add('opacity-100', 'translate-y-0');
+      clearTimeout(toast._timer);
+      toast._timer = setTimeout(() => {
+        toast.classList.remove('opacity-100', 'translate-y-0');
+        toast.classList.add('opacity-0', '-translate-y-2', 'pointer-events-none');
+      }, duration);
+    }
+
+    
+    // 全自动全量文案可编辑扫描引擎 (Zero-Omission Automated Text Scanner)
+    function autoRegisterEditableElements() {
+      document.querySelectorAll('.slide-pane').forEach((slide, sIdx) => {
+        const slideId = slide.dataset.slide || (sIdx + 1);
+        const candidates = slide.querySelectorAll('h1, h2, h3, h4, h5, h6, p, li, span, div, strong, em, b, i, a, blockquote, [data-editable="true"], .editable-text, .deck-text');
+        let counter = 0;
+
+        candidates.forEach(el => {
+          // 排除系统UI控制台、抽屉、导航、SVG内部、显式声明不编辑的元素
+          if (el.closest('svg') || el.closest('#deck-top-bar') || el.closest('#deck-nav') || el.closest('#drawer') || el.hasAttribute('data-no-edit') || el.classList.contains('crosshair')) return;
+
+          // 避免多重嵌套外层容器变成输入框：如果有结构性块子元素，跳过
+          const hasBlockChildren = Array.from(el.children).some(child => 
+            ['DIV', 'P', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'UL', 'OL', 'LI', 'SECTION', 'HEADER', 'FOOTER'].includes(child.tagName)
+          );
+          if (hasBlockChildren) return;
+
+          // 检查是否有实质性直接文本
+          let hasDirectText = false;
+          for (let node of el.childNodes) {
+            if (node.nodeType === Node.TEXT_NODE && node.textContent.trim().length > 0) {
+              hasDirectText = true;
+              break;
+            }
+          }
+
+          if (hasDirectText || el.classList.contains('editable-text') || el.classList.contains('deck-text') || el.getAttribute('data-editable') === 'true') {
+            counter++;
+            el.setAttribute('data-editable', 'true');
+            if (!el.getAttribute('data-edit-id')) {
+              el.setAttribute('data-edit-id', `s${slideId}_auto_${counter}`);
+            }
+            el.classList.add('deck-editable-node');
+          }
+        });
+      });
+    }
+  
+    function toggleEditMode(force) {
+      isEditingMode = force !== undefined ? force : !isEditingMode;
+      const editBtn = document.getElementById('btn-toggle-edit');
+      const editLabel = document.getElementById('edit-mode-text');
+      
+      const editableElements = document.querySelectorAll('[data-editable="true"]');
+
+      if (isEditingMode) {
+        document.body.classList.add('is-editing-mode');
+        editableElements.forEach(el => {
+          el.setAttribute('contenteditable', 'true');
+        });
+        if (editBtn) {
+          editBtn.classList.remove('bg-[#FAF8F4]', 'text-[#242321]', 'border-[#DCD6C8]');
+          editBtn.classList.add('bg-[#823838]', 'text-white', 'border-[#823838]', 'shadow');
+        }
+        if (editLabel) editLabel.textContent = '完成编辑';
+        showToast('即时编辑已开启：点击任意文字即可修改，按 Cmd/Ctrl+S 保存');
+        if (currentTimeline) currentTimeline.progress(1);
+      } else {
+        document.body.classList.remove('is-editing-mode');
+        editableElements.forEach(el => {
+          el.removeAttribute('contenteditable');
+        });
+        if (editBtn) {
+          editBtn.classList.remove('bg-[#823838]', 'text-white', 'border-[#823838]', 'shadow');
+          editBtn.classList.add('bg-[#FAF8F4]', 'text-[#242321]', 'border-[#DCD6C8]');
+        }
+        if (editLabel) editLabel.textContent = '编辑文案';
+        saveEditsToLocalStorage();
+      }
+    }
+
+    function saveEditsToLocalStorage(silent = false) {
+      const edits = {};
+      document.querySelectorAll('[data-edit-id]').forEach(el => {
+        const id = el.getAttribute('data-edit-id');
+        edits[id] = el.innerHTML;
+      });
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(edits));
+        if (!silent) showToast('✅ 文案已成功保存至本地！刷新依然保留。');
+      } catch (e) {
+        console.warn('LocalStorage save failed:', e);
+      }
+    }
+
+    function loadEditsFromLocalStorage() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (!saved) return;
+        const edits = JSON.parse(saved);
+        Object.keys(edits).forEach(id => {
+          const el = document.querySelector(`[data-edit-id="${id}"]`);
+          if (el) {
+            el.innerHTML = edits[id];
+            if (id === 'slide-meta-section') {
+              el.dataset.customEdited = 'true';
+            }
+          }
+        });
+      } catch (e) {
+        console.warn('LocalStorage load failed:', e);
+      }
+    }
+
+    function clearEditsCache() {
+      if (confirm('确定要清空全部文案修改与配色配置，恢复出厂默认设置吗？')) {
+        localStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem(CONFIG_STORAGE_KEY);
+        location.reload();
+      }
+    }
+
+    function exportCustomizedHtml() {
+      // 导出前先退出编辑模式保证纯净
+      if (isEditingMode) toggleEditMode(false);
+      
+      const clone = document.documentElement.cloneNode(true);
+      const cloneBody = clone.querySelector('body');
+      
+      // 1. 彻底清除多余状态与杂质 class
+      cloneBody.classList.remove('is-editing-mode', 'is-fullscreen', 'is-idle');
+      cloneBody.classList.add('is-fullscreen'); // 导出的 HTML 默认进入纯粹沉浸大屏模式
+      
+      // 2. 彻底剔除顶部控制栏、配置抽屉、Toast 提示、编辑标记
+      const topBar = clone.querySelector('#deck-top-bar');
+      if (topBar) topBar.remove();
+      const drawer = clone.querySelector('#drawer');
+      if (drawer) drawer.remove();
+      const toast = clone.querySelector('#deck-toast');
+      if (toast) toast.remove();
+      
+      // 移除所有编辑标记与残留属性
+      clone.querySelectorAll('[data-editable]').forEach(el => {
+        el.removeAttribute('data-editable');
+        el.removeAttribute('contenteditable');
+      });
+      clone.querySelectorAll('[data-edit-id]').forEach(el => {
+        el.removeAttribute('data-edit-id');
+      });
+
+      // 3. 视口容器铺满全屏，无顶栏占位，背景无缝填充当前纸色底板，固定舞台等比自适应
+      const viewport = clone.querySelector('#deck-viewport-wrap');
+      if (viewport) {
+        viewport.className = 'fixed inset-0 w-screen h-screen overflow-hidden flex items-center justify-center p-0 m-0';
+        viewport.style.backgroundColor = 'var(--board-bg)';
+      }
+
+      // 4. 清理导出版脚本中的无用抽屉与编辑逻辑，保证独立纯净
+      let htmlStr = '<!DOCTYPE html>\n' + clone.outerHTML;
+      // 将当前选中的配色与字体持久化写入新导出 HTML 的初始默认值中
+      htmlStr = htmlStr.replace(/style:\s*'[a-zA-Z0-9_-]+'/, `style: '${deckData.style}'`);
+      htmlStr = htmlStr.replace(/palette:\s*'[a-zA-Z0-9_-]+'/, `palette: '${deckData.palette}'`);
+      htmlStr = htmlStr.replace(/fontStyle:\s*'[a-zA-Z0-9_-]+'/, `fontStyle: '${deckData.fontStyle}'`);
+
+      const blob = new Blob([htmlStr], { type: 'text/html;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'artisan_presentation.html';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      showToast('🎉 已成功导出纯净放映版 HTML（无任何配置按钮与顶栏）！');
+    }
+
+    // 监听输入防抖自动缓存
+    document.addEventListener('input', (e) => {
+      if (e.target && e.target.getAttribute && e.target.getAttribute('data-editable') === 'true') {
+        clearTimeout(window._autoSaveTimer);
+        window._autoSaveTimer = setTimeout(() => {
+          saveEditsToLocalStorage(true);
+        }, 800);
+      }
+    });
+
+    // 打印前强制动画到终点
+    window.addEventListener('beforeprint', () => {
+      if (currentTimeline) currentTimeline.progress(1);
+    });
+
+    // 页面就绪执行
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>

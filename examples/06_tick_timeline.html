@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>范例 06 · 刻度尺时间线 — minimal-editorial-layout</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&family=Noto+Serif+SC:wght@400;600&family=Jost:wght@300;400&family=Courier+Prime&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EDEAE3;
+    --ink:#24211D;
+    --accent:#A65235;
+    --muted:rgba(36,33,29,.6);
+    --hairline:rgba(36,33,29,.4);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{height:100%;background:var(--bg);overflow:hidden;display:flex;align-items:center;justify-content:center;}
+  .stage{width:1280px;height:720px;background:var(--bg);position:relative;flex:none;transform-origin:center;
+         font-family:'Jost',-apple-system,'PingFang SC',sans-serif;color:var(--ink);}
+
+  .meta-top{position:absolute;left:128px;right:128px;top:36px;display:flex;justify-content:space-between;
+        font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--muted);z-index:10;}
+
+  /* 顶部居中标题 (top 54px，与下方刻度尺保持 60px 清晰空隙) */
+  .header{position:absolute;left:0;right:0;top:54px;text-align:center;}
+  .kicker{font-size:11px;letter-spacing:.35em;text-transform:uppercase;color:var(--muted);}
+  h1{font-family:'Noto Serif SC',serif;font-size:42px;font-weight:600;letter-spacing:.08em;margin-top:6px;}
+  h1 .anno{font-family:'Playfair Display',serif;font-style:italic;font-weight:400;color:var(--accent);margin-left:8px;}
+  .desc{margin-top:6px;font-weight:300;font-size:13.5px;color:var(--muted);letter-spacing:.04em;white-space:nowrap;}
+
+  /* 中间居中时间轴组 (left 160px, right 160px, 宽度 960px, top 215px，无重叠) */
+  .timeline-wrap{position:absolute;left:160px;right:160px;top:215px;}
+  .t-row{position:relative;margin-bottom:44px;}
+
+  .ruler{position:relative;width:100%;height:16px;
+         background:repeating-linear-gradient(90deg,rgba(36,33,29,.18) 0 1px,transparent 1px 8px);}
+  .ruler .active-bar{position:absolute;top:0;bottom:0;
+         background:repeating-linear-gradient(90deg,#24211D 0 1.5px,transparent 1.5px 8px);}
+  .ruler .tri{position:absolute;top:-14px;width:0;height:0;
+         border-left:5px solid transparent;border-right:5px solid transparent;border-top:7px solid var(--ink);}
+
+  .label-row{display:flex;justify-content:space-between;align-items:baseline;margin-top:12px;white-space:nowrap;}
+  .label-left{display:flex;align-items:baseline;gap:24px;}
+  .label-row .title{font-family:'Noto Serif SC',serif;font-size:17px;font-weight:600;letter-spacing:.06em;}
+  .label-row .sub{font-weight:300;font-size:13.5px;color:var(--muted);letter-spacing:.02em;}
+  .label-row .age{font-family:'Courier Prime',monospace;font-size:13px;color:var(--accent);letter-spacing:.06em;}
+
+  .foot-rule{position:absolute;left:128px;right:128px;bottom:36px;display:flex;
+        justify-content:space-between;align-items:baseline;
+        font-family:'Courier Prime',monospace;font-size:11px;letter-spacing:.18em;color:var(--muted);}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="meta-top"><span>Tick Ruler Timeline</span><span>版式范例 · 05</span></div>
+
+  <div class="header">
+    <div class="kicker">Three Stages · One Life</div>
+    <h1>人生各阶段的意义感<span class="anno">Tick Timeline</span></h1>
+    <p class="desc">埃里克森发展理论的标尺化映射：在时间刻度的平移中，看见青年、中年与晚年各自确立的心智锚点。</p>
+  </div>
+
+  <div class="timeline-wrap">
+    <!-- 阶段 01 -->
+    <div class="t-row">
+      <div class="ruler">
+        <span class="active-bar" style="left:12%;width:30%;"></span>
+        <span class="tri" style="left:12%;"></span>
+      </div>
+      <div class="label-row">
+        <div class="label-left">
+          <span class="title">成年早期 · 亲密与自我确立</span>
+          <span class="sub">向外探索生命边界，建立真诚的深度联结与自我认同。</span>
+        </div>
+        <div class="age">Ages 20–44</div>
+      </div>
+    </div>
+
+    <!-- 阶段 02 -->
+    <div class="t-row">
+      <div class="ruler">
+        <span class="active-bar" style="left:42%;width:30%;"></span>
+        <span class="tri" style="left:42%;"></span>
+      </div>
+      <div class="label-row">
+        <div class="label-left">
+          <span class="title">成年中期 · 繁衍与长期创造</span>
+          <span class="sub">沉淀经历与智慧，将个人的力量注入更具传承价值的事业。</span>
+        </div>
+        <div class="age">Ages 45–64</div>
+      </div>
+    </div>
+
+    <!-- 阶段 03 -->
+    <div class="t-row">
+      <div class="ruler">
+        <span class="active-bar" style="left:72%;width:26%;"></span>
+        <span class="tri" style="left:72%;"></span>
+      </div>
+      <div class="label-row">
+        <div class="label-left">
+          <span class="title">成年晚期 · 完善与通达自省</span>
+          <span class="sub">回望全程，接纳所有偶然与必然，在沉静中达成内心的自洽。</span>
+        </div>
+        <div class="age">Ages 65+</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot-rule">
+    <span>DEVELOPMENTAL STAGES</span>
+    <span style="letter-spacing:.25em;">ERIKSON FRAMEWORK</span>
+    <span>05 / 05</span>
+  </div>
+</div>
+<script>
+  const W=1280,H=720;
+  function fit(){
+    const s=Math.min(innerWidth/W,innerHeight/H);
+    document.querySelector('.stage').style.transform=`scale(${s})`;
+  }
+  addEventListener('resize',fit);fit();
+</script>
+</body>
+</html>

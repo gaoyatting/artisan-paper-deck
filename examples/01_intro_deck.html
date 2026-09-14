@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>留白辑要 — minimal-editorial-layout</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Noto+Serif+SC:wght@400;600&family=Jost:wght@300;400&family=Courier+Prime:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ivory:#F2F0EB;
+    --ink:#1E1C1A;
+    --accent:#A65235;
+    --hairline:rgba(30,28,26,.55);
+    --muted:rgba(30,28,26,.6);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{height:100%;overflow:hidden;background:var(--ivory);}
+  body{font-family:'Jost',-apple-system,'PingFang SC',sans-serif;color:var(--ink);}
+
+  #viewport{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;}
+  .stage{width:1280px;height:720px;position:relative;flex:none;transform-origin:center center;}
+  .slide{position:absolute;inset:0;background:var(--ivory);opacity:0;visibility:hidden;
+         transition:opacity .55s ease,visibility 0s .55s;padding:52px 128px;}
+  .slide.active{opacity:1;visibility:visible;transition:opacity .55s ease;}
+
+  /* ---------- meta frame : 只保留上缘两角 ---------- */
+  .meta-top{position:absolute;left:128px;right:128px;top:36px;display:flex;
+        justify-content:space-between;align-items:baseline;
+        font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--muted);z-index:5;}
+
+  .kicker{font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:var(--muted);}
+  .zh-serif{font-family:'Noto Serif SC',serif;}
+  .mono{font-family:'Courier Prime',monospace;}
+  .anno{font-family:'Playfair Display','Noto Serif SC',serif;font-style:italic;color:var(--accent);}
+  .num-serif{font-family:'Playfair Display',serif;font-weight:400;}
+
+  /* ================= S1 封面 · 目录 ================= */
+  #s1{display:flex;align-items:center;gap:96px;}
+  #s1 .left{flex:1.15;}
+  #s1 h1{font-family:'Noto Serif SC',serif;font-size:108px;line-height:1.08;
+        font-weight:600;letter-spacing:.05em;}
+  #s1 .sub{margin-top:34px;font-family:'Playfair Display',serif;font-style:italic;
+        font-size:19px;color:var(--muted);}
+  #s1 .toc{flex:1;padding-bottom:8px;}
+  #s1 .toc-title{font-size:12px;letter-spacing:.32em;color:var(--muted);
+        text-transform:uppercase;margin-bottom:26px;}
+  #s1 .toc .row{display:flex;align-items:baseline;gap:22px;padding:17px 0;
+        border-top:1px solid rgba(30,28,26,.3);}
+  #s1 .toc .row:last-child{border-bottom:1px solid rgba(30,28,26,.3);}
+  #s1 .toc .no{font-family:'Playfair Display',serif;font-size:22px;}
+  #s1 .toc .no::after{content:".";color:var(--accent);}
+  #s1 .toc .t{font-family:'Noto Serif SC',serif;font-size:19px;font-weight:600;letter-spacing:.12em;}
+  #s1 .toc .en{margin-left:auto;font-family:'Playfair Display',serif;font-style:italic;
+        font-size:13px;color:var(--muted);}
+
+  /* ================= 通用页头 ================= */
+  .head{margin:8px 0 0;}
+  .head h2{font-family:'Noto Serif SC',serif;font-size:42px;font-weight:600;
+        letter-spacing:.1em;margin-top:14px;}
+  .head h2 .anno{font-size:32px;letter-spacing:0;}
+
+  /* ================= S2 版式展示 ================= */
+  #s2 .grid{position:absolute;left:128px;right:128px;top:212px;bottom:96px;
+        display:grid;grid-template-columns:repeat(3,1fr);column-gap:56px;row-gap:34px;}
+  .demo .vignette{height:118px;position:relative;border-bottom:1px solid rgba(30,28,26,.3);
+        overflow:hidden;}
+  .demo h3{font-family:'Noto Serif SC',serif;font-size:17px;font-weight:600;
+        letter-spacing:.14em;margin:14px 0 2px;}
+  .demo .en{font-family:'Playfair Display',serif;font-style:italic;font-size:13px;color:var(--muted);}
+  /* vignette 1 hero-word */
+  .vg-hero .big{position:absolute;left:6px;bottom:6px;font-family:'Playfair Display',serif;
+        font-size:64px;line-height:1;}
+  .vg-hero .rule{position:absolute;left:118px;right:-30px;bottom:34px;height:1px;background:var(--hairline);}
+  /* vignette 2 numbered */
+  .vg-num{display:flex;gap:18px;align-items:flex-start;padding-top:14px;}
+  .vg-num span{font-family:'Playfair Display',serif;font-size:30px;}
+  .vg-num span::after{content:".";color:var(--accent);}
+  /* vignette 3 line-frame */
+  .vg-frame .rect{position:absolute;inset:14px 40px 14px 14px;border:1px solid var(--hairline);}
+  .vg-frame .oval{position:absolute;left:70px;top:12px;width:120px;height:94px;
+        border:1px solid var(--hairline);border-radius:50%;background:var(--ivory);}
+  /* vignette 4 process-path */
+  .vg-path .spine{position:absolute;left:34px;top:10px;bottom:10px;width:1px;background:var(--hairline);}
+  .vg-path .dot{position:absolute;left:31px;width:7px;height:7px;border-radius:50%;
+        background:var(--ink);}
+  .vg-path .lbl{position:absolute;left:58px;font-size:11px;color:var(--muted);letter-spacing:.08em;}
+  /* vignette 5 split-matrix */
+  .vg-matrix .v{position:absolute;left:50%;top:8px;bottom:0;width:1px;background:var(--hairline);}
+  .vg-matrix .h{position:absolute;left:8px;right:0;top:52%;height:1px;background:var(--hairline);}
+  .vg-matrix .w{position:absolute;font-family:'Playfair Display',serif;font-size:26px;}
+  .vg-matrix .w1{left:16%;top:10%;} .vg-matrix .w2{left:60%;top:10%;}
+  /* vignette 6 annotated-flow */
+  .vg-flow svg{position:absolute;inset:0;width:100%;height:100%;}
+  .vg-flow .note{position:absolute;right:8px;top:12px;font-family:'Courier Prime',monospace;
+        font-size:11px;color:var(--accent);}
+
+  /* ================= S3 安装 ================= */
+  #s3 .body{position:absolute;left:128px;right:128px;top:212px;bottom:92px;}
+  #s3 .flow{position:relative;display:grid;grid-template-columns:repeat(3,1fr);column-gap:56px;}
+  #s3 .rail{position:absolute;left:5px;right:304px;top:5px;height:1px;background:var(--hairline);}
+  #s3 .f-col{position:relative;}
+  #s3 .f-dot{width:11px;height:11px;border-radius:50%;border:1px solid var(--ink);
+        background:var(--ivory);position:relative;z-index:1;}
+  #s3 .f-col:last-child .f-dot{background:var(--accent);border-color:var(--accent);}
+  #s3 .f-no{font-family:'Playfair Display',serif;font-size:26px;margin-top:26px;}
+  #s3 .f-no::after{content:".";color:var(--accent);}
+  #s3 .f-t{font-family:'Noto Serif SC',serif;font-size:17px;font-weight:600;
+        letter-spacing:.16em;margin:8px 0 14px;}
+  #s3 .cmd{font-family:'Courier Prime',monospace;font-size:13px;color:var(--ink);
+        letter-spacing:.02em;line-height:1.7;max-width:280px;}
+  #s3 .cmd .cmt{color:var(--muted);}
+  #s3 .tip{position:absolute;left:0;bottom:0;display:flex;align-items:baseline;gap:18px;}
+  #s3 .tip .big{font-family:'Playfair Display',serif;font-style:italic;
+        font-size:24px;color:var(--accent);white-space:nowrap;}
+  #s3 .tip p{font-weight:300;font-size:14.5px;color:var(--muted);letter-spacing:.03em;}
+
+  /* ================= S4 使用与提示词 ================= */
+  #s4 .body{position:absolute;left:128px;right:128px;top:200px;bottom:92px;}
+  #s4 .pipe{display:flex;align-items:center;gap:22px;}
+  #s4 .p-item{font-family:'Noto Serif SC',serif;font-size:17px;font-weight:600;letter-spacing:.1em;}
+  #s4 .p-item.mid{font-family:'Courier Prime',monospace;font-size:14px;
+        border:1px solid var(--hairline);border-radius:999px;padding:9px 22px;letter-spacing:.04em;}
+  #s4 .p-arrow{width:52px;height:1px;background:var(--hairline);position:relative;}
+  #s4 .p-arrow::after{content:"";position:absolute;right:0;top:-3px;width:6px;height:6px;
+        border-top:1px solid var(--hairline);border-right:1px solid var(--hairline);
+        transform:rotate(45deg);}
+  #s4 .prompts{margin-top:34px;}
+  #s4 .q{font-family:'Playfair Display','Noto Serif SC',serif;font-style:italic;
+        font-size:21px;line-height:1.55;padding:16px 0 16px 46px;position:relative;
+        border-top:1px solid rgba(30,28,26,.3);}
+  #s4 .q:last-child{border-bottom:1px solid rgba(30,28,26,.3);}
+  #s4 .q::before{content:"“";position:absolute;left:6px;top:12px;
+        font-family:'Playfair Display',serif;font-size:34px;color:var(--accent);}
+  #s4 .kw{margin-top:30px;display:flex;align-items:baseline;gap:16px;}
+  #s4 .kw .k{font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);}
+  #s4 .kw .v{font-family:'Courier Prime',monospace;font-size:14px;letter-spacing:.06em;}
+
+  /* ================= S5 结语 ================= */
+  #s5{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;}
+  #s5 h2{font-family:'Noto Serif SC',serif;font-size:80px;font-weight:600;
+        letter-spacing:.06em;line-height:1.2;}
+  #s5 h2 .anno{opacity:.92;}
+  #s5 .check{margin-top:42px;font-weight:300;font-size:15.5px;line-height:2.05;
+        color:var(--muted);letter-spacing:.05em;}
+  #s5 .check em{font-style:normal;color:var(--ink);}
+  #s5 .fin{margin-top:36px;font-family:'Playfair Display',serif;font-style:italic;
+        font-size:15px;color:var(--muted);letter-spacing:.08em;}
+
+  /* ---------- nav hud ---------- */
+  #hud{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:50;
+        display:flex;align-items:center;gap:18px;font-family:'Courier Prime',monospace;
+        font-size:12px;color:var(--muted);letter-spacing:.15em;user-select:none;}
+  #hud button{background:none;border:none;color:inherit;font:inherit;cursor:pointer;padding:4px 8px;}
+  #hud button:hover{color:var(--ink);}
+  #progress{position:fixed;left:0;top:0;height:2px;background:var(--accent);z-index:60;transition:width .4s ease;}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div id="viewport"><div class="stage" id="stage">
+
+  <!-- 01 · 封面 · 目录 -->
+  <section class="slide active" id="s1">
+    <div class="meta-top"><span>Quiet Editorial Layout Doctrine</span><span>目录 · 01</span></div>
+    <div class="left">
+      <h1>留白辑要</h1>
+      <div class="sub">— 极简单色编辑排版规范</div>
+    </div>
+    <div class="toc">
+      <div class="toc-title">Contents</div>
+      <div class="row"><span class="no num-serif">01</span><span class="t">版式展示</span><span class="en">Layouts</span></div>
+      <div class="row"><span class="no num-serif">02</span><span class="t">安装方式</span><span class="en">Install</span></div>
+      <div class="row"><span class="no num-serif">03</span><span class="t">使用与提示词</span><span class="en">Usage</span></div>
+      <div class="row"><span class="no num-serif">04</span><span class="t">结语</span><span class="en">Colophon</span></div>
+    </div>
+  </section>
+
+  <!-- 02 · 版式展示 -->
+  <section class="slide" id="s2">
+    <div class="meta-top"><span>Six Architectures</span><span>版式展示 · 02</span></div>
+    <div class="head">
+      <h2>六大版式</h2>
+    </div>
+    <div class="grid">
+      <div class="demo"><div class="vignette vg-hero"><span class="big">who</span><span class="rule"></span></div><h3>空镜巨字</h3><div class="en">hero-word</div></div>
+      <div class="demo"><div class="vignette vg-num"><span>01</span><span>02</span><span>03</span></div><h3>编号列阵</h3><div class="en">numbered-list</div></div>
+      <div class="demo"><div class="vignette vg-frame"><span class="rect"></span><span class="oval"></span></div><h3>细线几何</h3><div class="en">line-frame</div></div>
+      <div class="demo"><div class="vignette vg-path"><span class="spine"></span><span class="dot" style="top:14px"></span><span class="dot" style="top:52px"></span><span class="dot" style="top:90px"></span><span class="lbl" style="top:10px">01 — 观察</span><span class="lbl" style="top:48px">02 — 记录</span><span class="lbl" style="top:86px">03 — 回看</span></div><h3>路径流程</h3><div class="en">process-path</div></div>
+      <div class="demo"><div class="vignette vg-matrix"><span class="v"></span><span class="h"></span><span class="w w1">IN</span><span class="w w2">OUT</span></div><h3>二分矩阵</h3><div class="en">split-matrix</div></div>
+      <div class="demo"><div class="vignette vg-flow">
+        <svg viewBox="0 0 240 118" preserveAspectRatio="none"><path d="M8,96 C60,96 70,20 128,20 C186,20 190,74 236,74" fill="none" stroke="#A65235" stroke-width="1.2"/><circle cx="8" cy="96" r="3.4" fill="#A65235"/><circle cx="128" cy="20" r="3.4" fill="#A65235"/><circle cx="236" cy="74" r="3.4" fill="#A65235"/></svg>
+        <span class="note">hand notes ×</span>
+      </div><h3>批注动线</h3><div class="en">annotated-flow</div></div>
+    </div>
+  </section>
+
+  <!-- 03 · 安装方式 -->
+  <section class="slide" id="s3">
+    <div class="meta-top"><span>Installation</span><span>安装 · 03</span></div>
+    <div class="head">
+      <h2>安装方式</h2>
+    </div>
+    <div class="body">
+      <div class="flow">
+        <span class="rail"></span>
+        <div class="f-col">
+          <div class="f-dot"></div>
+          <div class="f-no">01</div>
+          <div class="f-t">获取</div>
+          <div class="cmd">git clone github.com/gaoyatting/<br>minimal-editorial-layout.git</div>
+        </div>
+        <div class="f-col">
+          <div class="f-dot"></div>
+          <div class="f-no">02</div>
+          <div class="f-t">拷入</div>
+          <div class="cmd">cp -r minimal-editorial-layout<br>~/.cola/skills/</div>
+        </div>
+        <div class="f-col">
+          <div class="f-dot"></div>
+          <div class="f-no">03</div>
+          <div class="f-t">验证</div>
+          <div class="cmd">说出触发词<br>技能列表出现 <span class="cmt"># 即成功</span></div>
+        </div>
+      </div>
+      <div class="tip">
+        <span class="big">No dependencies</span>
+        <p>无脚本、无依赖，拷入即生效。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 · 使用与提示词 -->
+  <section class="slide" id="s4">
+    <div class="meta-top"><span>Usage & Prompts</span><span>使用 · 04</span></div>
+    <div class="head">
+      <h2>怎么用它</h2>
+    </div>
+    <div class="body">
+      <div class="pipe">
+        <span class="p-item">点名调用</span>
+        <span class="p-arrow"></span>
+        <span class="p-item mid">minimal-editorial-layout</span>
+        <span class="p-arrow"></span>
+        <span class="p-item">成品卡片</span>
+      </div>
+      <div class="prompts">
+        <div class="q">用 minimal-editorial-layout 帮我做一张信息图卡片，主题是咖啡品牌的三条理念。</div>
+        <div class="q">调用 minimal-editorial-layout，把这段内容做成五页轮播图。</div>
+        <div class="q">按 minimal-editorial-layout 的规范，做一页流程图卡片，五个步骤。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 · 结语 -->
+  <section class="slide" id="s5">
+    <div class="meta-top"><span>Colophon</span><span>结语 · 05</span></div>
+    <h2>安静，<br>是最高级的<span class="anno">排版技巧</span></h2>
+    <div class="check">三色上限 · 四声部 · 一画一焦点 · 空气感 · 细线 · 出血克制</div>
+    <div class="fin">minimal-editorial-layout</div>
+  </section>
+
+</div></div>
+
+<div id="hud">
+  <button id="prev">←</button>
+  <span id="counter">01 / 05</span>
+  <button id="next">→</button>
+</div>
+
+<script>
+  const W=1280,H=720,N=5;
+  const slides=[...document.querySelectorAll('.slide')];
+  let cur=0;
+  function fit(){
+    const s=Math.min(innerWidth/W,innerHeight/H);
+    document.getElementById('stage').style.transform=`scale(${s})`;
+  }
+  function go(i){
+    cur=Math.max(0,Math.min(N-1,i));
+    slides.forEach((sl,k)=>sl.classList.toggle('active',k===cur));
+    document.getElementById('counter').textContent=
+      String(cur+1).padStart(2,'0')+' / '+String(N).padStart(2,'0');
+    document.getElementById('progress').style.width=((cur+1)/N*100)+'%';
+  }
+  addEventListener('resize',fit);
+  addEventListener('keydown',e=>{
+    if(['ArrowRight','ArrowDown',' ','PageDown','Enter'].includes(e.key))go(cur+1);
+    if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key))go(cur-1);
+    if(e.key==='Home')go(0); if(e.key==='End')go(N-1);
+  });
+  document.getElementById('next').onclick=()=>go(cur+1);
+  document.getElementById('prev').onclick=()=>go(cur-1);
+  let tx=0;
+  addEventListener('touchstart',e=>tx=e.touches[0].clientX);
+  addEventListener('touchend',e=>{const d=e.changedTouches[0].clientX-tx;
+    if(d<-40)go(cur+1); if(d>40)go(cur-1);});
+  fit();
+  const h=parseInt(location.hash.slice(1),10);
+  go(Number.isFinite(h)&&h>=1&&h<=N?h-1:0);
+</script>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Editorial Scaffold — minimal-editorial-layout</title>
+<!-- ============================================================
+  留白辑要 · 标准 PPT 母版 (16:9 · 1280×720)
+  8 个业务插槽（搜索 SLOT 即可定位，只改内容不改骨架）：
+    SLOT-1 底色与墨色   SLOT-2 左上角描述   SLOT-3 右上角章节·页码
+    SLOT-4 左侧独唱主标题区              SLOT-5 右侧正文内容区
+    SLOT-6 纵向发丝分隔线位置            SLOT-7 底部引言/批注
+    SLOT-8 页脚足注与页码
+  纪律：不动 padding / 字阶 / 线宽 / 声部字体，只填业务内容。
+  自适应：fit() 脚本等比居中缩放，适应任意屏幕与分辨率。
+============================================================ -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Noto+Serif+SC:wght@400;600&family=Jost:wght@300;400&family=Courier+Prime:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  /* ---- SLOT-1 底色与墨色 —— 六选一，换注释即可 ---- */
+  :root{
+    --bg:#F2F0EB;   --ink:#1E1C1A;   /* 象牙灰 ivory（默认） */
+    /* --bg:#E5E1D8; --ink:#26231F; */  /* 暖米灰 greige */
+    /* --bg:#F5F1E6; --ink:#221F1A; */  /* 亚麻奶油 cream */
+    /* --bg:#DDD5C4; --ink:#2A261C; */  /* 橄榄米 olive-beige */
+    /* --bg:#EDEAE3; --ink:#24211D; */  /* 燕麦白 oat */
+    --accent:#A65235;                   /* 唯一强调 · 陶土红 */
+    --muted:rgba(30,28,26,.6);
+    --hairline:rgba(30,28,26,.45);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{height:100%;background:var(--bg);display:flex;align-items:center;justify-content:center;overflow:hidden;}
+
+  /* ---- 舞台：16:9 (1280×720) 固定画幅 + 自适应缩放 ---- */
+  .stage{width:1280px;height:720px;background:var(--bg);color:var(--ink);position:relative;flex:none;
+         font-family:'Jost',-apple-system,'PingFang SC',sans-serif;transform-origin:center;}
+
+  /* ---- SLOT-2 & SLOT-3 元信息框架 · 两角制 ---- */
+  /* 左上角 kicker，右上角 章节·页码 */
+  .meta-top{position:absolute;left:128px;right:128px;top:36px;display:flex;
+        justify-content:space-between;font-size:11px;letter-spacing:.32em;
+        text-transform:uppercase;color:var(--muted);z-index:10;}
+
+  /* ---- SLOT-6 纵向发丝分隔线（默认居中，可调 left 值） ---- */
+  .v-rule{position:absolute;left:640px;top:100px;bottom:70px;width:1px;background:var(--hairline);}
+
+  /* ---- SLOT-4 左侧独唱主标题区 ---- */
+  .left-pane{position:absolute;left:128px;top:150px;width:460px;}
+  .kicker{font-size:11px;letter-spacing:.35em;text-transform:uppercase;color:var(--muted);margin-bottom:20px;}
+  .display{font-family:'Noto Serif SC',serif;font-size:62px;font-weight:600;
+           letter-spacing:.08em;line-height:1.15;}
+  .display em{font-family:'Playfair Display',serif;font-style:italic;
+              font-weight:400;color:var(--accent);}
+  /* 大号衬线数字：用于 hero-word 或 numbered 排版 */
+  .big-no{font-family:'Playfair Display',serif;font-size:180px;line-height:1;}
+  .big-no::after{content:".";color:var(--accent);}
+  /* 子标题 */
+  .subtitle{margin-top:22px;font-family:'Playfair Display',serif;font-style:italic;
+            font-size:20px;color:var(--muted);}
+
+  /* ---- SLOT-5 右侧正文内容区 ---- */
+  .right-pane{position:absolute;left:680px;right:128px;top:150px;}
+  /* 正文 body 声部 */
+  .body{font-weight:300;font-size:17px;line-height:1.95;letter-spacing:.02em;}
+  /* 编号列 numbered-list */
+  .numbered-row{display:flex;align-items:baseline;gap:24px;padding:16px 0;
+               border-bottom:1px solid rgba(30,28,26,.18);}
+  .numbered-row:first-of-type{border-top:1px solid rgba(30,28,26,.18);}
+  .numbered-row .no{font-family:'Playfair Display',serif;font-size:26px;flex:none;width:40px;}
+  .numbered-row .no::after{content:".";color:var(--accent);}
+  .numbered-row .t{font-family:'Noto Serif SC',serif;font-size:17px;font-weight:600;letter-spacing:.1em;}
+  .numbered-row .d{font-weight:300;font-size:14px;color:var(--muted);margin-top:4px;letter-spacing:.02em;}
+  /* 三列网格 grid */
+  .col-grid{display:grid;grid-template-columns:repeat(3,1fr);column-gap:40px;}
+  .col-item .col-no{font-family:'Playfair Display',serif;font-style:italic;font-size:40px;}
+  .col-item .col-no::after{content:".";color:var(--accent);}
+  .col-item h3{font-family:'Noto Serif SC',serif;font-size:17px;font-weight:600;
+               letter-spacing:.1em;margin:14px 0 10px;}
+  .col-item p{font-weight:300;font-size:13.5px;line-height:1.85;color:var(--muted);}
+
+  /* ---- SLOT-7 底部批注·引言 ---- */
+  .annotation{position:absolute;left:128px;bottom:100px;right:128px;
+              font-family:'Playfair Display',serif;font-style:italic;
+              font-size:16px;color:var(--accent);letter-spacing:.04em;}
+
+  /* ---- SLOT-8 页脚足注与分隔线 ---- */
+  .footer-rule{position:absolute;left:128px;right:128px;bottom:78px;height:1px;background:var(--hairline);}
+  .footer{position:absolute;left:128px;right:128px;bottom:52px;display:flex;
+          justify-content:space-between;align-items:baseline;
+          font-family:'Courier Prime',monospace;font-size:11px;letter-spacing:.18em;color:var(--muted);}
+</style>
+</head>
+<body>
+<div class="stage">
+
+  <!-- SLOT-2 左上角描述 / SLOT-3 右上角章节页码 -->
+  <div class="meta-top">
+    <span>Section Description</span><!-- SLOT-2 -->
+    <span>章节名 · 01</span><!-- SLOT-3 -->
+  </div>
+
+  <!-- SLOT-6 纵向发丝分隔线（left 默认 640px = 50%，可按需调整） -->
+  <div class="v-rule"></div>
+
+  <!-- SLOT-4 左侧独唱主标题区 -->
+  <div class="left-pane">
+    <div class="kicker">Kicker Label</div><!-- 分类小字 -->
+    <div class="display">
+      主标题大字<br>
+      <em>Italic Accent</em>
+    </div>
+    <div class="subtitle">副标题斜体批注文字</div>
+  </div>
+
+  <!-- SLOT-5 右侧正文内容区（示范三种子结构，按需选用一种） -->
+  <div class="right-pane">
+
+    <!-- 子结构 A：正文段落 body -->
+    <div class="body">
+      这里填写正文内容。字重 300，字号 17px，行高 1.95，<br>
+      每块正文不超过 6 行，多则拆列或拆页。
+    </div>
+
+    <!-- 子结构 B：编号列表 numbered-list（删除 A 或 C 使用此） -->
+    <!--
+    <div class="numbered-row"><span class="no">01</span><div><div class="t">条目标题</div><div class="d">简短说明，不超过一行半。</div></div></div>
+    <div class="numbered-row"><span class="no">02</span><div><div class="t">条目标题</div><div class="d">简短说明，不超过一行半。</div></div></div>
+    <div class="numbered-row"><span class="no">03</span><div><div class="t">条目标题</div><div class="d">简短说明，不超过一行半。</div></div></div>
+    -->
+
+    <!-- 子结构 C：三列网格 col-grid（删除 A 或 B 使用此） -->
+    <!--
+    <div class="col-grid">
+      <div class="col-item"><div class="col-no">01</div><h3>标题</h3><p>说明文字，保持简洁。</p></div>
+      <div class="col-item"><div class="col-no">02</div><h3>标题</h3><p>说明文字，保持简洁。</p></div>
+      <div class="col-item"><div class="col-no">03</div><h3>标题</h3><p>说明文字，保持简洁。</p></div>
+    </div>
+    -->
+  </div>
+
+  <!-- SLOT-7 底部斜体批注（可留空） -->
+  <div class="annotation">— 斜体引言或批注，仅用于陶土红强调色</div>
+
+  <!-- SLOT-8 页脚横线 + 足注与页码 -->
+  <div class="footer-rule"></div>
+  <div class="footer">
+    <span>Footer Note / Handle / Source</span>
+    <span>01 / XX</span>
+  </div>
+
+</div>
+<script>
+  const W=1280,H=720;
+  function fit(){
+    const s=Math.min(innerWidth/W,innerHeight/H);
+    document.querySelector('.stage').style.transform=`scale(${s})`;
+  }
+  addEventListener('resize',fit);fit();
+</script>
+</body>
+</html>

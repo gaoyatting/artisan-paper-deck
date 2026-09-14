@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>范例 05 · 十字象限散点 — minimal-editorial-layout</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&family=Noto+Serif+SC:wght@400;600&family=Jost:wght@300;400&family=Courier+Prime&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#E5E1D8;
+    --ink:#26231F;
+    --accent:#A65235;
+    --muted:rgba(38,35,31,.6);
+    --hairline:rgba(38,35,31,.4);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{height:100%;background:var(--bg);overflow:hidden;display:flex;align-items:center;justify-content:center;}
+  .stage{width:1280px;height:720px;background:var(--bg);position:relative;flex:none;transform-origin:center;
+         font-family:'Jost',-apple-system,'PingFang SC',sans-serif;color:var(--ink);}
+
+  .meta-top{position:absolute;left:128px;right:128px;top:36px;display:flex;justify-content:space-between;
+        font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--muted);z-index:10;}
+
+  /* 顶部居中标题 (top 54px，与下方框留出 55px 纯净空隙) */
+  .header{position:absolute;left:0;right:0;top:54px;text-align:center;}
+  .kicker{font-size:11px;letter-spacing:.35em;text-transform:uppercase;color:var(--muted);}
+  h1{font-family:'Noto Serif SC',serif;font-size:42px;font-weight:600;letter-spacing:.08em;margin-top:6px;}
+  h1 .anno{font-family:'Playfair Display',serif;font-style:italic;font-weight:400;color:var(--accent);margin-left:8px;}
+  .desc{margin-top:6px;font-weight:300;font-size:13.5px;color:var(--muted);letter-spacing:.04em;white-space:nowrap;}
+
+  /* 中间居中象限框 (宽度 640px, 高度 410px, left: 320px, top: 205px，完美居中，无遮挡) */
+  .frame{position:absolute;left:320px;top:205px;width:640px;height:410px;
+         border:1px solid var(--hairline);}
+  .cross-h{position:absolute;left:0;right:0;top:50%;height:1px;background:var(--hairline);}
+  .cross-v{position:absolute;top:0;bottom:0;left:50%;width:1px;background:var(--hairline);}
+
+  /* 四极轴标签：端点留足间距，Focused 与上方 desc 间隔 30px */
+  .axis{position:absolute;font-family:'Playfair Display',serif;font-style:italic;font-size:15px;color:var(--ink);white-space:nowrap;}
+  .axis-top{left:50%;top:-25px;transform:translateX(-50%);letter-spacing:.05em;}
+  .axis-bottom{left:50%;bottom:-25px;transform:translateX(-50%);letter-spacing:.05em;}
+  .axis-left{left:-56px;top:50%;transform:translateY(-50%);letter-spacing:.05em;}
+  .axis-right{right:-68px;top:50%;transform:translateY(-50%);letter-spacing:.05em;}
+
+  /* 散点定义 */
+  .pt{position:absolute;text-align:center;white-space:nowrap;z-index:5;}
+  .pt i{display:block;width:7px;height:7px;border:1px solid var(--ink);background:var(--bg);border-radius:50%;margin:0 auto 5px;}
+  .pt.highlight i{border-color:var(--accent);background:var(--accent);}
+  .pt span{font-family:'Noto Serif SC',serif;font-size:13.5px;font-weight:600;letter-spacing:.08em;display:block;}
+  .pt .en{font-family:'Playfair Display',serif;font-style:italic;font-size:11px;color:var(--muted);margin-top:2px;}
+
+  .foot-rule{position:absolute;left:128px;right:128px;bottom:36px;display:flex;
+        justify-content:space-between;align-items:baseline;
+        font-family:'Courier Prime',monospace;font-size:11px;letter-spacing:.18em;color:var(--muted);}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="meta-top"><span>Quadrant Chart</span><span>版式范例 · 04</span></div>
+
+  <div class="header">
+    <div class="kicker">Axes & Typology · 2×2 Matrix</div>
+    <h1>十字象限<span class="anno">Typology Matrix</span></h1>
+    <p class="desc">横轴衡量对内向外的能量流向，纵轴标定专注执着与温润包容的气质分野。</p>
+  </div>
+
+  <div class="frame">
+    <div class="cross-h"></div>
+    <div class="cross-v"></div>
+
+    <!-- 四极轴标签 -->
+    <span class="axis axis-top">Focused</span>
+    <span class="axis axis-bottom">Warm</span>
+    <span class="axis axis-left">Self</span>
+    <span class="axis axis-right">Others</span>
+
+    <!-- 第二象限 (左上: Self + Focused) -->
+    <div class="pt" style="left:16%;top:18%;"><i></i><span>倾听者</span><span class="en">Listener</span></div>
+    <div class="pt highlight" style="left:34%;top:28%;"><i></i><span>构建者</span><span class="en">Architect</span></div>
+
+    <!-- 第三象限 (左下: Self + Warm) -->
+    <div class="pt" style="left:18%;top:62%;"><i></i><span>务实派</span><span class="en">Pragmatist</span></div>
+    <div class="pt" style="left:32%;top:76%;"><i></i><span>开拓者</span><span class="en">Pioneer</span></div>
+
+    <!-- 第一象限 (右上: Others + Focused) -->
+    <div class="pt highlight" style="left:68%;top:22%;"><i></i><span>洞察者</span><span class="en">Observer</span></div>
+
+    <!-- 第四象限 (右下: Others + Warm) -->
+    <div class="pt" style="left:60%;top:58%;"><i></i><span>调和者</span><span class="en">Harmonizer</span></div>
+    <div class="pt" style="left:78%;top:72%;"><i></i><span>表达者</span><span class="en">Creator</span></div>
+  </div>
+
+  <div class="foot-rule">
+    <span>TYPOLOGY MAPPING</span>
+    <span style="letter-spacing:.25em;">FOUR-QUADRANT EQUILIBRIUM</span>
+    <span>04 / 05</span>
+  </div>
+</div>
+<script>
+  const W=1280,H=720;
+  function fit(){
+    const s=Math.min(innerWidth/W,innerHeight/H);
+    document.querySelector('.stage').style.transform=`scale(${s})`;
+  }
+  addEventListener('resize',fit);fit();
+</script>
+</body>
+</html>

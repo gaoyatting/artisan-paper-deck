@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>范例 04 · 拱顶题名与编号色带 — minimal-editorial-layout</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&family=Noto+Serif+SC:wght@400;600&family=Jost:wght@300;400&family=Courier+Prime&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F5F1E6;
+    --ink:#221F1A;
+    --accent:#A65235;
+    --muted:rgba(34,31,26,.6);
+    --hairline:rgba(34,31,26,.4);
+    --band:rgba(34,31,26,.05);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{height:100%;background:var(--bg);overflow:hidden;display:flex;align-items:center;justify-content:center;}
+  .stage{width:1280px;height:720px;background:var(--bg);position:relative;flex:none;transform-origin:center;
+         font-family:'Jost',-apple-system,'PingFang SC',sans-serif;color:var(--ink);}
+
+  .meta-top{position:absolute;left:128px;right:128px;top:36px;display:flex;justify-content:space-between;
+        font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--muted);z-index:10;}
+
+  /* 左侧：拱形题名与阐释 */
+  .left-pane{position:absolute;left:128px;top:150px;width:380px;}
+  .arch-svg{width:380px;height:110px;overflow:visible;}
+  .sub-title{margin-top:16px;font-family:'Noto Serif SC',serif;font-size:26px;font-weight:600;
+             letter-spacing:.1em;color:var(--ink);white-space:nowrap;}
+  .desc{margin-top:18px;font-weight:300;font-size:14.5px;line-height:1.85;color:var(--muted);
+        letter-spacing:.02em;}
+
+  .spine{position:absolute;left:480px;top:150px;bottom:90px;width:1px;background:var(--hairline);}
+
+  /* 右侧：四行色带阵列 */
+  .bands-wrap{position:absolute;left:530px;right:128px;top:136px;}
+  .band-row{padding:22px 28px;display:flex;align-items:center;gap:28px;
+            border-bottom:1px solid rgba(34,31,26,.15);white-space:nowrap;}
+  .band-row:nth-child(even){background:var(--band);}
+  .band-row:first-child{border-top:1px solid rgba(34,31,26,.15);}
+
+  .band-no{font-family:'Playfair Display',serif;font-size:36px;line-height:1;width:54px;flex:none;}
+  .band-no::after{content:".";color:var(--accent);}
+  .band-main{flex:1;display:flex;align-items:baseline;gap:20px;}
+  .band-title{font-family:'Noto Serif SC',serif;font-size:18px;font-weight:600;letter-spacing:.08em;flex:none;}
+  .band-desc{font-weight:300;font-size:13.5px;color:var(--muted);letter-spacing:.02em;}
+  .band-en{font-family:'Playfair Display',serif;font-style:italic;font-size:13px;color:var(--muted);flex:none;margin-left:auto;}
+
+  .foot-rule{position:absolute;left:128px;right:128px;bottom:36px;display:flex;
+        justify-content:space-between;align-items:baseline;
+        font-family:'Courier Prime',monospace;font-size:11px;letter-spacing:.18em;color:var(--muted);}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="meta-top"><span>Banded List</span><span>版式范例 · 03</span></div>
+
+  <div class="left-pane">
+    <svg class="arch-svg" viewBox="0 0 380 110">
+      <defs>
+        <path id="arch-curve" d="M10,100 Q190,15 370,100" fill="none"/>
+      </defs>
+      <text style="font-family:'Playfair Display',serif;font-size:35px;fill:#221F1A;letter-spacing:.03em;">
+        <textPath href="#arch-curve" startOffset="50%" text-anchor="middle">Four Quiet Principles</textPath>
+      </text>
+    </svg>
+    <div class="sub-title">为什么安静的品牌更可信</div>
+    <p class="desc">摒弃粗暴的声量竞争，<br>以极简色带与秩序感传递内在底气。</p>
+  </div>
+
+  <div class="spine"></div>
+
+  <div class="bands-wrap">
+    <div class="band-row">
+      <div class="band-no">01</div>
+      <div class="band-main">
+        <div class="band-title">少即是可信</div>
+        <div class="band-desc">删去冗余修饰，让诚恳的质地与事实自己说话。</div>
+      </div>
+      <div class="band-en">Restraint</div>
+    </div>
+    <div class="band-row">
+      <div class="band-no">02</div>
+      <div class="band-main">
+        <div class="band-title">留白即自信</div>
+        <div class="band-desc">给视线呼吸的空间，空镜往往比填满更有焦点。</div>
+      </div>
+      <div class="band-en">Breathing</div>
+    </div>
+    <div class="band-row">
+      <div class="band-no">03</div>
+      <div class="band-main">
+        <div class="band-title">一致即专业</div>
+        <div class="band-desc">从头至尾严守统一网格与声部，克制就是品质。</div>
+      </div>
+      <div class="band-en">Discipline</div>
+    </div>
+    <div class="band-row">
+      <div class="band-no">04</div>
+      <div class="band-main">
+        <div class="band-title">安静即高级</div>
+        <div class="band-desc">当所有人都在高呼时，耳语与沉静最具穿透力。</div>
+      </div>
+      <div class="band-en">Quiet Power</div>
+    </div>
+  </div>
+
+  <div class="foot-rule">
+    <span>EDITORIAL STANDARDS</span>
+    <span style="letter-spacing:.25em;">FOUR PRINCIPLES</span>
+    <span>03 / 05</span>
+  </div>
+</div>
+<script>
+  const W=1280,H=720;
+  function fit(){
+    const s=Math.min(innerWidth/W,innerHeight/H);
+    document.querySelector('.stage').style.transform=`scale(${s})`;
+  }
+  addEventListener('resize',fit);fit();
+</script>
+</body>
+</html>
