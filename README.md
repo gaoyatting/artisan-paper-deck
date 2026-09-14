@@ -10,6 +10,8 @@
 
 聚焦于高信息密度与克制美学，支持**手工纸质（Artisan Paper）**与**极简编辑（Minimal Editorial）**两种视觉风格，内置图示化表达原则与标准的 16:9 网页交互能力。
 
+![配色方案预览](assets/previews/palette_system_showcase.png)
+
 ---
 
 ## ✨ 核心特性
